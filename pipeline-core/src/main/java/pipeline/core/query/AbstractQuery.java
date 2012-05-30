@@ -4,9 +4,14 @@ import java.sql.Connection;
 
 import javax.sql.DataSource;
 
-public abstract class AbstractQuery implements Query {
+import pipeline.common.jdbc.DataSourceUtils;
+
+public abstract class AbstractQuery<T> implements Query<T> {
 	private DataSource dataSource;
 	private Connection connection;
+
+	public AbstractQuery() {
+	}
 
 	public AbstractQuery(DataSource dataSource) {
 		this.dataSource = dataSource;
@@ -22,7 +27,7 @@ public abstract class AbstractQuery implements Query {
 
 	protected Connection getConnection() {
 		if (connection == null) {
-			connection = DataSourceUtils.getConnection();
+			connection = DataSourceUtils.getConnection(getDataSource());
 		}
 		return connection;
 	}

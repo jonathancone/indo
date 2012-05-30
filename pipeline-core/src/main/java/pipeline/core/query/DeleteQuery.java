@@ -1,5 +1,22 @@
 package pipeline.core.query;
 
-public class DeleteQuery {
+import pipeline.core.ResultSetMapper;
+
+public class DeleteQuery<T> extends AbstractQuery<T> {
+
+	public T run(String query) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public T run(String query, Object... params) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public T run(String query, ResultSetMapper<T> mapper, Object... params) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
