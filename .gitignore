@@ -17,7 +17,7 @@ local.properties
 .classpath
 .settings/
 .loadpath
-target/**
+**/target/**
 
 # External tool builders
 .externalToolBuilders/
