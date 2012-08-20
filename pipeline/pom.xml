@@ -16,7 +16,7 @@
 
 	<modules>
 		<module>pipeline-common</module>
-		<module>pipeline-core</module>
+		<module>pipeline-web</module>
 		<module>pipeline-tools</module>
 		<module>pipeline-persistence</module>
 	</modules>
