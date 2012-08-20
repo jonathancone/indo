@@ -4,18 +4,21 @@
 	<properties>
 		<pipeline.version>1.0</pipeline.version>
 		<unitils.version>3.3</unitils.version>
+		<db.version.postgresql>9.1-901.jdbc4</db.version.postgresql>
+		<db.version.hsqldb>2.2.8</db.version.hsqldb>
 	</properties>
 
 	<groupId>pipeline</groupId>
 	<artifactId>pipeline-parent</artifactId>
 	<packaging>pom</packaging>
 	<version>${pipeline.version}</version>
-	<name>Pipeline parent POM project</name>
+	<name>Pipeline Parent Project</name>
 
 	<modules>
 		<module>pipeline-common</module>
 		<module>pipeline-core</module>
 		<module>pipeline-tools</module>
+		<module>pipeline-persistence</module>
 	</modules>
 
 	<dependencyManagement>
@@ -25,8 +28,6 @@
 				<artifactId>pipeline-common</artifactId>
 				<version>${pipeline.version}</version>
 			</dependency>
-
-
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
@@ -36,7 +37,13 @@
 			<dependency>
 				<groupId>org.hsqldb</groupId>
 				<artifactId>hsqldb</artifactId>
-				<version>2.2.8</version>
+				<version>${db.version.hsqldb}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>postgresql</groupId>
+				<artifactId>postgresql</artifactId>
+				<version>${db.version.postgresql}</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>

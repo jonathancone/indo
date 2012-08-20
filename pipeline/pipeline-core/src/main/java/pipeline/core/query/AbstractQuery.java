@@ -4,7 +4,7 @@ import java.sql.Connection;
 
 import javax.sql.DataSource;
 
-import pipeline.common.jdbc.DataSourceUtils;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 
 public abstract class AbstractQuery<T> implements Query<T> {
 	private DataSource dataSource;
