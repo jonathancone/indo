@@ -1,29 +1,65 @@
 package pipeline.persistence;
 
-import java.sql.PreparedStatement;
+import pipeline.persistence.jdbc.JdbcPersistenceTest;
 
-import org.junit.Test;
+public class DatabaseSmokeTest extends JdbcPersistenceTest {
 
-import pipeline.persistence.jdbc.QuietConnection;
-import static junit.framework.Assert.*;
-
-public class DatabaseSmokeTest extends BasePersistenceTest {
-
-	@Test
-	public void testConnect() {
-		QuietConnection connection = new QuietConnection(getConnection());
-
-		assertNotNull("The test suite should have a connection.", connection);
-
-		PreparedStatement ps = connection
-				.prepareStatement("SELECT 'x' FROM information_schema.tables WHERE 1=?");
-
-		// ps.setInt(1, 1);
-		//
-		// ps.executeQuery();
-		//
-		// ps.close();
-
-	}
-
+	// @Test
+	// public void testConnect() {
+	// Connection connection = getConnection();
+	//
+	// assertNotNull("The test suite should have a connection.", connection);
+	//
+	// PreparedStatement ps = null;
+	// ResultSet rs = null;
+	// try {
+	//
+	// String queryA = "SELECT                                 "
+	// + "        t.table_catalog,                     "
+	// + "        t.table_schema,                      "
+	// + "        t.table_name,                        "
+	// + "        t.table_type,                        "
+	// + "        c.column_name                        "
+	// + "      FROM                                   "
+	// + "        information_schema.tables t          "
+	// + "      INNER JOIN                             "
+	// + "        information_schema.columns c         "
+	// + "      ON                                     "
+	// + "        t.table_catalog = c.table_catalog    "
+	// + "        AND t.table_schema = c.table_schema  "
+	// + "        AND t.table_name = c.table_name      "
+	// + "      WHERE                                  "
+	// + "        t.table_type = 'VIEW'                "
+	// + "        AND c.data_type = 'character varying'";
+	//
+	// String queryB =
+	// "SELECT  t.table_catalog,  t.table_schema,  t.table_name,  t.table_type,  c.column_nameFROM  information_schema.tables tINNER JOIN  information_schema.columns cON  t.table_catalog = c.table_catalog  AND t.table_schema = c.table_schema  AND t.table_name = c.table_nameWHERE  t.table_type = 'VIEW'  AND c.data_type = 'character varying'";
+	//
+	// ps = connection.prepareStatement(queryB);
+	// rs.getM
+	//
+	// ps.setString(1, "pg_catalog");
+	//
+	// rs = ps.executeQuery();
+	//
+	//
+	//
+	// } catch (SQLException e) {
+	// throw new RuntimeException(e);
+	// } finally {
+	// if (rs != null) {
+	// try {
+	// rs.close();
+	// } catch (SQLException e) {
+	// }
+	// }
+	// if (ps != null) {
+	// try {
+	// ps.close();
+	// } catch (SQLException e) {
+	// }
+	// }
+	// }
+	//
+	// }
 }
