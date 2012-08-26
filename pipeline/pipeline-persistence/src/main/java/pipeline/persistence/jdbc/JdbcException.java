@@ -1,5 +1,6 @@
 package pipeline.persistence.jdbc;
 
+@SuppressWarnings("serial")
 public class JdbcException extends RuntimeException {
 
 	public JdbcException() {
