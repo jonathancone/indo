@@ -155,11 +155,10 @@ public class PreparedWork {
 
 	public ResultSetMetaData getMetaData() {
 		try {
+			return getPreparedStatement().getMetaData();
 		} catch (SQLException e) {
 			throw new JdbcException(e);
 		}
-
-		return null;
 	}
 
 	public boolean getMoreResults() {
@@ -176,15 +175,6 @@ public class PreparedWork {
 		} catch (SQLException e) {
 			throw new JdbcException(e);
 		}
-	}
-
-	public ParameterMetaData getParameterMetaData() {
-		try {
-		} catch (SQLException e) {
-			throw new JdbcException(e);
-		}
-
-		return null;
 	}
 
 	public PreparedStatement getPreparedStatement() {
