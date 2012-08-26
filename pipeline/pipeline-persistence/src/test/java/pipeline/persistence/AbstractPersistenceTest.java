@@ -4,22 +4,17 @@ import org.junit.Before;
 import org.unitils.UnitilsJUnit4;
 
 public abstract class AbstractPersistenceTest extends UnitilsJUnit4 {
-
-	private QueryBuilderFactory queryBuilderFactory;
+	private QueryFactory queryFactory;
 
 	@Before
 	public void setUp() {
-		queryBuilderFactory = createFactory();
+		this.queryFactory = createFactory();
 	}
 
-	public QueryBuilderFactory getQueryBuilderFactory() {
-		return queryBuilderFactory;
-	}
+	protected abstract QueryFactory createFactory();
 
-	protected abstract QueryBuilderFactory createFactory();
-
-	protected QueryBuilder getQueryBuilder() {
-		return getQueryBuilderFactory().getQueryBuilder();
+	protected QueryFactory getQueryFactory() {
+		return queryFactory;
 	}
 
 }

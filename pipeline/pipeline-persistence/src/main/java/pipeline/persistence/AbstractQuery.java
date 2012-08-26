@@ -1,123 +1,70 @@
 package pipeline.persistence;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AbstractQuery<T> implements Query<T> {
-	private String query;
-	private T root;
+import org.joor.Reflect;
 
-	public AbstractQuery(String query, T root) {
-		this.query = query;
+public class AbstractQuery<T> implements Query<T> {
+	protected T root;
+
+	protected String query;
+
+	protected Map<String, Object> parameters;
+
+	public AbstractQuery(T root) {
 		this.root = root;
+	}
+
+	public AbstractQuery(Class<T> type) {
+		this.root =
+				Reflect
+						.on(type)
+						.create()
+						.get();
+	}
+
+	public Query<T> query(String query) {
+		this.query = query;
+		return this;
+	}
+
+	public Query<T> using(String parameter, Object value) {
+		getParameters().put(parameter, value);
+		return this;
+	}
+
+	public Query<T> using(Map<String, Object> parameters) {
+		getParameters().putAll(parameters);
+		return this;
+	}
+
+	public List<T> asList() {
+		return null;
+	}
+
+	public T[] asArray() {
+		return null;
+	}
+
+	public T asObject() {
+		return null;
+	}
+
+	public T getRoot() {
+		return root;
 	}
 
 	public String getQuery() {
 		return query;
 	}
 
-	public T getQueryRoot() {
-		return root;
-	}
-
-	public List<T> list() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void setParameter(String name, byte value) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void setParameter(String name, boolean value) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void setParameter(String name, char value) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void setParameter(String name, short value) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void setParameter(String name, int value) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void setParameter(String name, long value) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void setParameter(String name, float value) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void setParameter(String name, double value) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void setParameter(String name, Byte value) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void setParameter(String name, Boolean value) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void setParameter(String name, Character value) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void setParameter(String name, Short value) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void setParameter(String name, Integer value) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void setParameter(String name, Long value) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void setParameter(String name, Float value) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void setParameter(String name, Double value) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void setParameter(String name, Object o) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void setParameterSource(Object source) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void setParameterSource(Map<?, ?> source) {
-		// TODO Auto-generated method stub
-
+	public Map<String, Object> getParameters() {
+		if (parameters == null) {
+			parameters = new HashMap<String, Object>();
+		}
+		return parameters;
 	}
 
 }
