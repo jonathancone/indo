@@ -26,7 +26,7 @@ public class ConnectionWork {
 		try {
 			return new ConnectionWork(dataSource.getConnection());
 		} catch (SQLException e) {
-			throw new JdbcWorkException(e);
+			throw new JdbcWork(e);
 		}
 	}
 
