@@ -1,6 +1,5 @@
 package pipeline.persistence;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +10,7 @@ public class AbstractQuery<T> implements Query<T> {
 
 	protected String query;
 
-	protected Map<String, Object> parameters;
+	protected Parameters parameters;
 
 	public AbstractQuery(T root) {
 		this.root = root;
@@ -30,13 +29,21 @@ public class AbstractQuery<T> implements Query<T> {
 		return this;
 	}
 
+	public Query<T> using(Object object) {
+		return this;
+	}
+
+	public Query<T> using(Integer parameter, Object value) {
+		return this;
+	}
+
 	public Query<T> using(String parameter, Object value) {
-		getParameters().put(parameter, value);
+		getParameters().use(parameter, value);
 		return this;
 	}
 
 	public Query<T> using(Map<String, Object> parameters) {
-		getParameters().putAll(parameters);
+		getParameters().use(parameters);
 		return this;
 	}
 
@@ -60,11 +67,7 @@ public class AbstractQuery<T> implements Query<T> {
 		return query;
 	}
 
-	public Map<String, Object> getParameters() {
-		if (parameters == null) {
-			parameters = new HashMap<String, Object>();
-		}
+	protected Parameters getParameters() {
 		return parameters;
 	}
-
 }

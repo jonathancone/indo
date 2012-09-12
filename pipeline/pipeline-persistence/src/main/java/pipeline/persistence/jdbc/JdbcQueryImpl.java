@@ -1,15 +1,21 @@
 package pipeline.persistence.jdbc;
 
 import java.sql.Connection;
-import java.sql.SQLException;
+import java.sql.PreparedStatement;
 import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import pipeline.persistence.AbstractQuery;
+import pipeline.persistence.Query;
 
 public class JdbcQueryImpl<T> extends AbstractQuery<T> {
-	private ConnectionProvider connectionProvider;
 
-	// Constructors
+	private static final Log LOG = LogFactory.getLog(JdbcQueryImpl.class);
+
+	private ConnectionProvider connectionProvider;
 
 	public JdbcQueryImpl(ConnectionProvider connectionProvider, Class<T> type) {
 		super(type);
@@ -21,24 +27,15 @@ public class JdbcQueryImpl<T> extends AbstractQuery<T> {
 		this.connectionProvider = connectionProvider;
 	}
 
-	// Logic
-
 	@Override
 	public List<T> asList() {
-
-		Connection connection = getConnection();
-
-		try {
-			connection.prepareStatement(getQuery());
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 		return super.asList();
 	}
 
-	// Accessors
+	private void buildParameters() {
+
+	}
 
 	public ConnectionProvider getConnectionProvider() {
 		return connectionProvider;

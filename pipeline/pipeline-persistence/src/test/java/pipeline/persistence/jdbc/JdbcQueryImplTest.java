@@ -53,6 +53,7 @@ public class JdbcQueryImplTest extends JdbcPersistenceTest {
 						+ "   AND o.first_name = :firstName    ")
 				.using("lastName", owner.getLastName())
 				.using("firstName", owner.getFirstName())
+				.using(owner)
 				.asList();
 
 	}
