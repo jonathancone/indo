@@ -36,7 +36,7 @@ public class Owner {
 		return firstName;
 	}
 
-	public Owner setFirstName(String firstName) {
+	public Owner withFirstName(String firstName) {
 		this.firstName = firstName;
 		return this;
 	}
@@ -45,7 +45,7 @@ public class Owner {
 		return lastName;
 	}
 
-	public Owner setLastName(String lastName) {
+	public Owner withLastName(String lastName) {
 		this.lastName = lastName;
 		return this;
 	}

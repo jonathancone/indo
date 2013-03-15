@@ -1,7 +1,7 @@
 package pipeline.persistence;
 
 @SuppressWarnings("serial")
-public class QueryException extends DataAccessException {
+public class QueryException extends RuntimeException {
 
 	public QueryException() {
 		super();

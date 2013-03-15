@@ -6,10 +6,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import pipeline.common.MoreCollections;
-import pipeline.common.MoreReflection;
-import pipeline.common.MoreString;
-
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class TextTable implements Table {
 
@@ -53,7 +52,7 @@ public class TextTable implements Table {
 		Row first = null;
 		Field[] fields = null;
 
-		if (MoreCollections.isNotEmpty(collection)) {
+		if (CollectionUtils.isNotEmpty(collection)) {
 			for (Object o : collection) {
 
 				if (firstItem) {
@@ -68,12 +67,16 @@ public class TextTable implements Table {
 						field.setAccessible(true);
 
 						String name = getProperties().isUppercaseHeader() ? field
-								.getName().toUpperCase() : field.getName();
+								.getName().toUpperCase()
+								: field.getName();
 
 						first.addCell(name);
 					}
 
-					row.addCell(MoreReflection.get(field, o));
+					try {
+						row.addCell(field.get(o));
+					} catch (Exception e) {
+					}
 
 				}
 
@@ -86,7 +89,7 @@ public class TextTable implements Table {
 
 		addCollectionRows();
 
-		int count = MoreCollections.size(rows);
+		int count = CollectionUtils.size(rows);
 
 		area = getArea();
 
@@ -108,7 +111,7 @@ public class TextTable implements Table {
 			if (grid) {
 				if (buildHoriz) {
 					horizontal.append(getProperties().getCornerCharacter());
-					render(cell.getWidth(), MoreString.repeat(getProperties()
+					render(cell.getWidth(), StringUtils.repeat(getProperties()
 							.getHorizontalCharacter(), cell.getWidth()),
 							horizontal);
 				}
@@ -139,7 +142,7 @@ public class TextTable implements Table {
 
 		int realWidth = Math.min(width, getProperties().getMaxCellWidth());
 
-		String realString = content == null ? "null" : MoreString
+		String realString = content == null ? "null" : ObjectUtils
 				.toString(content);
 
 		realString = realString.substring(0,
@@ -157,7 +160,7 @@ public class TextTable implements Table {
 			int height = 0;
 			int width = 0;
 
-			if (MoreCollections.isNotEmpty(rows)) {
+			if (CollectionUtils.isNotEmpty(rows)) {
 
 				for (Row row : rows) {
 					width = Math.max(width, row.getArea().getWidth());
@@ -198,15 +201,16 @@ public class TextTable implements Table {
 
 	public int getWidth(Cell cell) {
 
-		if (MoreCollections.isEmpty(widths)) {
+		if (CollectionUtils.isEmpty(widths)) {
 			for (Row row : getRows()) {
 
 				int index = 0;
 
 				for (Cell c : row.getCells()) {
-					int length = MoreString.toString(c.getObject()).length() + 2;
+					int length = ObjectUtils.toString(c.getObject()).length() + 2;
 
-					Integer curWidth = MoreCollections.get(widths, index);
+					Integer curWidth = (Integer) CollectionUtils.get(widths,
+							index);
 
 					if (curWidth == null) {
 						widths.add(length);

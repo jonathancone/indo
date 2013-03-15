@@ -6,9 +6,5 @@ package pipeline.persistence;
  * @author Jonathan Cone
  */
 public interface QueryFactory {
-
-	<T> Query<T> on(Class<T> root);
-
-	<T> Query<T> on(T root);
-
+	Query withSQL(String sql);
 }

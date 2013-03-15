@@ -3,8 +3,7 @@ package pipeline.common.table;
 import java.util.ArrayList;
 import java.util.List;
 
-import pipeline.common.MoreCollections;
-
+import org.apache.commons.collections.CollectionUtils;
 
 public class Row {
 	private Table table;
@@ -33,14 +32,14 @@ public class Row {
 	}
 
 	public int getCellCount() {
-		return MoreCollections.size(cells);
+		return CollectionUtils.size(cells);
 	}
 
 	public Area getArea() {
 
 		int height = 0;
 		int width = 0;
-		if (MoreCollections.isNotEmpty(cells)) {
+		if (CollectionUtils.isNotEmpty(cells)) {
 
 			for (Cell c : cells) {
 				height = Math.max(height, c.getArea().getHeight());

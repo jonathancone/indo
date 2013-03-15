@@ -3,21 +3,24 @@ package pipeline.persistence;
 import java.util.List;
 import java.util.Map;
 
-public interface Query<T> {
+public interface Query {
 
-	Query<T> query(String query);
+	Query bind(String parameter, Object value);
 
-	Query<T> using(Object object);
+	Query bind(Integer parameter, Object value);
 
-	Query<T> using(String parameter, Object value);
+	Query bind(String parameter, Object value, Integer sqlType);
 
-	Query<T> using(Integer parameter, Object value);
+	Query bind(Integer parameter, Object value, Integer sqlType);
 
-	Query<T> using(Map<String, Object> parameters);
+	Query bindAll(Object object);
 
-	List<T> asList();
+	Query bindAll(Map<String, Object> parameters);
 
-	T[] asArray();
+	<T> List<T> executeForList(Class<T> type);
 
-	T asObject();
+	<T> T executeForObject(Class<T> type);
+
+	<T> T[] executeForArray(Class<T> type);
+
 }

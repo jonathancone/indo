@@ -1,8 +1,7 @@
 package pipeline.persistence;
 
-import pipeline.persistence.jdbc.JdbcPersistenceTest;
 
-public class DatabaseSmokeTest extends JdbcPersistenceTest {
+public class DatabaseSmokeTest extends BasePersistenceTest {
 
 	// @Test
 	// public void testConnect() {

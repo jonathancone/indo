@@ -3,71 +3,73 @@ package pipeline.persistence;
 import java.util.List;
 import java.util.Map;
 
-import org.joor.Reflect;
+public class AbstractQuery implements Query {
 
-public class AbstractQuery<T> implements Query<T> {
-	protected T root;
+	protected String sql;
+	protected BindParameterHolder parameters;
+	protected SqlParser parser;
 
-	protected String query;
-
-	protected Parameters parameters;
-
-	public AbstractQuery(T root) {
-		this.root = root;
-	}
-
-	public AbstractQuery(Class<T> type) {
-		this.root =
-				Reflect
-						.on(type)
-						.create()
-						.get();
-	}
-
-	public Query<T> query(String query) {
-		this.query = query;
+	public Query bind(String parameter, Object value) {
+		getParameters().addParameter(parameter, value);
 		return this;
 	}
 
-	public Query<T> using(Object object) {
+	public Query bind(Integer index, Object value) {
+		getParameters().addParameter(index, value);
 		return this;
 	}
 
-	public Query<T> using(Integer parameter, Object value) {
+	public Query bind(String parameter, Object value, Integer sqlType) {
+		getParameters().addParameter(parameter, value, sqlType);
 		return this;
 	}
 
-	public Query<T> using(String parameter, Object value) {
-		getParameters().use(parameter, value);
+	public Query bind(Integer index, Object value, Integer sqlType) {
+		getParameters().addParameter(index, value, sqlType);
 		return this;
 	}
 
-	public Query<T> using(Map<String, Object> parameters) {
-		getParameters().use(parameters);
+	public Query bindAll(Object object) {
+		getParameters().addParameters(object);
 		return this;
 	}
 
-	public List<T> asList() {
+	public Query bindAll(Map<String, Object> parameters) {
+		getParameters().addParameters(parameters);
+		return this;
+	}
+
+	public <T> T[] executeForArray(Class<T> type) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public T[] asArray() {
+	public <T> List<T> executeForList(Class<T> type) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public T asObject() {
+	public <T> T executeForObject(Class<T> type) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public T getRoot() {
-		return root;
+	public SqlParser getParser() {
+		if (parser == null) {
+			parser = new SqlParserImpl();
+		}
+		return parser;
 	}
 
-	public String getQuery() {
-		return query;
-	}
-
-	protected Parameters getParameters() {
+	protected BindParameterHolder getParameters() {
+		if (parameters == null) {
+			parameters = new BindParameterHolderImpl(parser);
+		}
 		return parameters;
 	}
+
+	protected void addParameter(BindParameter parameter) {
+		getParameters().addParameter(parameter);
+	}
+
 }
