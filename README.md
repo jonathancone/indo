@@ -2,7 +2,7 @@ Pipeline Persistence
 ====================
 __Java. SQL. Simple.__
 
-Pipeline is a simple Java API you can use to query your database. Maybe you've tried Hibernate and JPA and realized they're too complex and heavyweight.  Pipeline is a lightweight API that puts the control back in your hands while taking care of all the hard work for you.
+You've spent hours telling Hibernate or JPA how to do something you could code the SQL for in a couple of minutes.  The complexity is astounding.  Mapping rules, caching configuration, attachment, detachment, you name it, its a mess.  Pipeline is a lightweight API that takes care of the hard work while providing some very compelling features.  Check out the examples, we think you'll be pleased.
 
 __By Example__
 
