@@ -8,7 +8,7 @@ __By Example__
 
 
 _Fetch a collection of Owners as well as their Pets_
-
+```java
     List<Owner> owners = getQueryFactory()
                             .newQuery(
                                 "  SELECT                                "
@@ -24,4 +24,4 @@ _Fetch a collection of Owners as well as their Pets_
                               + " WHERE o.first_name = :firstName        ")
                             .bind("firstName", firstName)
                             .executeForList(Owner.class);
-
+```
