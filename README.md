@@ -9,18 +9,19 @@ __By Example__
 
 _Fetch a collection of Owners as well as their Pets_
 
-    getQueryFactory().newQuery(
-                "  SELECT                                "
-              + "   o.id,                                "
-              + "   o.first_name  AS firstName,          "
-              + "   o.last_name   AS lastName,           "
-              + "   o.city,                              "              
-              + "   p.id          AS pets_id,            "
-              + "   p.name        AS pets_name,          "
-              + "   p.birth_date  AS pets_birthDate,     "
-              + " FROM Owners o                          "
-              + " INNER JOIN Pets p ON o.id = p.owner_id "
-              + " WHERE o.first_name = :firstName        ")
-              .bind("firstName", firstName)
-              .executeForList(Owner.class);
+    List<Owner> owners = getQueryFactory()
+                            .newQuery(
+                                "  SELECT                                "
+                              + "   o.id,                                "
+                              + "   o.first_name  AS firstName,          "
+                              + "   o.last_name   AS lastName,           "
+                              + "   o.city,                              "              
+                              + "   p.id          AS pets_id,            "
+                              + "   p.name        AS pets_name,          "
+                              + "   p.birth_date  AS pets_birthDate,     "
+                              + " FROM Owners o                          "
+                              + " INNER JOIN Pets p ON o.id = p.owner_id "
+                              + " WHERE o.first_name = :firstName        ")
+                            .bind("firstName", firstName)
+                            .executeForList(Owner.class);
 
