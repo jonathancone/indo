@@ -7,7 +7,7 @@ You've spent hours telling Hibernate or JPA how to do something you could code t
 __By Example__
 
 
-
+_Fetch a collection of Owners as well as their Pets_
 
     getQueryFactory().newQuery(
                 "  SELECT                                "
@@ -20,8 +20,7 @@ __By Example__
               + "   p.birth_date  AS pets_birthDate,     "
               + " FROM Owners o                          "
               + " INNER JOIN Pets p ON o.id = p.owner_id "
-              + " WHERE                                  "
-              + "   o.first_name = :firstName            ")
+              + " WHERE o.first_name = :firstName        ")
               .bind("firstName", firstName)
               .executeForList(Owner.class);
 
