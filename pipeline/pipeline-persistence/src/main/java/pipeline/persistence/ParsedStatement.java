@@ -1,5 +1,5 @@
 package pipeline.persistence;
 
-public interface ParameterParts {
+public interface ParsedStatement {
 
 }

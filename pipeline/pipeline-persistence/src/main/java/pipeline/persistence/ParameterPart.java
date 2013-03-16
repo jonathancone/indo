@@ -1,23 +1,33 @@
 package pipeline.persistence;
 
 public class ParameterPart {
-	String name;
-	ParameterStyle style;
+	private int bindStart;
+	private int identifierStart;
+	private int identifierEnd;
+	private String identifier;
 
-	public String getName() {
-		return name;
+	public ParameterPart(int bindStartingIndex, int javaIdentifierStart,
+			int javaIdentifierEnd, String identifier) {
+		this.bindStart = bindStartingIndex;
+		this.identifierStart = javaIdentifierStart;
+		this.identifierEnd = javaIdentifierEnd;
+		this.identifier = identifier;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public int getBindStartingIndex() {
+		return bindStart;
 	}
 
-	public ParameterStyle getStyle() {
-		return style;
+	public int getJavaIdentifierStart() {
+		return identifierStart;
 	}
 
-	public void setStyle(ParameterStyle style) {
-		this.style = style;
+	public int getJavaIdentifierEnd() {
+		return identifierEnd;
+	}
+
+	public String getIdentifier() {
+		return identifier;
 	}
 
 }

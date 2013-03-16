@@ -7,45 +7,97 @@ import org.apache.commons.lang3.StringUtils;
 
 public class SqlParserImpl implements SqlParser {
 
-	private static final char ESCAPE = '\'';
-	private static final char ORDINAL_PARAM_TOKEN = '?';
-	private static final char NAMED_PARAM_TOKEN = ':';
+	private static final char DEFAULT_ESCAPE_TOKEN = '\'';
+	private static final char DEFAULT_PREFIX_TOKEN = ':';
 
-	public List<ParameterPart> findParameterParts(String sql) {
+	private char prefixToken;
+	private char escapeToken;
 
-		List<ParameterPart> parts = new LinkedList<ParameterPart>();
+	public SqlParserImpl() {
+		this(DEFAULT_PREFIX_TOKEN, DEFAULT_ESCAPE_TOKEN);
+	}
+
+	public SqlParserImpl(char prefixToken, char escapeToken) {
+		this.prefixToken = prefixToken;
+		this.escapeToken = escapeToken;
+	}
+
+	public ParsedStatement parse(String sql) {
+
+		List<ParameterPart> parameters = new LinkedList<ParameterPart>();
 
 		if (StringUtils.isNotBlank(sql)) {
 
-			int length = sql.length();
-
 			boolean escaped = false;
 
-			for (int i = 0; i < length; i++) {
+			char escape = getEscapeToken();
+			char prefix = getPrefixToken();
+			int length = sql.length();
 
-				char current = sql.charAt(i);
+			for (int index = 0; index < length; index++) {
 
-				switch (current) {
-				case ESCAPE:
+				char current = sql.charAt(index);
+
+				if (current == escape) {
+
+					// Flip the escape mode
 					escaped = !escaped;
-					break;
-				case ORDINAL_PARAM_TOKEN:
 
-					if (!escaped) {
+				} else if (current == prefix && !escaped) {
 
+					/*
+					 * Found a match for a bind variable, check to make sure the
+					 * next character is a valid Java identifier starting
+					 * character.
+					 */
+
+					int bindStart = index;
+					int identifierStart = bindStart + 1;
+					int identifierEnd = identifierStart + 1;
+					StringBuilder identifier = new StringBuilder();
+
+					if (identifierStart < length) {
+						char char0 = sql.charAt(identifierStart);
+
+						if (validStart(char0)) {
+							identifier.append(char0);
+
+							while (identifierEnd < length
+									&& validPart(sql.charAt(identifierEnd))) {
+								identifier.append(sql.charAt(identifierEnd));
+								identifierEnd++;
+							}
+
+							parameters.add(
+									new ParameterPart(
+											bindStart,
+											identifierStart,
+											identifierEnd,
+											identifier.toString()));
+
+							// Fast forward the index
+							index = identifierEnd;
+						}
 					}
-
-					break;
-
-				case NAMED_PARAM_TOKEN:
-					break;
 				}
-
 			}
-
 		}
+		return new ParsedStatementImpl(sql, parameters);
+	}
 
-		return parts;
+	protected boolean validStart(char character) {
+		return Character.isJavaIdentifierStart(character);
+	}
 
+	protected boolean validPart(char character) {
+		return Character.isJavaIdentifierPart(character);
+	}
+
+	protected char getPrefixToken() {
+		return prefixToken;
+	}
+
+	protected char getEscapeToken() {
+		return escapeToken;
 	}
 }
