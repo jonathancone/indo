@@ -32,11 +32,8 @@ public class QueryImplTest extends BasePersistenceTest {
 		getQueryFactory()
 				.withSQL("  SELECT                             "
 						+ "   o.id,                            "
-						+ "   o.first_name  AS firstName,      "
-						+ "   o.last_name   AS lastName,       "
-						+ "   o.address,                       "
-						+ "   o.city,                          "
-						+ "   o.telephone,                     "
+						+ "   o.firstName,                     "
+						+ "   o.lastName,                      "
 						+ "   p.id          AS pets_id,        "
 						+ "   p.name        AS pets_name,      "
 						+ "   p.birth_date  AS pets_birthDate, "

@@ -1,6 +1,6 @@
 package pipeline.persistence;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +11,7 @@ public class BindParameterHolderImpl implements BindParameterHolder {
 	private SqlParser sqlParser;
 
 	public BindParameterHolderImpl(SqlParser sqlParser) {
-		this(new LinkedList<BindParameter>(), sqlParser);
+		this(new ArrayList<BindParameter>(), sqlParser);
 	}
 
 	public BindParameterHolderImpl(List<BindParameter> parameters,
