@@ -1,10 +1,12 @@
 package pipeline.persistence;
 
-import java.io.InputStream;
+import java.io.File;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joor.Reflect;
 import org.junit.rules.TestRule;
@@ -16,34 +18,10 @@ public class ExpectedFileRule implements TestRule {
 	private static final String INPUT_TEMPLATE = "%s-input.txt";
 	private static final String EXPECTED_TEMPLATE = "%s-expected.txt";
 
-	private String inputFile;
-	private String expectedFile;
-
-	private List<String> inputLines;
-	private List<String> expectedLines;
-	private List<String> actualLines;
-
 	private Object testObject;
 
 	public ExpectedFileRule(Object testObject) {
 		this.testObject = testObject;
-	}
-
-	void buildActualLines() {
-		Class<? extends Object> testClass = testObject.getClass();
-
-		Field[] fields = testClass.getFields();
-
-		for (Field field : fields) {
-			ExpectedFile ef = field.getAnnotation(ExpectedFile.class);
-
-			if (ef != null) {
-				Reflect.accessible(field);
-				Reflect.on(testObject)
-						.set(field.getName(), actualLines);
-			}
-		}
-
 	}
 
 	public Statement apply(final Statement base, final Description description) {
@@ -56,10 +34,9 @@ public class ExpectedFileRule implements TestRule {
 				if (expectedFile != null) {
 					Class<?> testClass = description.getTestClass();
 
-					InputStream eis = testClass
-							.getResourceAsStream(expectedFile);
+					URL url = testClass.getResource(expectedFile);
 
-					expectedLines = IOUtils.readLines(eis);
+					File file = FileUtils.toFile(url);
 
 				}
 
@@ -73,10 +50,25 @@ public class ExpectedFileRule implements TestRule {
 		};
 	}
 
+	/**
+	 * Based on the {@link Description}, determine the name of the
+	 * {@link ExpectedFile}. This implementation allows for two schemes:
+	 * <ol>
+	 * <li>The class can be annotated</li>
+	 * <li></li>
+	 * </ol>
+	 * 
+	 * @param description
+	 * @return
+	 */
 	protected String getExpectedFile(Description description) {
 
-		ExpectedFile methodAnnotation = description
-				.getAnnotation(ExpectedFile.class);
+		Class<?> testClass = description.getTestClass();
+		Method testMethod = testClass.getMethod(description.getMethodName());
+
+		AnnotationDetails<ExpectedFile> expectedFileDetails = AnnotationFinder
+				.findAnnotation(testClass, testMethod,
+						ExpectedFile.class);
 
 		String inputFile = null;
 		String expectedFile = null;
@@ -121,24 +113,16 @@ public class ExpectedFileRule implements TestRule {
 	}
 
 	private String buildFileName(String template, Description description) {
-		return String.format(template, description.getClassName() + "."
-				+ description.getMethodName());
+
+		String className = description.getTestClass().getSimpleName();
+
+		String filePattern = className + "." + description.getMethodName();
+
+		return String.format(template, filePattern);
 	}
 
 	public Object getTestObject() {
 		return testObject;
-	}
-
-	public List<String> getInputLines() {
-		return inputLines;
-	}
-
-	public List<String> getExpectedLines() {
-		return expectedLines;
-	}
-
-	public List<String> getActualLines() {
-		return actualLines;
 	}
 
 }
