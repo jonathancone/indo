@@ -54,6 +54,7 @@ public class SqlParserImplTest {
 
 		assertEquals(expected, parsed.getParsedSql());
 
+		parsed.getParameters().get(0).getIdentifier();
 	}
 
 }
