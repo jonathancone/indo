@@ -2,7 +2,7 @@ package rebound.sql;
 
 import org.junit.Test;
 
-import rebound.sql.model.Athlete;
+import rebound.sql.test.Athlete;
 
 public class QueryImplTest {
     private QueryImpl query;
@@ -10,7 +10,7 @@ public class QueryImplTest {
     @Test
     private void testRunUsingPrototype() {
 
-	Athlete prototype = new Athlete("Mickey", "Mantle");
+	Athlete bambino = new Athlete("Babe", "Ruth");
 
 	query.run("  SELECT                          "
 		+ "  	a.firstName,                 "
@@ -27,7 +27,7 @@ public class QueryImplTest {
 		+ "  WHERE                           "
 		+ "  	a.firstName = :firstName     "
 		+ "  	AND a.lastName = :lastName   ")
-		.binding(prototype)
+		.binding(bambino)
 		.listOf(Athlete.class);
 
     }

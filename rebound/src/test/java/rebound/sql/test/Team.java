@@ -1,4 +1,4 @@
-package rebound.sql.model;
+package rebound.sql.test;
 
 public class Team {
     private String name;
