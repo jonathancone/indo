@@ -5,30 +5,30 @@ import org.junit.Test;
 import rebound.sql.test.Athlete;
 
 public class QueryImplTest {
-    private QueryImpl query;
+	private QueryImpl query;
 
-    @Test
-    private void testRunUsingPrototype() {
+	@Test
+	private void testRunUsingPrototype() {
 
-	Athlete bambino = new Athlete("Babe", "Ruth");
+		Athlete bambino = new Athlete("Babe", "Ruth");
 
-	query.run("  SELECT                          "
-		+ "  	a.firstName,                 "
-		+ "  	a.lastName,                  "
-		+ "  	t.name,                      "
-		+ "  	t.city AS team_city,         "
-		+ "  	t.state AS team_state        "
-		+ "  FROM                            "
-		+ "  	Athlete a                    "
-		+ "  INNER JOIN                      "
-		+ "  	Team t                       "
-		+ "  ON                              "
-		+ "  	a.teamId = t.teamId          "
-		+ "  WHERE                           "
-		+ "  	a.firstName = :firstName     "
-		+ "  	AND a.lastName = :lastName   ")
-		.binding(bambino)
-		.listOf(Athlete.class);
+		query.run(
+				"  SELECT                          "
+						+ "  	a.firstName,                 "
+						+ "  	a.lastName,                  "
+						+ "  	t.name,                      "
+						+ "  	t.city AS team_city,         "
+						+ "  	t.state AS team_state        "
+						+ "  FROM                            "
+						+ "  	Athlete a                    "
+						+ "  INNER JOIN                      "
+						+ "  	Team t                       "
+						+ "  ON                              "
+						+ "  	a.teamId = t.teamId          "
+						+ "  WHERE                           "
+						+ "  	a.firstName = :firstName     "
+						+ "  	AND a.lastName = :lastName   ").binding(bambino)
+				.listOf(Athlete.class);
 
-    }
+	}
 }

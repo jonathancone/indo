@@ -1,5 +1,5 @@
 package rebound.sql;
 
 public interface SqlParser {
-    ParsedStatement parse(String originalSql);
+	ParsedStatement parse(String originalSql);
 }
