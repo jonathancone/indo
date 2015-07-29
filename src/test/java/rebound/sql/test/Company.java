@@ -1,9 +1,12 @@
 package rebound.sql.test;
 
-public class Team {
+import java.util.List;
+
+public class Company {
 	private String name;
 	private String city;
 	private String state;
+	private List<Department> departments;
 
 	public String getName() {
 		return name;
@@ -27,6 +30,14 @@ public class Team {
 
 	public void setState(String state) {
 		this.state = state;
+	}
+
+	public List<Department> getDepartments() {
+		return departments;
+	}
+
+	public void setDepartments(List<Department> departments) {
+		this.departments = departments;
 	}
 
 }

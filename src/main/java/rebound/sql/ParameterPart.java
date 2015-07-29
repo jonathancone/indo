@@ -4,6 +4,7 @@ public class ParameterPart {
 	private int bindStart;
 	private int identifierStart;
 	private int identifierEnd;
+
 	private String identifier;
 
 	public ParameterPart(int bindStartingIndex, int javaIdentifierStart,
