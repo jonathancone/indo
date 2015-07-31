@@ -1,4 +1,6 @@
-<<<<<<< HEAD
+.idea/
+.gradle/
+*.iml
 *.class
 
 # Mobile Tools for Java (J2ME)
@@ -182,4 +184,3 @@ pip-log.txt
 
 # Mac crap
 .DS_Store
->>>>>>> b129667bffa03fa1e550e227e12b4f23da7491ef
