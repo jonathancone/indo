@@ -23,10 +23,11 @@ public class SqlParserImpl implements SqlParser {
 		this.escapeToken = escapeToken;
 	}
 
-	public ParsedStatement parse(String originalSql) {
+	@Override
+	public ParsedStatement parse(String originalSql, SuppliedParameters suppliedParameters) {
 
 		StringBuilder parsedSql = new StringBuilder();
-
+		JdbcCallType jdbcCallType = JdbcCallType.STATEMENT;
 		List<ParameterPart> parameters = new ArrayList<ParameterPart>();
 
 		if (StringUtils.isNotBlank(originalSql)) {
@@ -91,7 +92,7 @@ public class SqlParserImpl implements SqlParser {
 			}
 		}
 		return new ParsedStatement(originalSql, parsedSql.toString(),
-				parameters);
+				parameters, jdbcCallType);
 	}
 
 	protected boolean validStart(char character) {

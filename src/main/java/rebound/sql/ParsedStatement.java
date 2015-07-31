@@ -5,27 +5,33 @@ import java.util.List;
 import org.apache.commons.collections.ListUtils;
 
 public class ParsedStatement {
-	private String originalSql;
-	private String parsedSql;
-	private List<ParameterPart> parameters;
+    private String sourceSql;
+    private String parsedSql;
+    private List<ParameterPart> parameters;
+    private JdbcCallType jdbcCallType;
 
-	public ParsedStatement(String originalSql, String parsedSql,
-			List<ParameterPart> parameters) {
-		this.originalSql = originalSql;
-		this.parsedSql = parsedSql;
-		this.parameters = parameters;
-	}
+    public ParsedStatement(String sourceSql, String parsedSql,
+                           List<ParameterPart> parameters, JdbcCallType jdbcCallType) {
+        this.sourceSql = sourceSql;
+        this.parsedSql = parsedSql;
+        this.parameters = parameters;
+        this.jdbcCallType = jdbcCallType;
+    }
 
-	public String getOriginalSql() {
-		return originalSql;
-	}
+    public JdbcCallType getJdbcCallType() {
+        return jdbcCallType;
+    }
 
-	public String getParsedSql() {
-		return parsedSql;
-	}
+    public String getSourceSql() {
+        return sourceSql;
+    }
 
-	public List<ParameterPart> getParameters() {
-		return ListUtils.unmodifiableList(parameters);
-	}
+    public String getParsedSql() {
+        return parsedSql;
+    }
+
+    public List<ParameterPart> getParameters() {
+        return ListUtils.unmodifiableList(parameters);
+    }
 
 }
