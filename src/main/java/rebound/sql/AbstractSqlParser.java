@@ -1,7 +1,6 @@
 package rebound.sql;
 
 import org.apache.commons.collections.ListUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +72,7 @@ public abstract class AbstractSqlParser implements SqlParser {
 
     protected JdbcCallType resolveCallType(String sourceSql) {
 
-        String stripped = StringUtils.strip(sourceSql, " ");
+        String stripped = sourceSql.replace(" ", "");
 
         if (stripped.startsWith("{?=call")) {
             return JdbcCallType.FUNCTION;
