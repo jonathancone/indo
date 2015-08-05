@@ -1,7 +1,5 @@
 package rebound.sql;
 
-import java.util.Map;
-
 public interface SqlQuery {
 //
 //	<T> SqlQuery binding(Object param);
