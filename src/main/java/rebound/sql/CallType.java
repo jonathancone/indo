@@ -14,22 +14,13 @@
  * limitations under the License.
  */
 
-apply plugin: 'java'
-apply plugin: 'idea'
+package rebound.sql;
 
-repositories {
-    jcenter()
-}
-
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
-
-dependencies {
-
-    compile 'com.google.guava:guava:18.0'
-    compile 'com.h2database:h2:1.4.187'
-    compile 'org.dbunit:dbunit:2.5.1'
-
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.+'
+/**
+ * Created by jcone on 8/1/15.
+ */
+public enum CallType {
+    STATEMENT,
+    FUNCTION,
+    PROCEDURE
 }

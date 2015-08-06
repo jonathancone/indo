@@ -16,25 +16,33 @@
 
 package rebound.sql;
 
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 /**
  * Created by jcone on 8/4/15.
  */
-public class CollectionBindingResolver extends AbstractBindingResolver {
-    @Override
-    public String resolve(int nextIndex, SqlParameter sqlParameter) {
+@RunWith(Parameterized.class)
+public class BindingTest {
+    @Parameterized.Parameter(0)
+    public int length;
 
-        int length = 0;
+    @Parameterized.Parameter(1)
+    public String result;
 
-        if (sqlParameter.getValue() instanceof Collection) {
-            Collection collection = (Collection) sqlParameter.getValue();
-            length = collection.size();
-            sqlParameter.addIndexes(nextIndex, length);
-        }
+    @Parameterized.Parameters
+    public static Collection<Object[]> statements() {
+        return Arrays.asList(new Object[][]{{-1, ""}, {0, ""}, {1, "?"}, {2, "?,?"}, {3, "?,?,?"}});
+    }
 
-        return generateBindingPlaceholders(length);
 
+    @Test
+    public void testRepeatPlaceholder() {
+        Assert.assertEquals(result, Binding.repeatPlaceholders(length));
     }
 }

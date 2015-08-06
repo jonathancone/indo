@@ -16,23 +16,29 @@
 
 package rebound.sql;
 
-import java.lang.reflect.Array;
-
 /**
- * Created by jcone on 8/3/15.
+ * Created by jcone on 8/5/15.
  */
-public class ArrayBindingResolver extends AbstractBindingResolver {
+public class Binding {
+    public static final String DEFAULT_BINDING_PLACEHOLDER = "?";
+    public static final String DEFAULT_BINDING_DELIMITER = ",";
 
-    @Override
-    public String resolve(int nextIndex, SqlParameter sqlParameter) {
+    public static String repeatPlaceholders(String placeholder, String delimiter, int length) {
+        String sql = "";
 
-        int length = 0;
+        for (int i = 0; i < length; i++) {
+            sql += placeholder;
 
-        if (sqlParameter.getValue() instanceof Array) {
-            length = Array.getLength(sqlParameter.getValue());
-            sqlParameter.addIndexes(nextIndex, length);
+            if (i != (length - 1)) {
+                sql += delimiter;
+            }
         }
 
-        return generateBindingPlaceholders(length);
+        return sql;
     }
+
+    public static String repeatPlaceholders(int length) {
+        return repeatPlaceholders(DEFAULT_BINDING_PLACEHOLDER, DEFAULT_BINDING_DELIMITER, length);
+    }
+
 }
