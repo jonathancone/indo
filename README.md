@@ -11,10 +11,10 @@ SqlSession sql = new SqlConfig(dataSource).create();
 SqlSession sql = new SqlConfig(properties).create();
 
 // Use an existing java.sql.Connection
-SqlSession sql = SqlConfig(connection).create();
+SqlSession sql = new SqlConfig(connection).create();
 
 // Quick and dirty using JDBC URL
-SqlSession sql = SqlConfig("jdbc://...", "user", "password").create();
+SqlSession sql = new SqlConfig("jdbc://...", "user", "password").create();
 ```
 
 ######Inserting Records
