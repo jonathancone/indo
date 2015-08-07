@@ -4,10 +4,16 @@
 Creating a Connection
 ```java
 // Use a javax.sql.DataSource for connection pooling, transactions, etc.
-SqlSession sql = new SqlSession(dataSource);
+SqlSession sql = new SqlConfig(dataSource).create();
+
+// Use java.util.Properties to configure datasource
+SqlSession sql = new SqlConfig(properties).create();
 
 // Use an existing java.sql.Connection
-SqlSession sql = new SqlSession(connection);
+SqlSession sql = SqlConfig(connection).create();
+
+// Quick and dirty using JDBC URL
+SqlSession sql = SqlConfig("jdbc://...", "user", "password").create();
 ```
 
 Inserting Records
