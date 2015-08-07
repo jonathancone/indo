@@ -19,7 +19,7 @@ SqlSession sql = SqlConfig("jdbc://...", "user", "password").create();
 ```
 
 ######Inserting Records
-Simple records can be inserted using the DSL, more complex scenarios make use of the query API.
+Simple records can be inserted using the DSL, more complex scenarios make use of the query() API.
 ```java
 Employee employee1 = new Employee("Bill", "Gates");
 Employee employee2 = new Employee("Larry", "Ellison");
@@ -37,7 +37,7 @@ sql.insert(employee1, "firstName AS FIRST_NAME", "lastName AS LAST_NAME").into("
 // Perform a bulk insert (uses JDBC batch statement)
 sql.insert(collection).into("Employee").returningKey("employeeId");
 
-// Perform a more complex insert
+// Perform a more complex insert using query() and return the primary key of the new record
 Integer employeeId = sql.query(" INSERT INTO Employee (firstName, lastName) " 
                              + " SELECT firstName, lastName                 "
                              + " FROM Application                           "
@@ -48,7 +48,7 @@ Integer employeeId = sql.query(" INSERT INTO Employee (firstName, lastName) "
 ```
 
 ######Updating Records
-Simple records can be updated using the DSL, more complex scenarios make use of the query API.
+Simple records can be updated using the DSL, more complex scenarios make use of the query() API.
 ```java
 // Update a single record that matches the employeeId on employee1
 sql.update(employee1).into("Employee").usingKey("employeeId");
@@ -58,6 +58,15 @@ sql.update(employee1, "firstName").into("Employee").usingKey("lastName");
 
 // Perform a bulk update (uses JDBC batch statement), overriding columns
 sql.update(collection, "firstName AS FIRST_NAME", "lastName AS LAST_NAME").into("Employee").usingKey("employeeId");
+
+// Perform a more complex update using query() update and return the number of rows updated
+Integer rowCount = sql.query(" UPDATE Employee                  "
+                           + " SET salary = salary * 1.03       "
+                           + " WHERE hireDate > :hireDate       "
+                           + " AND employeeId IN (:employeeIds) "
+                      .withParameter("hireDate", hireDate)
+                      .withParameter("employeeIds", Arrays.asList(9, 15, 19))
+                      .returningCount();
 ```
 
 ######Deleting Records
@@ -68,6 +77,11 @@ sql.delete(employee1).keyedOn("employeeId");
 
 // Perform a bulk delete (uses JDBC batch statment)
 sql.delete(collection).keyedOn("employeeId");
+
+// Perform a more complexe delete using query() based on the properties bound from employee2
+Integer rowCount = sql.query("DELETE FROM Employee WHERE employeeId = :employeeId AND lastName = :lastName)"
+                      .withParametersFrom(employee2)
+                      .returningCount();
 ```
 
 ######Selecting Records 
