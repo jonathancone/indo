@@ -3,7 +3,6 @@
 What if there were an API that eliminated all the confusing parts of reading and writing data to a relational database?
 
 ###### Creating a Connection
-You can create a connection to the database using any of the standard ways you would expect.
 ```java
 // Use a javax.sql.DataSource for connection pooling, transactions, etc.
 SqlSession sql = new SqlConfig(dataSource).create();
@@ -19,7 +18,6 @@ SqlSession sql = SqlConfig("jdbc://...", "user", "password").create();
 ```
 
 ######Inserting Records
-Simple records can be inserted using the DSL, more complex scenarios make use of the query() API.
 ```java
 Employee employee1 = new Employee("Bill", "Gates");
 Employee employee2 = new Employee("Larry", "Ellison");
@@ -48,7 +46,6 @@ Integer employeeId = sql.query(" INSERT INTO Employee (firstName, lastName) "
 ```
 
 ######Updating Records
-Simple records can be updated using the DSL, more complex scenarios make use of the query() API.
 ```java
 // Update a single record that matches the employeeId on employee1
 sql.update(employee1).into("Employee").usingKey("employeeId");
@@ -70,7 +67,6 @@ Integer rowCount = sql.query(" UPDATE Employee                  "
 ```
 
 ######Deleting Records
-Simple records can be deleted using the DSL, more complex scenarios make use of the query API.
 ```java
 // Delete a single record that matches the employeeId on employee1
 sql.delete(employee1).keyedOn("employeeId");
@@ -85,7 +81,6 @@ Integer rowCount = sql.query("DELETE FROM Employee WHERE employeeId = :employeeI
 ```
 
 ######Selecting Records 
-Simple records can be selected using the DSL, more complex scenarios make use of the query API.
 ```java
 // Find an employee based on their ID
 Employee employee3 = sql.select(Employee.class)
@@ -102,3 +97,5 @@ List<Employee> steves = sql.select(Employee.class, "firstName AS FIRST_NAME", "l
 ```
 
 Stored Procedures
+```java
+```
