@@ -12,13 +12,9 @@ SqlSession sql = new SqlSession(connection);
 
 Inserting Records
 ```java
-SqlConnection sql = new SqlConnection(dataSource);
 Employee employee1 = new Employee("Bill", "Gates");
-Employee employee2 = new Employee("Steve", "Jobs");
-Employee employee3 = new Employee("Larry", "Ellison");
-
-Collection collection = Arrays.asList(employee1, employee2, employee3);
-
+Employee employee2 = new Employee("Larry", "Ellison");
+Collection collection = Arrays.asList(employee1, employee2);
 
 // Insert a single record and set the primary key value back into employee1.employeeId
 sql.insert(employee1).into("Employee").returningKey("employeeId");
