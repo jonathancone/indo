@@ -37,6 +37,6 @@ sql.update(employee1).into("Employee").keyedOn("employeeId");
 // Update a single record, just setting the first name for all employees with a matching last name
 sql.update(employee1, "firstName").into("Employee").keyedOn("lastName");
 
-// Update a collection, overriding columns
+// Perform a bulk update (uses JDBC batch statement), overriding columns
 sql.update(collection, "firstName AS FIRST_NAME", "lastName AS LAST_NAME").into("Employee").keyedOn("employeeId");
 ```
