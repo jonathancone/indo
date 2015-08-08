@@ -19,6 +19,7 @@ package rebound.sql;
 import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.util.logging.Logger;
@@ -27,14 +28,34 @@ import java.util.logging.Logger;
  * Created by jcone on 8/7/15.
  */
 public class SingleConnectionDataSource implements DataSource {
+    private String username;
+    private String password;
+    private String url;
+    private Connection connection;
+
+    public SingleConnectionDataSource(Connection connection) {
+        this.connection = connection;
+    }
+
+    public SingleConnectionDataSource(String username, String password, String url) {
+        this.username = username;
+        this.password = password;
+        this.url = url;
+    }
+
     @Override
     public Connection getConnection() throws SQLException {
-        return null;
+        return getConnection(username, password);
     }
 
     @Override
     public Connection getConnection(String username, String password) throws SQLException {
-        return null;
+
+        if (connection == null || connection.isClosed()) {
+            connection = DriverManager.getConnection(url, username, password);
+        }
+
+        return connection;
     }
 
     @Override
@@ -48,13 +69,13 @@ public class SingleConnectionDataSource implements DataSource {
     }
 
     @Override
-    public void setLoginTimeout(int seconds) throws SQLException {
-
+    public int getLoginTimeout() throws SQLException {
+        return 0;
     }
 
     @Override
-    public int getLoginTimeout() throws SQLException {
-        return 0;
+    public void setLoginTimeout(int seconds) throws SQLException {
+
     }
 
     @Override
