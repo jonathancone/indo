@@ -16,14 +16,26 @@
 
 package rebound.sql;
 
-import org.junit.Test;
+/**
+ * Created by jcone on 8/7/15.
+ */
+public class UnexpectedSqlException extends RuntimeException {
+    public UnexpectedSqlException() {
+    }
 
-public class SqlQueryImplTest {
+    public UnexpectedSqlException(String message) {
+        super(message);
+    }
 
-	@Test
-	public void testQuery1() throws Exception {
-		// SqlQueryImpl query = new SqlQueryImpl(sql, connection);
+    public UnexpectedSqlException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	}
+    public UnexpectedSqlException(Throwable cause) {
+        super(cause);
+    }
 
+    public UnexpectedSqlException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 }

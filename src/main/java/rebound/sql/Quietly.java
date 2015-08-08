@@ -16,14 +16,20 @@
 
 package rebound.sql;
 
-import org.junit.Test;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 
-public class SqlQueryImplTest {
+/**
+ * Created by jcone on 8/7/15.
+ */
+public class Quietly {
 
-	@Test
-	public void testQuery1() throws Exception {
-		// SqlQueryImpl query = new SqlQueryImpl(sql, connection);
-
-	}
-
+    public static Connection getConnection(DataSource dataSource) {
+        try {
+            return dataSource.getConnection();
+        } catch (SQLException e) {
+            throw new UnexpectedSqlException(e);
+        }
+    }
 }
