@@ -40,42 +40,57 @@ import java.util.Properties;
  * SqlSession sql = new SqlConfig("jdbc://...", "user", "password", ...).create();
  * </code>
  */
-public class SqlConfig {
+public class SqlConfig implements SqlConfiguration {
 
     public static final String PROP_JDBC_URL = "jdbc.url";
     public static final String PROP_JDBC_USER = "jdbc.user";
     public static final String PROP_JDBC_PASSWORD = "jdbc.password";
-    public static final String PROP_JDBC_DATASOURCE_CLASS = "jdbc.datasource.class";
 
     private DataSource dataSource;
     private Connection connection;
     private Properties properties;
 
     public SqlConfig(DataSource dataSource) {
+        checkArguments("DataSource", dataSource);
         this.dataSource = dataSource;
     }
 
     public SqlConfig(Properties properties) {
+        checkArguments("Properties", properties);
         this.properties = properties;
     }
 
-    public SqlConfig(String url, String username, String password, String dataSourceClass) {
-        this.properties = new Properties();
-        this.properties.setProperty(PROP_JDBC_USER, username);
-        this.properties.setProperty(PROP_JDBC_PASSWORD, password);
-        this.properties.setProperty(PROP_JDBC_URL, url);
-        this.properties.setProperty(PROP_JDBC_DATASOURCE_CLASS, dataSourceClass);
+    public SqlConfig(String url, String username, String password) {
+        checkArguments("String (url)", url);
+        checkArguments("String (username)", username);
+        checkArguments("String (password)", password);
+        this.properties = constructProperties(url, username, password);
     }
 
     public SqlConfig(Connection connection) {
+        checkArguments("Connection", connection);
         this.connection = connection;
+    }
+
+    private void checkArguments(String name, Object value) {
+        if (value == null) {
+            throw new NullPointerException(String.format("Cannot create %s instance, a null %s reference was supplied.", getClass().getName(), name));
+        }
+    }
+
+    protected Properties constructProperties(String url, String username, String password) {
+        Properties properties = new Properties();
+        properties.setProperty(PROP_JDBC_USER, username);
+        properties.setProperty(PROP_JDBC_PASSWORD, password);
+        properties.setProperty(PROP_JDBC_URL, url);
+        return properties;
     }
 
     public SqlSession create() {
         if (connection == null) {
             if (dataSource == null) {
                 if (properties == null) {
-                    throw new UnexpectedSqlException("No data source connection properties were supplied. Consult the documentation on how to configure a data source.");
+                    throw new NullPointerException("No data source connection properties were supplied. Consult the documentation on how to configure a data source.");
                 }
                 dataSource = createDataSource(properties);
             }
@@ -85,7 +100,7 @@ public class SqlConfig {
 
     protected DataSource createDataSource(Properties properties) {
         if (connection == null) {
-            return new SingleConnectionDataSource(getJdbcUser(properties), getJdbcPassword(properties), getJdbcUrl(properties));
+            return new SingleConnectionDataSource(getJdbcUser(), getJdbcPassword(), getJdbcUrl());
         } else {
             return new SingleConnectionDataSource(connection);
         }
@@ -103,23 +118,15 @@ public class SqlConfig {
         return System.getProperty(PROP_JDBC_URL);
     }
 
-    protected String getSystemJdbcDataSourceClass() {
-        return System.getProperty(PROP_JDBC_DATASOURCE_CLASS);
-    }
-
-    protected String getJdbcUser(Properties properties) {
+    protected String getJdbcUser() {
         return properties.getProperty(PROP_JDBC_USER, getSystemJdbcUser());
     }
 
-    protected String getJdbcPassword(Properties properties) {
+    protected String getJdbcPassword() {
         return properties.getProperty(PROP_JDBC_PASSWORD, getSystemJdbcPassword());
     }
 
-    protected String getJdbcUrl(Properties properties) {
+    protected String getJdbcUrl() {
         return properties.getProperty(PROP_JDBC_URL, getSystemJdbcUrl());
-    }
-
-    protected String getJdbcDataSourceClass(Properties properties) {
-        return properties.getProperty(PROP_JDBC_DATASOURCE_CLASS, getSystemJdbcDataSourceClass());
     }
 }
