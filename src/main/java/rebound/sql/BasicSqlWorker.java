@@ -21,7 +21,7 @@ import javax.sql.DataSource;
 /**
  * Created by jcone on 8/8/15.
  */
-public class StandardSqlSession implements SqlSession {
-    public StandardSqlSession(DataSource dataSource) {
+public class BasicSqlWorker implements SqlWorker {
+    public BasicSqlWorker(DataSource dataSource) {
     }
 }

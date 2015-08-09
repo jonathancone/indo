@@ -17,7 +17,12 @@
 package rebound.sql;
 
 /**
- * Created by jcone on 8/2/15.
+ * A {@link BindingResolver} is responsible for generating bind variables in a SQL statement for a specific parameter.
+ * How these are generated might vary based on the Java object being bound, so this interface can be used to
+ * implement a specific strategy depending on the object.
+ *
+ * @see ArrayBindingResolver
+ * @see CollectionBindingResolver
  */
 public interface BindingResolver {
 

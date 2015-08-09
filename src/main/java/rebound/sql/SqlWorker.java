@@ -17,8 +17,7 @@
 package rebound.sql;
 
 /**
- * Created by jcone on 8/8/15.
+ * Created by jcone on 8/7/15.
  */
-public interface SqlConfiguration {
-    SqlSession create();
+public interface SqlWorker {
 }

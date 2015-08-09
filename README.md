@@ -5,16 +5,16 @@ What if there were an API that eliminated all the confusing parts of reading and
 ###### Creating a Connection
 ```java
 // Use a javax.sql.DataSource for connection pooling, transactions, etc.
-SqlSession sql = new SqlConfig(dataSource).create();
+SqlWorker sql = new BasicSqlConfig(dataSource).create();
 
 // Use java.util.Properties to configure datasource
-SqlSession sql = new SqlConfig(properties).create();
+SqlWorker sql = new BasicSqlConfig(properties).create();
 
 // Use an existing java.sql.Connection
-SqlSession sql = new SqlConfig(connection).create();
+SqlWorker sql = new BasicSqlConfig(connection).create();
 
 // Quick and dirty using JDBC URL
-SqlSession sql = new SqlConfig("jdbc://...", "user", "password").create();
+SqlWorker sql = new BasicSqlConfig("jdbc://...", "user", "password").create();
 ```
 
 ######Inserting Records
