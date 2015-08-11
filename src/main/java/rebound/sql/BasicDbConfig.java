@@ -28,19 +28,19 @@ import java.util.Properties;
  * <br>
  * <code>
  * // Use a javax.sql.DataSource for connection pooling, transactions, etc.<br>
- * SqlWorker sql = new BasicSqlConfig(dataSource).create();<br>
+ * SqlWorker sql = new BasicDbConfig(dataSource).create();<br>
  * <br>
  * // Use java.util.Properties to configure datasource<br>
- * SqlWorker sql = new BasicSqlConfig(properties).create();<br>
+ * SqlWorker sql = new BasicDbConfig(properties).create();<br>
  * <br>
  * // Use an existing java.sql.Connection<br>
- * SqlWorker sql = new BasicSqlConfig(connection).create();<br>
+ * SqlWorker sql = new BasicDbConfig(connection).create();<br>
  * <br>
  * // Quick and dirty using JDBC URL<br>
- * SqlWorker sql = new BasicSqlConfig("jdbc://...", "user", "password", ...).create();
+ * SqlWorker sql = new BasicDbConfig("jdbc://...", "user", "password", ...).create();
  * </code>
  */
-public class BasicSqlConfig implements SqlConfig {
+public class BasicDbConfig implements DbConfig {
 
     public static final String PROP_JDBC_URL = "jdbc.url";
     public static final String PROP_JDBC_USER = "jdbc.user";
@@ -50,24 +50,24 @@ public class BasicSqlConfig implements SqlConfig {
     private Connection connection;
     private Properties properties;
 
-    public BasicSqlConfig(DataSource dataSource) {
+    public BasicDbConfig(DataSource dataSource) {
         checkArguments("DataSource", dataSource);
         this.dataSource = dataSource;
     }
 
-    public BasicSqlConfig(Properties properties) {
+    public BasicDbConfig(Properties properties) {
         checkArguments("Properties", properties);
         this.properties = properties;
     }
 
-    public BasicSqlConfig(String url, String username, String password) {
+    public BasicDbConfig(String url, String username, String password) {
         checkArguments("String (url)", url);
         checkArguments("String (username)", username);
         checkArguments("String (password)", password);
         this.properties = constructProperties(url, username, password);
     }
 
-    public BasicSqlConfig(Connection connection) {
+    public BasicDbConfig(Connection connection) {
         checkArguments("Connection", connection);
         this.connection = connection;
     }

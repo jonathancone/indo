@@ -27,45 +27,45 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by jcone on 8/8/15.
  */
-public class BasicSqlConfigTest {
+public class BasicDbConfigTest {
 
     @Test(expected = NullPointerException.class)
     public void testDataSourceConstructor() throws Exception {
-        new BasicSqlConfig((DataSource) null);
+        new BasicDbConfig((DataSource) null);
     }
 
     @Test(expected = NullPointerException.class)
     public void testPropertiesConstructor() throws Exception {
-        new BasicSqlConfig((Properties) null);
+        new BasicDbConfig((Properties) null);
     }
 
     @Test(expected = NullPointerException.class)
     public void testConnectionConstructor() throws Exception {
-        new BasicSqlConfig((Connection) null);
+        new BasicDbConfig((Connection) null);
     }
 
     @Test
     public void testGetSystemJdbcUser() throws Exception {
 
-        System.setProperty(BasicSqlConfig.PROP_JDBC_USER, "value1");
+        System.setProperty(BasicDbConfig.PROP_JDBC_USER, "value1");
 
-        assertEquals(new BasicSqlConfig(new Properties()).getSystemJdbcUser(), System.getProperty(BasicSqlConfig.PROP_JDBC_USER));
+        assertEquals(new BasicDbConfig(new Properties()).getSystemJdbcUser(), System.getProperty(BasicDbConfig.PROP_JDBC_USER));
     }
 
     @Test
     public void testGetSystemJdbcPassword() throws Exception {
 
-        System.setProperty(BasicSqlConfig.PROP_JDBC_PASSWORD, "value2");
+        System.setProperty(BasicDbConfig.PROP_JDBC_PASSWORD, "value2");
 
-        assertEquals(new BasicSqlConfig(new Properties()).getSystemJdbcPassword(), System.getProperty(BasicSqlConfig.PROP_JDBC_PASSWORD));
+        assertEquals(new BasicDbConfig(new Properties()).getSystemJdbcPassword(), System.getProperty(BasicDbConfig.PROP_JDBC_PASSWORD));
     }
 
     @Test
     public void testGetSystemJdbcUrl() throws Exception {
 
-        System.setProperty(BasicSqlConfig.PROP_JDBC_URL, "value3");
+        System.setProperty(BasicDbConfig.PROP_JDBC_URL, "value3");
 
-        assertEquals(new BasicSqlConfig(new Properties()).getSystemJdbcUrl(), System.getProperty(BasicSqlConfig.PROP_JDBC_URL));
+        assertEquals(new BasicDbConfig(new Properties()).getSystemJdbcUrl(), System.getProperty(BasicDbConfig.PROP_JDBC_URL));
     }
 
     @Test
@@ -73,9 +73,9 @@ public class BasicSqlConfigTest {
 
         Properties properties = new Properties();
 
-        properties.setProperty(BasicSqlConfig.PROP_JDBC_USER, "value1");
+        properties.setProperty(BasicDbConfig.PROP_JDBC_USER, "value1");
 
-        assertEquals(new BasicSqlConfig(properties).getJdbcUser(), properties.getProperty(BasicSqlConfig.PROP_JDBC_USER));
+        assertEquals(new BasicDbConfig(properties).getJdbcUser(), properties.getProperty(BasicDbConfig.PROP_JDBC_USER));
 
     }
 
@@ -83,9 +83,9 @@ public class BasicSqlConfigTest {
     public void testGetJdbcPassword() throws Exception {
         Properties properties = new Properties();
 
-        properties.setProperty(BasicSqlConfig.PROP_JDBC_PASSWORD, "value2");
+        properties.setProperty(BasicDbConfig.PROP_JDBC_PASSWORD, "value2");
 
-        assertEquals(new BasicSqlConfig(properties).getJdbcPassword(), properties.getProperty(BasicSqlConfig.PROP_JDBC_PASSWORD));
+        assertEquals(new BasicDbConfig(properties).getJdbcPassword(), properties.getProperty(BasicDbConfig.PROP_JDBC_PASSWORD));
 
     }
 
@@ -93,9 +93,9 @@ public class BasicSqlConfigTest {
     public void testGetJdbcUrl() throws Exception {
         Properties properties = new Properties();
 
-        properties.setProperty(BasicSqlConfig.PROP_JDBC_URL, "value3");
+        properties.setProperty(BasicDbConfig.PROP_JDBC_URL, "value3");
 
-        assertEquals(new BasicSqlConfig(properties).getJdbcUrl(), properties.getProperty(BasicSqlConfig.PROP_JDBC_URL));
+        assertEquals(new BasicDbConfig(properties).getJdbcUrl(), properties.getProperty(BasicDbConfig.PROP_JDBC_URL));
 
     }
 

@@ -16,8 +16,15 @@
 
 package rebound.sql;
 
+import java.util.Collection;
+
 /**
  * Created by jcone on 8/7/15.
  */
 public interface SqlWorker {
+
+    <T> InsertWorker<T> insert(T object);
+
+    <T> InsertWorker<T> insert(Collection<T> object);
+
 }

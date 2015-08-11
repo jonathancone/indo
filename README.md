@@ -27,7 +27,7 @@ Collection collection = Arrays.asList(employee1, employee2);
 sql.insert(employee1).into("Employee").returningKey("employeeId");
 
 // Insert a single record using only the specified columns, pass null for everything not listed
-sql.insert(employee1, "firstName").into("Employee").returningNothing();
+sql.insert(employee1).into("Employee").including("firstName").returningNothing();
 
 // Insert a single record overriding the column names in the database
 sql.insert(employee1, "firstName AS FIRST_NAME", "lastName AS LAST_NAME").into("Employee").returningNothing();

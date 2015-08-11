@@ -16,9 +16,16 @@
 
 package rebound.sql;
 
+
+import java.util.Collection;
+
 /**
  * Created by jcone on 8/8/15.
  */
-public interface SqlConfig {
+public interface DbConfig {
     SqlWorker create();
+
+    <T> InsertWorker<T> newInsert(T object);
+
+    <T> InsertWorker<T> newInsert(Collection<T> objects);
 }
