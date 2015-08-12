@@ -16,14 +16,26 @@
 
 package rebound.sql;
 
-import org.junit.Test;
+/**
+ * Created by jcone on 8/7/15.
+ */
+public class UncheckedSQLException extends RuntimeException {
+    public UncheckedSQLException() {
+    }
 
-public class SqlQueryImplTest {
+    public UncheckedSQLException(String message) {
+        super(message);
+    }
 
-	@Test
-	public void testQuery1() throws Exception {
-		// SqlQueryImpl query = new SqlQueryImpl(sql, connection);
+    public UncheckedSQLException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	}
+    public UncheckedSQLException(Throwable cause) {
+        super(cause);
+    }
 
+    public UncheckedSQLException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 }

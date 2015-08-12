@@ -24,13 +24,13 @@ import java.lang.reflect.Array;
 public class ArrayBindingResolver extends AbstractBindingResolver {
 
     @Override
-    public String resolve(int nextIndex, SqlParameter sqlParameter) {
+    public String resolve(int nextIndex, Parameter parameter) {
 
         int length = 0;
 
-        if (sqlParameter.getValue() instanceof Array) {
-            length = Array.getLength(sqlParameter.getValue());
-            sqlParameter.addIndexes(nextIndex, length);
+        if (parameter.getValue() instanceof Array) {
+            length = Array.getLength(parameter.getValue());
+            parameter.addIndexes(nextIndex, length);
         }
 
         return generateBindingPlaceholders(length);

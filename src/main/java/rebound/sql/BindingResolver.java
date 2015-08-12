@@ -26,6 +26,6 @@ package rebound.sql;
  */
 public interface BindingResolver {
 
-    String resolve(int nextIndex, SqlParameter sqlParameter);
+    String resolve(int nextIndex, Parameter parameter);
 
 }

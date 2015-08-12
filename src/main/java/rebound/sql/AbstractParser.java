@@ -21,7 +21,7 @@ import org.apache.commons.collections.ListUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractSqlParser implements SqlParser {
+public abstract class AbstractParser implements Parser {
 
     private static final char DEFAULT_ESCAPE_TOKEN = '\'';
     private static final char DEFAULT_PREFIX_TOKEN = ':';
@@ -33,11 +33,11 @@ public abstract class AbstractSqlParser implements SqlParser {
 
     private List<BindingResolver> bindingResolvers;
 
-    public AbstractSqlParser() {
+    public AbstractParser() {
         this(DEFAULT_PREFIX_TOKEN, DEFAULT_ESCAPE_TOKEN, DEFAULT_BIND_TOKEN);
     }
 
-    public AbstractSqlParser(char prefixToken, char escapeToken, char bindToken) {
+    public AbstractParser(char prefixToken, char escapeToken, char bindToken) {
         this.prefixToken = prefixToken;
         this.escapeToken = escapeToken;
         this.bindToken = bindToken;
@@ -45,11 +45,11 @@ public abstract class AbstractSqlParser implements SqlParser {
     }
 
     @Override
-    public ParsedStatement parse(String sourceSql, SqlParameters sqlParameters) {
-        return new ParsedStatement(sourceSql, resolveCallType(sourceSql), parseInternal(sourceSql, sqlParameters), sqlParameters);
+    public ParsedStatement parse(String sourceSql, Parameters parameters) {
+        return new ParsedStatement(sourceSql, resolveCallType(sourceSql), parseInternal(sourceSql, parameters), parameters);
     }
 
-    protected abstract String parseInternal(String sourceSql, SqlParameters sqlParameters);
+    protected abstract String parseInternal(String sourceSql, Parameters parameters);
 
     public List<BindingResolver> getBindingResolvers() {
         return ListUtils.unmodifiableList(bindingResolvers);
@@ -71,7 +71,7 @@ public abstract class AbstractSqlParser implements SqlParser {
         return prefixToken;
     }
 
-    protected String normalizeParamName(SqlParameter sp) {
+    protected String normalizeParamName(Parameter sp) {
         return getPrefixToken() + sp.getName();
     }
 

@@ -29,7 +29,7 @@ public class Quietly {
         try {
             return dataSource.getConnection();
         } catch (SQLException e) {
-            throw new UnexpectedSqlException(e);
+            throw new UncheckedSQLException(e);
         }
     }
 }

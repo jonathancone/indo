@@ -26,7 +26,7 @@ import java.util.TreeSet;
 /**
  * Created by jcone on 8/1/15.
  */
-public class SqlParameter {
+public class Parameter {
 
     private String name;
 
@@ -42,7 +42,7 @@ public class SqlParameter {
 
     private SortedSet<Integer> indexes;
 
-    public SqlParameter(String name, Object value, Class<?> type) {
+    public Parameter(String name, Object value, Class<?> type) {
         this.name = name;
         this.value = value;
         this.type = type;

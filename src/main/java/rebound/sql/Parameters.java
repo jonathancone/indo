@@ -16,15 +16,25 @@
 
 package rebound.sql;
 
-import java.util.Collection;
+import org.apache.commons.collections.CollectionUtils;
+
+import java.util.Iterator;
+import java.util.List;
 
 /**
- * Created by jcone on 8/7/15.
+ * Created by jcone on 8/1/15.
  */
-public interface SqlWorker {
+public class Parameters implements Iterable<Parameter> {
 
-    <T> InsertWorker<T> insert(T object);
+    private List<Parameter> parameters;
 
-    <T> InsertWorker<T> insert(Collection<T> object);
+    @Override
+    public Iterator<Parameter> iterator() {
+        return parameters.iterator();
+    }
+
+    public boolean hasParameters() {
+        return CollectionUtils.isNotEmpty(parameters);
+    }
 
 }

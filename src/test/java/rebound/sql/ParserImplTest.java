@@ -21,14 +21,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
 import rebound.sql.test.Employee;
 
 import java.util.Arrays;
 import java.util.Collection;
 
 @RunWith(Parameterized.class)
-public class SqlParserImplTest {
+public class ParserImplTest {
 
     @Parameter(0)
     public String original;
@@ -37,16 +36,16 @@ public class SqlParserImplTest {
     public String expected;
 
     @Parameter(2)
-    public SqlParameters sqlParameters;
+    public Parameters parameters;
 
-    @Parameters
+    @Parameterized.Parameters
     public static Collection<Object[]> statements() {
 
         Employee employee = new Employee("First", "Last");
 
-        SqlParameters pojoParams = new SqlParameters();
-        SqlParameters mapParams = new SqlParameters();
-        SqlParameters iterableParams = new SqlParameters();
+        Parameters pojoParams = new Parameters();
+        Parameters mapParams = new Parameters();
+        Parameters iterableParams = new Parameters();
 
 
         return Arrays
@@ -104,9 +103,9 @@ public class SqlParserImplTest {
 
     @Test
     public void test() {
-        StreamingSqlParser parser = new StreamingSqlParser();
+        StreamingParser parser = new StreamingParser();
 
-        ParsedStatement parsed = parser.parse(original, sqlParameters);
+        ParsedStatement parsed = parser.parse(original, parameters);
 
         Assert.assertEquals(expected, parsed.getTargetSql());
 

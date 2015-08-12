@@ -16,16 +16,6 @@
 
 package rebound.sql;
 
-
-import java.util.Collection;
-
-/**
- * Created by jcone on 8/8/15.
- */
-public interface DbConfig {
-    SqlWorker create();
-
-    <T> InsertWorker<T> newInsert(T object);
-
-    <T> InsertWorker<T> newInsert(Collection<T> objects);
+public interface Parser {
+    ParsedStatement parse(String sourceSql, Parameters parameters);
 }

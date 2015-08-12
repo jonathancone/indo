@@ -19,11 +19,11 @@ package rebound.sql;
 /**
  * Created by jcone on 8/1/15.
  */
-public class StreamingSqlParser extends AbstractSqlParser implements SqlParser {
+public class StreamingParser extends AbstractParser implements Parser {
 
 
     @Override
-    protected String parseInternal(String sourceSql, SqlParameters sqlParameters) {
+    protected String parseInternal(String sourceSql, Parameters parameters) {
 
         StringBuilder targetSql = new StringBuilder(sourceSql.length());
 
@@ -34,7 +34,7 @@ public class StreamingSqlParser extends AbstractSqlParser implements SqlParser {
             // We found what could appear to be a bind variable.
             if (isPrefixToken(sourceSql.charAt(c))) {
 
-                for (SqlParameter sp : sqlParameters) {
+                for (Parameter sp : parameters) {
 
                     String name = normalizeParamName(sp);
 

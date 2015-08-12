@@ -24,14 +24,14 @@ import java.util.Collection;
  */
 public class CollectionBindingResolver extends AbstractBindingResolver {
     @Override
-    public String resolve(int nextIndex, SqlParameter sqlParameter) {
+    public String resolve(int nextIndex, Parameter parameter) {
 
         int length = 0;
 
-        if (sqlParameter.getValue() instanceof Collection) {
-            Collection collection = (Collection) sqlParameter.getValue();
+        if (parameter.getValue() instanceof Collection) {
+            Collection collection = (Collection) parameter.getValue();
             length = collection.size();
-            sqlParameter.addIndexes(nextIndex, length);
+            parameter.addIndexes(nextIndex, length);
         }
 
         return generateBindingPlaceholders(length);

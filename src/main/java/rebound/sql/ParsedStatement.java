@@ -19,14 +19,14 @@ package rebound.sql;
 public class ParsedStatement {
     private String sourceSql;
     private String targetSql;
-    private SqlParameters sqlParameters;
+    private Parameters parameters;
     private CallType callType;
 
-    public ParsedStatement(String sourceSql, CallType callType, String targetSql, SqlParameters sqlParameters) {
+    public ParsedStatement(String sourceSql, CallType callType, String targetSql, Parameters parameters) {
         this.sourceSql = sourceSql;
         this.callType = callType;
         this.targetSql = targetSql;
-        this.sqlParameters = sqlParameters;
+        this.parameters = parameters;
     }
 
     public String getSourceSql() {
@@ -37,8 +37,8 @@ public class ParsedStatement {
         return targetSql;
     }
 
-    public SqlParameters getSqlParameters() {
-        return sqlParameters;
+    public Parameters getParameters() {
+        return parameters;
     }
 
     public CallType getCallType() {
