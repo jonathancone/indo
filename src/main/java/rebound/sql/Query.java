@@ -17,19 +17,15 @@
 package rebound.sql;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
 
 /**
  * Created by jcone on 8/7/15.
  */
-public class Query<T> {
+public class Query<T> extends SQL {
 
-    private DataSource dataSource;
-
-    protected Connection getConnection() {
-        return Quietly.getConnection(dataSource);
+    public Query(DataSource dataSource) {
+        super(dataSource);
     }
-
 /*
     public Query<T> insert(T object) {
         return this;

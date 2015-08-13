@@ -38,4 +38,5 @@ public class UncheckedSQLException extends RuntimeException {
     public UncheckedSQLException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
+
 }

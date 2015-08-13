@@ -16,7 +16,6 @@
 
 package rebound.sql;
 
-import org.apache.commons.collections.ListUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +73,7 @@ public class Parameter {
     }
 
     public List<Integer> getIndexes() {
-        return ListUtils.unmodifiableList(new ArrayList<>(indexes));
+        return new ArrayList<>(indexes);
     }
 
     public void addIndex(Integer index) {

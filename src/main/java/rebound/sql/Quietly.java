@@ -17,6 +17,8 @@
 package rebound.sql;
 
 import javax.sql.DataSource;
+import java.io.Closeable;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -29,6 +31,14 @@ public class Quietly {
         try {
             return dataSource.getConnection();
         } catch (SQLException e) {
+            throw new UncheckedSQLException(e);
+        }
+    }
+
+    public static void close(Closeable closeable) {
+        try {
+            closeable.close();
+        } catch (IOException e) {
             throw new UncheckedSQLException(e);
         }
     }

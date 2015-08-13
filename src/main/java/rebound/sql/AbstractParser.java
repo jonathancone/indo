@@ -16,8 +16,6 @@
 
 package rebound.sql;
 
-import org.apache.commons.collections.ListUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +50,7 @@ public abstract class AbstractParser implements Parser {
     protected abstract String parseInternal(String sourceSql, Parameters parameters);
 
     public List<BindingResolver> getBindingResolvers() {
-        return ListUtils.unmodifiableList(bindingResolvers);
+        return new ArrayList<>(bindingResolvers);
     }
 
     public char getBindToken() {

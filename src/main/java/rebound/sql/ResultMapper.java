@@ -16,23 +16,11 @@
 
 package rebound.sql;
 
-import java.util.Iterator;
-import java.util.List;
+import java.sql.ResultSet;
 
 /**
- * Created by jcone on 8/1/15.
+ * Created by jcone on 8/12/15.
  */
-public class Parameters implements Iterable<Parameter> {
-
-    private List<Parameter> parameters;
-
-    @Override
-    public Iterator<Parameter> iterator() {
-        return parameters.iterator();
-    }
-
-    public boolean hasParameters() {
-        return Tuples.isNotEmpty(parameters);
-    }
-
+public interface ResultMapper<T> {
+    T map(ResultSet rs, int rowNumber);
 }

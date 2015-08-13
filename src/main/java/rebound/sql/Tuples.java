@@ -16,23 +16,17 @@
 
 package rebound.sql;
 
-import java.util.Iterator;
-import java.util.List;
+import java.util.Collection;
 
 /**
- * Created by jcone on 8/1/15.
+ * Created by jcone on 8/12/15.
  */
-public class Parameters implements Iterable<Parameter> {
-
-    private List<Parameter> parameters;
-
-    @Override
-    public Iterator<Parameter> iterator() {
-        return parameters.iterator();
+public class Tuples {
+    public static boolean isNotEmpty(Object[] array) {
+        return array != null && array.length > 0;
     }
 
-    public boolean hasParameters() {
-        return Tuples.isNotEmpty(parameters);
+    public static boolean isNotEmpty(Collection collection) {
+        return collection != null && collection.size() > 0;
     }
-
 }
