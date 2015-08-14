@@ -35,7 +35,6 @@ List<Employee> employees = query.select(Employee.class)
 List<Department> depts = query.select(" SELECT                                              "
                                     + "     departmentId,                                   "
                                     + "     name,                                           "
-                                    + "     employeeId,                                     "
                                     + "     firstName AS employees_firstName,               "
                                     + "     lastName  AS employees_lastName,                "
                                     + "     employeeId AS employees_employeeId              "

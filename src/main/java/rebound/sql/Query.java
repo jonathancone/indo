@@ -122,4 +122,8 @@ public class Query<T> extends SQL {
     public List<T> list() {
         return null;
     }
+
+    public T single() {
+        return null;
+    }
 }
