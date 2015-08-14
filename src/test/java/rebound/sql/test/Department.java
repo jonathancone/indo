@@ -16,8 +16,39 @@
 
 package rebound.sql.test;
 
+import java.util.List;
+
 /**
  * Created by jcone on 8/1/15.
  */
 public class Department {
+
+    private int departmentId;
+    private String name;
+    private List<Employee> employees;
+
+
+    public int getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(int departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
+    }
 }

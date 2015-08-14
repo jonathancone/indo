@@ -17,21 +17,33 @@
 package rebound.sql;
 
 import javax.sql.DataSource;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by jcone on 8/7/15.
  */
 public class Query<T> extends SQL {
+    private boolean dynamic;
 
     public Query(DataSource dataSource) {
         super(dataSource);
     }
-/*
+
+    public Query<T> insert(String sql) {
+        return this;
+    }
+
     public Query<T> insert(T object) {
         return this;
     }
 
     public Query<T> insert(Collection<T> objects) {
+        return this;
+    }
+
+    public Query<T> update(String sql) {
         return this;
     }
 
@@ -43,11 +55,19 @@ public class Query<T> extends SQL {
         return this;
     }
 
+    public Query<T> delete(String sql) {
+        return this;
+    }
+
     public Query<T> delete(T object) {
         return this;
     }
 
     public Query<T> delete(Collection<T> objects) {
+        return this;
+    }
+
+    public Query<T> select(String sql) {
         return this;
     }
 
@@ -75,12 +95,31 @@ public class Query<T> extends SQL {
         return this;
     }
 
-    public Query<T> generate(String... columns) {
+    public Query<T> generateKey(String... fields) {
         return this;
     }
 
-    public Integer run() {
+    public Query<T> withParameter(String field, Object value) {
+        return this;
+    }
+
+    public Query<T> withParameters(Map<String, Object> fieldValues) {
+        return this;
+    }
+
+    public Query<T> withParameters(Object mappingObject) {
+        return this;
+    }
+
+    public Query<T> usingKey(String... fields) {
+        return this;
+    }
+
+    public Integer count() {
         return 0;
     }
-    */
+
+    public List<T> list() {
+        return null;
+    }
 }
