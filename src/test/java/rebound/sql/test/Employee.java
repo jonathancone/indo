@@ -20,6 +20,7 @@ import java.util.Date;
 
 public class Employee {
     private Integer employeeId;
+    private Integer payrollId;
     private Date hireDate;
     private String firstName;
     private String lastName;
@@ -27,7 +28,8 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(String firstName, String lastName) {
+    public Employee(Integer employeId, String firstName, String lastName) {
+        this.employeeId = employeId;
         this.firstName = firstName;
         this.lastName = lastName;
     }
@@ -38,6 +40,14 @@ public class Employee {
 
     public void setEmployeeId(Integer employeeId) {
         this.employeeId = employeeId;
+    }
+
+    public Integer getPayrollId() {
+        return payrollId;
+    }
+
+    public void setPayrollId(Integer payrollId) {
+        this.payrollId = payrollId;
     }
 
     public Date getHireDate() {

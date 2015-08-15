@@ -20,6 +20,7 @@ import rebound.sql.Query;
 
 import javax.sql.DataSource;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,38 +30,42 @@ public class Examples {
 
     private DataSource dataSource = null;
 
-    private Employee employee1 = new Employee("Bill", "Gates");
-    private Employee employee2 = new Employee("Larry", "Ellison");
+    private List<Employee> allEmployees = Arrays.asList(
+            new Employee(1, "Bill", "Gates"),
+            new Employee(2, "Steve", "Jobs"),
+            new Employee(3, "Larry", "Ellison"));
 
-    private List<Employee> allEmployees = Arrays.asList(employee1, employee2);
+    private Employee employee = allEmployees.get(0);
 
     void selectExamples() {
 
-        Query<Employee> query = new Query<>(dataSource);
+        Query query = new Query(dataSource);
 
         // Find an employee based on the value of employeeId.
-        Employee employee = query.select(Employee.class)
-                .withParameter("employeeId", 729)
-                .single();
+        Employee employee = query
+                .select()
+                .bind("employeeId", 3)
+                .single(Employee.class);
 
         // Find all employees with the name Steve Jobs.
-        List<Employee> employees1 = query.select(Employee.class)
-                .withParameter("firstName", "Steve")
-                .withParameter("lastName", "Jobs")
-                .list();
+        List<Employee> employees1 = query
+                .select()
+                .bind("firstName", "Steve")
+                .bind("lastName", "Jobs")
+                .list(Employee.class);
 
         // Similar to above, but override some of the defaults.
-        List<Employee> employees2 = query.select(Employee.class)
+        List<Employee> employees2 = query
+                .select()
                 .in("EmployeeTable")
-                .mapping("firstName", "F_NAME")
-                .mapping("lastName", "L_NAME")
-                .withParameter("firstName", "Steve")
-                .withParameter("lastName", "Jobs")
-                .list();
+                .mapping("firstName", "F_NAME", "lastName", "L_NAME")
+                .bind("firstName", "Steve")
+                .bind("lastName", "Jobs")
+                .list(Employee.class);
 
         // Complex joins can be mapped to an object graph using "AS" mapping construct.  This example
         // Populates a list of Department objects, each containing a list of Employee objects.
-        Query<Department> departmentQuery = new Query<>(dataSource);
+        Query departmentQuery = new Query(dataSource);
 
         List<Department> departments = departmentQuery
                 .select("   SELECT                                              "
@@ -77,35 +82,40 @@ public class Examples {
                         + "     Department.departmentId = Employee.departmentId "
                         + " WHERE                                               "
                         + "     Department.name = :deptName                     ")
-                .withParameter("deptName", "Human Resources")
-                .list();
+                .bind("deptName", "Human Resources")
+                .list(Department.class);
     }
 
     void insertExamples() {
-        Query<Employee> query = new Query<>(dataSource);
+        Query query = new Query(dataSource);
 
         // Default convention: insert Employee instance into a table named Employee and
         // map each of the fields on the Employee class to table columns with the same
         // name.
-        query.insert(employee1).count();
+        query.insert(employee).count();
 
         // Override the table name to EmployeeTable and insert a record. Also, set the
-        // primary key value back into employee1.employeeId by default.
-        query.insert(employee1).in("EmployeeTable").generateKey().count();
+        // primary key value back into employee.employeeId by default.
+        query.insert(employee).in("EmployeeTable").count();
 
         // Insert a single record including only the specified fields
-        query.insert(employee1).includingOnly("firstName").count();
+        query.insert(employee)
+                .includingOnly("firstName", "payrollId")
+                .count();
 
         // Insert a single record overriding the column names in the database
-        query.insert(employee1).mapping("firstName", "F_NAME").count();
+        query.insert(employee)
+                .mapping("firstName", "F_NAME", "lastName", "L_NAME")
+                .count();
 
         // Perform a bulk insert using a collection (uses JDBC batch statement) and
-        // return the multiple generated keys into the payrollId and systemId fields
-        // instead of the default employeeId field.
-        query.insert(allEmployees).generateKey("payrollId", "systemId").count();
+        // return the generated key into payrollId (default would have been employeeId)
+        query.insert(allEmployees)
+                .usingKey("payrollId")
+                .count();
 
         // Perform a custom SQL insert and supply our own parameter values
-        Integer employeeId = query
+        Integer rowCount = query
                 .insert(" INSERT INTO                        " +
                         "     Employee (firstName, lastName) " +
                         " SELECT                             " +
@@ -116,8 +126,58 @@ public class Examples {
                         " WHERE                              " +
                         "     applicationId = :applicationId " +
                         "     AND status = :status           ")
-                .withParameter("applicationId", 212)
-                .withParameter("status", "Open")
+                .bind("applicationId", 212)
+                .bind("status", "Open")
+                .count();
+
+    }
+
+    void updateExamples() {
+        Query query = new Query(dataSource);
+
+        // Default convention: update Employee instance into a table named Employee and
+        // map each of the fields on the Employee class to table columns with the same
+        // name.  By default use the primary key field employeeId as the criteria.
+        query.update(employee).count();
+
+        // Update a single record in an overridden table, just setting the first name for all employees with a
+        // matching last name.
+        query.update(employee)
+                .in("EmployeeTable")
+                .includingOnly("firstName")
+                .usingKey("lastName");
+
+        // Perform a bulk update (uses JDBC batch statement), overriding columns
+        query.update(allEmployees)
+                .mapping("firstName", "F_NAME", "lastName", "L_NAME")
+                .count();
+
+        // Perform a custom SQL update and supply our own parameter values
+        query
+                .update(" UPDATE Employee                  " +
+                        " SET salary = salary * 1.03       " +
+                        " WHERE hireDate > :hireDate       " +
+                        " AND employeeId IN (:employeeIds) ")
+                .bind("hireDate", new Date())
+                .bind("employeeIds", Arrays.asList(1, 3))
+                .count();
+    }
+
+    void deleteExamples() {
+        Query query = new Query(dataSource);
+
+        // Delete a single record that matches the employeeId on employee.
+        query.delete(employee).count();
+
+        // Perform a bulk delete (uses JDBC batch statment).
+        query.delete(allEmployees).usingKey("employeeId").count();
+
+        // Perform a more complexe delete using the properties bound from employee instance.
+        query
+                .delete(" DELETE FROM Employee           " +
+                        " WHERE employeeId = :employeeId " +
+                        " AND lastName = :lastName       ")
+                .bind(employee)
                 .count();
 
     }

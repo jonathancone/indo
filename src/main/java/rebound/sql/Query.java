@@ -16,6 +16,8 @@
 
 package rebound.sql;
 
+import org.apache.poi.ss.formula.functions.T;
+
 import javax.sql.DataSource;
 import java.util.Collection;
 import java.util.List;
@@ -24,94 +26,99 @@ import java.util.Map;
 /**
  * Created by jcone on 8/7/15.
  */
-public class Query<T> extends SQL {
-    private boolean dynamic;
+public class Query {
+
+    private SQL sql;
 
     public Query(DataSource dataSource) {
-        super(dataSource);
+        this.sql = new SQL(dataSource);
     }
 
-    public Query<T> insert(String sql) {
+    public Query insert(String sql) {
         return this;
     }
 
-    public Query<T> insert(T object) {
+    public Query insert(Object object) {
         return this;
     }
 
-    public Query<T> insert(Collection<T> objects) {
+    public Query insert(Collection<T> objects) {
         return this;
     }
 
-    public Query<T> update(String sql) {
+    public Query update(String sql) {
         return this;
     }
 
-    public Query<T> update(T object) {
+    public Query update(Object object) {
         return this;
     }
 
-    public Query<T> update(Collection<T> objects) {
+    public Query update(Collection<?> objects) {
         return this;
     }
 
-    public Query<T> delete(String sql) {
+    public Query insertOrUpdate(Object object) {
         return this;
     }
 
-    public Query<T> delete(T object) {
+    public Query insertOrUpdate(Collection<?> objects) {
         return this;
     }
 
-    public Query<T> delete(Collection<T> objects) {
+    public Query delete(String sql) {
         return this;
     }
 
-    public Query<T> select(String sql) {
+    public Query delete(Object object) {
         return this;
     }
 
-    public Query<T> select(Class<T> clazz) {
+    public Query delete(Collection<?> objects) {
         return this;
     }
 
-    public Query<T> in(String table) {
+    public Query select(String sql) {
         return this;
     }
 
-    public Query<T> includingOnly(String... fields) {
+    public Query select() {
         return this;
     }
 
-    public Query<T> excludingOnly(String... fields) {
+    public Query in(String table) {
         return this;
     }
 
-    public Query<T> mapping(String... fieldColumn) {
+    public Query includingOnly(String... fields) {
         return this;
     }
 
-    public Query<T> mapping(Map<String, String> fieldColumn) {
+    public Query excludingOnly(String... fields) {
         return this;
     }
 
-    public Query<T> generateKey(String... fields) {
+    public Query mapping(String... fieldColumn) {
         return this;
     }
 
-    public Query<T> withParameter(String field, Object value) {
+    public Query mapping(Map<String, String> fieldColumn) {
         return this;
     }
 
-    public Query<T> withParameters(Map<String, Object> fieldValues) {
+    public Query bind(String field, Object value) {
         return this;
     }
 
-    public Query<T> withParameters(Object mappingObject) {
+    public Query bind(Map<String, Object> fieldValues) {
         return this;
     }
 
-    public Query<T> usingKey(String... fields) {
+    public Query bind(Object mappingObject) {
+        return this;
+    }
+
+    public Query usingKey(String... fields) {
         return this;
     }
 
@@ -119,11 +126,15 @@ public class Query<T> extends SQL {
         return 0;
     }
 
-    public List<T> list() {
+    public <T> List<T> list(Class<T> type) {
         return null;
     }
 
-    public T single() {
+    public <T> T single(Class<T> type) {
+        return null;
+    }
+
+    public <T> T unique(Class<T> type) {
         return null;
     }
 }

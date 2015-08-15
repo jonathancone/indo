@@ -29,6 +29,7 @@ import java.util.List;
  */
 public class SQL {
     private DataSource dataSource;
+    private boolean sqlOnlyMode;
 
     public SQL(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -36,6 +37,22 @@ public class SQL {
 
     protected Connection getConnection() {
         return Quietly.getConnection(dataSource);
+    }
+
+    protected boolean isSqlOnlyMode() {
+        return sqlOnlyMode;
+    }
+
+    protected void setSqlOnlyMode(boolean sqlOnlyMode) {
+        this.sqlOnlyMode = sqlOnlyMode;
+    }
+
+    public DataSource getDataSource() {
+        return dataSource;
+    }
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     public <T> List<T> query(String sql, ResultMapper<T> mapper, Object... parameters) {
