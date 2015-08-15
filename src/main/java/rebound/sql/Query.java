@@ -16,7 +16,6 @@
 
 package rebound.sql;
 
-import org.apache.poi.ss.formula.functions.T;
 
 import javax.sql.DataSource;
 import java.util.Collection;
@@ -42,7 +41,7 @@ public class Query {
         return this;
     }
 
-    public Query insert(Collection<T> objects) {
+    public Query insert(Collection<?> objects) {
         return this;
     }
 

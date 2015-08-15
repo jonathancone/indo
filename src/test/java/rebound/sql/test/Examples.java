@@ -63,8 +63,18 @@ public class Examples {
                 .bind("lastName", "Jobs")
                 .list(Employee.class);
 
-        // Complex joins can be mapped to an object graph using "AS" mapping construct.  This example
-        // Populates a list of Department objects, each containing a list of Employee objects.
+        // Complex joins can be mapped to an object graph using an "AS" mapping.  This example
+        // populates a list of Department objects, each containing a list of Employee objects in a
+        // single query. E.g.
+        //
+        // Department 1
+        //    -- Employee 1
+        //    -- Employee 2
+        //    -- Employee 3
+        // Department 2
+        //    -- Employee 4
+        //    -- Employee 5
+        //    -- Employee 6
         Query departmentQuery = new Query(dataSource);
 
         List<Department> departments = departmentQuery
@@ -81,8 +91,8 @@ public class Examples {
                         + " ON                                                  "
                         + "     Department.departmentId = Employee.departmentId "
                         + " WHERE                                               "
-                        + "     Department.name = :deptName                     ")
-                .bind("deptName", "Human Resources")
+                        + "     Department.name LIKE :deptName                  ")
+                .bind("deptName", "%Operations%")
                 .list(Department.class);
     }
 
@@ -154,10 +164,14 @@ public class Examples {
 
         // Perform a custom SQL update and supply our own parameter values
         query
-                .update(" UPDATE Employee                  " +
-                        " SET salary = salary * 1.03       " +
-                        " WHERE hireDate > :hireDate       " +
-                        " AND employeeId IN (:employeeIds) ")
+                .update(" UPDATE                           " +
+                        "     Employee                     " +
+                        " SET                              " +
+                        "     salary = salary * 1.03       " +
+                        " WHERE                            " +
+                        "     hireDate > :hireDate         " +
+                        " AND                              " +
+                        "     employeeId IN (:employeeIds) ")
                 .bind("hireDate", new Date())
                 .bind("employeeIds", Arrays.asList(1, 3))
                 .count();
@@ -169,14 +183,19 @@ public class Examples {
         // Delete a single record that matches the employeeId on employee.
         query.delete(employee).count();
 
-        // Perform a bulk delete (uses JDBC batch statment).
+        // Perform a bulk delete (uses JDBC batch statment) using the employeeId field
+        // as the matching WHERE clause.
         query.delete(allEmployees).usingKey("employeeId").count();
 
-        // Perform a more complexe delete using the properties bound from employee instance.
+        // Perform an arbitrary delete with your own SQL using the properties
+        // bound from the employee instance.
         query
-                .delete(" DELETE FROM Employee           " +
-                        " WHERE employeeId = :employeeId " +
-                        " AND lastName = :lastName       ")
+                .delete(" DELETE FROM                    " +
+                        "     Employee                   " +
+                        " WHERE                          " +
+                        "     employeeId = :employeeId   " +
+                        " AND                            " +
+                        "     lastName = :lastName       ")
                 .bind(employee)
                 .count();
 

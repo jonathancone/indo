@@ -41,7 +41,7 @@ public class ParserImplTest {
     @Parameterized.Parameters
     public static Collection<Object[]> statements() {
 
-        Employee employee = new Employee("First", "Last");
+        Employee employee = new Employee(1, "First", "Last");
 
         Parameters pojoParams = new Parameters();
         Parameters mapParams = new Parameters();
