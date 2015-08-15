@@ -16,19 +16,6 @@
 
 package rebound.sql;
 
-import java.lang.reflect.TypeVariable;
-
-/**
- * Created by jcone on 8/14/15.
- */
-public class Reflection {
-
-    public static <T> Class<T> getParameterizedType(T instance) {
-        TypeVariable<? extends Class<?>>[] typeParameters = instance.getClass().getTypeParameters();
-
-        System.out.println(typeParameters);
-        return null;
-    }
-
-
+public interface SQLParser {
+    String parse(String sourceSql, Parameters parameters);
 }

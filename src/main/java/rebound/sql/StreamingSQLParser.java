@@ -19,11 +19,11 @@ package rebound.sql;
 /**
  * Created by jcone on 8/1/15.
  */
-public class StreamingParser extends AbstractParser implements Parser {
+public class StreamingSQLParser extends AbstractSQLParser implements SQLParser {
 
 
     @Override
-    protected String parseInternal(String sourceSql, Parameters parameters) {
+    public String parse(String sourceSql, Parameters parameters) {
 
         StringBuilder targetSql = new StringBuilder(sourceSql.length());
 

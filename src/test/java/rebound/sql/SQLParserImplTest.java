@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @RunWith(Parameterized.class)
-public class ParserImplTest {
+public class SQLParserImplTest {
 
     @Parameter(0)
     public String original;
@@ -103,11 +103,11 @@ public class ParserImplTest {
 
     @Test
     public void test() {
-        StreamingParser parser = new StreamingParser();
+        StreamingSQLParser parser = new StreamingSQLParser();
 
-        ParsedStatement parsed = parser.parse(original, parameters);
+        String parsed = parser.parse(original, parameters);
 
-        Assert.assertEquals(expected, parsed.getTargetSql());
+        Assert.assertEquals(expected, parsed);
 
     }
 

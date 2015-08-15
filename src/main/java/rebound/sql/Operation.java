@@ -16,19 +16,9 @@
 
 package rebound.sql;
 
-import org.junit.Test;
-
 /**
  * Created by jcone on 8/14/15.
  */
-public class ReflectionTest {
-
-    @Test
-    public void testGetParameterizedType() {
-        System.out.println(Reflection.getParameterizedType(new Sample<String>()));
-    }
-
-    public static class Sample<X> {
-
-    }
+public enum Operation {
+    SELECT, INSERT, UPDATE, DELETE, CALL_PROCEDURE, CALL_FUNCTION;
 }

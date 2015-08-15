@@ -18,122 +18,22 @@ package rebound.sql;
 
 
 import javax.sql.DataSource;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by jcone on 8/7/15.
  */
-public class Query {
-
-    private SQL sql;
+public class Query extends AbstractQueryOperations {
+    private static final SQLParser parser = new StreamingSQLParser();
 
     public Query(DataSource dataSource) {
-        this.sql = new SQL(dataSource);
+        super(dataSource);
     }
 
-    public Query insert(String sql) {
-        return this;
+    @Override
+    protected SQLParser getSQLParser() {
+        return parser;
     }
 
-    public Query insert(Object object) {
-        return this;
-    }
 
-    public Query insert(Collection<?> objects) {
-        return this;
-    }
 
-    public Query update(String sql) {
-        return this;
-    }
-
-    public Query update(Object object) {
-        return this;
-    }
-
-    public Query update(Collection<?> objects) {
-        return this;
-    }
-
-    public Query insertOrUpdate(Object object) {
-        return this;
-    }
-
-    public Query insertOrUpdate(Collection<?> objects) {
-        return this;
-    }
-
-    public Query delete(String sql) {
-        return this;
-    }
-
-    public Query delete(Object object) {
-        return this;
-    }
-
-    public Query delete(Collection<?> objects) {
-        return this;
-    }
-
-    public Query select(String sql) {
-        return this;
-    }
-
-    public Query select() {
-        return this;
-    }
-
-    public Query in(String table) {
-        return this;
-    }
-
-    public Query includingOnly(String... fields) {
-        return this;
-    }
-
-    public Query excludingOnly(String... fields) {
-        return this;
-    }
-
-    public Query mapping(String... fieldColumn) {
-        return this;
-    }
-
-    public Query mapping(Map<String, String> fieldColumn) {
-        return this;
-    }
-
-    public Query bind(String field, Object value) {
-        return this;
-    }
-
-    public Query bind(Map<String, Object> fieldValues) {
-        return this;
-    }
-
-    public Query bind(Object mappingObject) {
-        return this;
-    }
-
-    public Query usingKey(String... fields) {
-        return this;
-    }
-
-    public Integer count() {
-        return 0;
-    }
-
-    public <T> List<T> list(Class<T> type) {
-        return null;
-    }
-
-    public <T> T single(Class<T> type) {
-        return null;
-    }
-
-    public <T> T unique(Class<T> type) {
-        return null;
-    }
 }

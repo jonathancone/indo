@@ -1,0 +1,170 @@
+/*
+ * Copyright (c) 2015 Rebound Contributors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package rebound.sql;
+
+import javax.sql.DataSource;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by jcone on 8/14/15.
+ */
+public abstract class AbstractQueryOperations implements QueryOperations {
+
+    private DataSource dataSource;
+    private QueryMetaData queryMetaData;
+    private SQLEngine sqlEngine;
+
+    public AbstractQueryOperations(DataSource dataSource) {
+        this.dataSource = dataSource;
+        this.queryMetaData = new QueryMetaData();
+    }
+
+    protected abstract SQLParser getSQLParser();
+
+    @Override
+    public AbstractQueryOperations insert(String sql) {
+        return null;
+    }
+
+    @Override
+    public AbstractQueryOperations insert(Object object) {
+        return null;
+    }
+
+    @Override
+    public AbstractQueryOperations insert(Collection<?> objects) {
+        return null;
+    }
+
+    @Override
+    public AbstractQueryOperations update(String sql) {
+        return null;
+    }
+
+    @Override
+    public AbstractQueryOperations update(Object object) {
+        return null;
+    }
+
+    @Override
+    public AbstractQueryOperations update(Collection<?> objects) {
+        return null;
+    }
+
+    @Override
+    public AbstractQueryOperations insertOrUpdate(Object object) {
+        return null;
+    }
+
+    @Override
+    public AbstractQueryOperations insertOrUpdate(Collection<?> objects) {
+        return null;
+    }
+
+    @Override
+    public AbstractQueryOperations delete(String sql) {
+        return null;
+    }
+
+    @Override
+    public AbstractQueryOperations delete(Object object) {
+        return null;
+    }
+
+    @Override
+    public AbstractQueryOperations delete(Collection<?> objects) {
+        return null;
+    }
+
+    @Override
+    public AbstractQueryOperations select(String sql) {
+        return null;
+    }
+
+    @Override
+    public AbstractQueryOperations select() {
+        return null;
+    }
+
+    @Override
+    public AbstractQueryOperations in(String table) {
+        queryMetaData.setTableNameOverride(table);
+        return this;
+    }
+
+    @Override
+    public AbstractQueryOperations includingOnly(String... fields) {
+        return null;
+    }
+
+    @Override
+    public AbstractQueryOperations excludingOnly(String... fields) {
+        return null;
+    }
+
+    @Override
+    public AbstractQueryOperations mapping(String... fieldColumn) {
+        return null;
+    }
+
+    @Override
+    public AbstractQueryOperations mapping(Map<String, String> fieldColumn) {
+        return null;
+    }
+
+    @Override
+    public AbstractQueryOperations bind(String field, Object value) {
+        return null;
+    }
+
+    @Override
+    public AbstractQueryOperations bind(Map<String, Object> fieldValues) {
+        return null;
+    }
+
+    @Override
+    public AbstractQueryOperations bind(Object mappingObject) {
+        return null;
+    }
+
+    @Override
+    public AbstractQueryOperations usingKey(String... fields) {
+        return null;
+    }
+
+    @Override
+    public Integer count() {
+        return null;
+    }
+
+    @Override
+    public <T> List<T> list(Class<T> type) {
+        return null;
+    }
+
+    @Override
+    public <T> T single(Class<T> type) {
+        return null;
+    }
+
+    @Override
+    public <T> T unique(Class<T> type) {
+        return null;
+    }
+}

@@ -27,24 +27,21 @@ import java.util.List;
 /**
  * Created by jcone on 8/12/15.
  */
-public class SQL {
+public class SQLEngine {
     private DataSource dataSource;
-    private boolean sqlOnlyMode;
+    private SQLParser SQLParser;
 
-    public SQL(DataSource dataSource) {
+    public SQLEngine(DataSource dataSource, SQLParser SQLParser) {
         this.dataSource = dataSource;
+        this.SQLParser = SQLParser;
     }
 
     protected Connection getConnection() {
         return Quietly.getConnection(dataSource);
     }
 
-    protected boolean isSqlOnlyMode() {
-        return sqlOnlyMode;
-    }
-
-    protected void setSqlOnlyMode(boolean sqlOnlyMode) {
-        this.sqlOnlyMode = sqlOnlyMode;
+    protected SQLParser getSQLParser() {
+        return this.SQLParser;
     }
 
     public DataSource getDataSource() {

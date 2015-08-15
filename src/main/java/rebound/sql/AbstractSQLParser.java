@@ -19,7 +19,7 @@ package rebound.sql;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractParser implements Parser {
+public abstract class AbstractSQLParser implements SQLParser {
 
     private static final char DEFAULT_ESCAPE_TOKEN = '\'';
     private static final char DEFAULT_PREFIX_TOKEN = ':';
@@ -31,23 +31,16 @@ public abstract class AbstractParser implements Parser {
 
     private List<BindingResolver> bindingResolvers;
 
-    public AbstractParser() {
+    public AbstractSQLParser() {
         this(DEFAULT_PREFIX_TOKEN, DEFAULT_ESCAPE_TOKEN, DEFAULT_BIND_TOKEN);
     }
 
-    public AbstractParser(char prefixToken, char escapeToken, char bindToken) {
+    public AbstractSQLParser(char prefixToken, char escapeToken, char bindToken) {
         this.prefixToken = prefixToken;
         this.escapeToken = escapeToken;
         this.bindToken = bindToken;
         this.bindingResolvers = new ArrayList<>();
     }
-
-    @Override
-    public ParsedStatement parse(String sourceSql, Parameters parameters) {
-        return new ParsedStatement(sourceSql, resolveCallType(sourceSql), parseInternal(sourceSql, parameters), parameters);
-    }
-
-    protected abstract String parseInternal(String sourceSql, Parameters parameters);
 
     public List<BindingResolver> getBindingResolvers() {
         return new ArrayList<>(bindingResolvers);
@@ -71,27 +64,6 @@ public abstract class AbstractParser implements Parser {
 
     protected String normalizeParamName(Parameter sp) {
         return getPrefixToken() + sp.getName();
-    }
-
-    protected boolean validStart(char character) {
-        return Character.isJavaIdentifierStart(character);
-    }
-
-    protected boolean validPart(char character) {
-        return Character.isJavaIdentifierPart(character);
-    }
-
-    protected CallType resolveCallType(String sourceSql) {
-
-        String stripped = sourceSql.replace(" ", "");
-
-        if (stripped.startsWith("{?=call")) {
-            return CallType.FUNCTION;
-        } else if (stripped.startsWith("{call")) {
-            return CallType.PROCEDURE;
-        } else {
-            return CallType.STATEMENT;
-        }
     }
 
 }
