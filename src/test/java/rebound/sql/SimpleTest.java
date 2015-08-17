@@ -14,23 +14,17 @@
  * limitations under the License.
  */
 
-apply plugin: 'java'
-apply plugin: 'idea'
+package rebound.sql;
 
-repositories {
-    jcenter()
-}
+import org.junit.Test;
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+/**
+ * Created by jcone on 8/16/15.
+ */
+public class SimpleTest extends AbstractDataSourceTest {
+    @Test
+    public void testName() throws Exception {
+        System.out.println(getDataSource());
 
-dependencies {
-
-    compile 'org.slf4j:slf4j-simple:1.7.12'
-
-    testCompile 'com.h2database:h2:1.4.187'
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.+'
-    testCompile 'org.dbunit:dbunit:2.5.1'
-
+    }
 }
