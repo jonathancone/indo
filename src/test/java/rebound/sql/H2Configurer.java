@@ -38,7 +38,7 @@ public class H2Configurer extends AbstractDataSourceConfigurer {
 
     @Override
     protected void doCreateSchema() throws Exception {
-        RunScript.execute(getUrl(), getUser(), getPassword(), getSchemaSetupSql(), Charset.forName("UTF-8"), false);
+        RunScript.execute(getUrl(), getUser(), getPassword(), getFullSchemaSetupSqlPath(), Charset.forName("UTF-8"), false);
     }
 
 }

@@ -1,0 +1,1 @@
+CREATE TABLE Employee (employeeId INT)

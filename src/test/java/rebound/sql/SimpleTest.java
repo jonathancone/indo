@@ -23,8 +23,17 @@ import org.junit.Test;
  */
 public class SimpleTest extends AbstractDataSourceTest {
     @Test
-    public void testName() throws Exception {
-        System.out.println(getDataSource());
+    public void testDo1() throws Exception {
+        log(getDataSource().toString());
+    }
 
+    @Test
+    public void testDo2() throws Exception {
+        log(getDataSource().toString());
+    }
+
+    @Test
+    public void testDo3() throws Exception {
+        log(getDataSource().toString());
     }
 }

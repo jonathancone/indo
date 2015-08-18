@@ -16,9 +16,14 @@
 
 package rebound.sql;
 
+import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.util.Arrays;
@@ -26,6 +31,10 @@ import java.util.List;
 
 @RunWith(Parameterized.class)
 public abstract class AbstractDataSourceTest {
+    private static final Logger log = LoggerFactory.getLogger(AbstractDataSourceTest.class);
+
+    @Rule
+    public TestName testName = new TestName();
 
     @Parameterized.Parameter(0)
     public AbstractDataSourceConfigurer dataSourceConfig;
@@ -41,13 +50,27 @@ public abstract class AbstractDataSourceTest {
 
     @Before
     public void setupDataSource() {
-        dataSourceConfig.createDataSource();
-        dataSourceConfig.createSchema();
-        dataSourceConfig.populateSchema("dataset.xml");
+        dataSourceConfig.populateSchema(beforeDataSetName());
     }
 
+    @After
+    public void tearDownDataSource() {
+        dataSourceConfig.assertSchema(afterDataSetName());
+    }
+
+    protected String beforeDataSetName() {
+        return testName.getMethodName() + "-before.xml";
+    }
+
+    protected String afterDataSetName() {
+        return testName.getMethodName() + "-after.xml";
+    }
 
     protected DataSource getDataSource() {
         return dataSourceConfig.getDataSource();
+    }
+
+    protected void log(String message, Object... args) {
+        LoggerFactory.getLogger(getClass()).info(message, args);
     }
 }

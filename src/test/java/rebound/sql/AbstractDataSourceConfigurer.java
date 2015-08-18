@@ -18,6 +18,7 @@ package rebound.sql;
 
 import org.dbunit.IDatabaseTester;
 import org.dbunit.JdbcDatabaseTester;
+import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
@@ -26,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.io.File;
+import java.io.FileNotFoundException;
 
 /**
  * Created by jcone on 8/16/15.
@@ -47,6 +49,8 @@ public abstract class AbstractDataSourceConfigurer {
         this.url = url;
         this.schemaSetupSql = schemaSetupSql;
         this.driver = driver;
+        this.dataSource = createDataSource();
+        createSchema();
     }
 
     protected abstract DataSource doCreateDataSource() throws Exception;
@@ -79,9 +83,19 @@ public abstract class AbstractDataSourceConfigurer {
             databaseTester.setSetUpOperation(DatabaseOperation.CLEAN_INSERT);
             databaseTester.setDataSet(dataSet);
             databaseTester.onSetup();
+        } catch (DataSetException dse) {
+            if (dse.getCause() instanceof FileNotFoundException) {
+                log.info("Skipping schema population since {} was not found.", dataSetName);
+            } else {
+                throw new RuntimeException(dse);
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected void assertSchema(String dataSetName) {
+
     }
 
     public String getDriver() {
@@ -112,4 +126,7 @@ public abstract class AbstractDataSourceConfigurer {
         return dataSource;
     }
 
+    protected String getFullSchemaSetupSqlPath() {
+        return getClass().getResource(getSchemaSetupSql()).toString();
+    }
 }
