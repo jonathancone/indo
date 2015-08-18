@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public abstract class AbstractDataSourceTest {
     @Parameterized.Parameters
     public static List<Object[]> dataSourceConfigurations() {
         Object[][] configs = new Object[][]{
-                {new H2Configurer("sa", "sa", "jdbc:h2:mem:test", "default-schema.sql", "org.h2.Driver")}
+                {new H2Configurer("sa", "sa", "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "default-schema.sql", "org.h2.Driver")}
         };
 
         return Arrays.asList(configs);
@@ -59,11 +60,16 @@ public abstract class AbstractDataSourceTest {
     }
 
     protected String beforeDataSetName() {
-        return testName.getMethodName() + "-before.xml";
+        return fullyQualifiedPath(getClass().getSimpleName() + "-" + testName.getMethodName() + "-before.xml");
     }
 
     protected String afterDataSetName() {
-        return testName.getMethodName() + "-after.xml";
+        return fullyQualifiedPath(getClass().getSimpleName() + "-" + testName.getMethodName() + "-after.xml");
+    }
+
+    protected String fullyQualifiedPath(String dataSetName) {
+        URL url = getClass().getResource(dataSetName);
+        return url != null ? url.toString() : dataSetName;
     }
 
     protected DataSource getDataSource() {

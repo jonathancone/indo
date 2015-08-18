@@ -16,9 +16,11 @@
 
 package rebound.sql;
 
+import org.dbunit.Assertion;
 import org.dbunit.IDatabaseTester;
 import org.dbunit.JdbcDatabaseTester;
 import org.dbunit.dataset.DataSetException;
+import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
@@ -26,8 +28,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
-import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URL;
 
 /**
  * Created by jcone on 8/16/15.
@@ -42,6 +44,7 @@ public abstract class AbstractDataSourceConfigurer {
     private String url;
     private String schemaSetupSql;
     private String driver;
+    private IDatabaseTester databaseTester;
 
     public AbstractDataSourceConfigurer(String user, String password, String url, String schemaSetupSql, String driver) {
         this.user = user;
@@ -76,10 +79,10 @@ public abstract class AbstractDataSourceConfigurer {
     }
 
     protected void populateSchema(String dataSetName) {
-        FlatXmlDataSet dataSet = null;
         try {
-            dataSet = new FlatXmlDataSetBuilder().build(new File(dataSetName));
-            IDatabaseTester databaseTester = new JdbcDatabaseTester(getDriver(), getUrl(), getUser(), getPassword());
+
+            FlatXmlDataSet dataSet = new FlatXmlDataSetBuilder().build(new URL(dataSetName));
+            databaseTester = new JdbcDatabaseTester(getDriver(), getUrl(), getUser(), getPassword());
             databaseTester.setSetUpOperation(DatabaseOperation.CLEAN_INSERT);
             databaseTester.setDataSet(dataSet);
             databaseTester.onSetup();
@@ -96,6 +99,20 @@ public abstract class AbstractDataSourceConfigurer {
 
     protected void assertSchema(String dataSetName) {
 
+        try {
+            IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(new URL(dataSetName));
+            IDataSet actualDataSet = databaseTester.getConnection().createDataSet();
+
+            Assertion.assertEquals(expectedDataSet, actualDataSet);
+        } catch (DataSetException dse) {
+            if (dse.getCause() instanceof FileNotFoundException) {
+                log.info("Skipping schema assertion since {} was not found.", dataSetName);
+            } else {
+                throw new RuntimeException(dse);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public String getDriver() {
