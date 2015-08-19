@@ -69,7 +69,7 @@ public abstract class AbstractDataSourceConfigurer {
     }
 
     protected final void createSchema() {
-        log.info("Creating {} schema...", getClass().getName());
+        log.debug("Creating {} schema...", getClass().getName());
         try {
             doCreateSchema();
         } catch (Exception e) {
@@ -87,7 +87,7 @@ public abstract class AbstractDataSourceConfigurer {
             databaseTester.onSetup();
         } catch (Exception e) {
             if (e instanceof MalformedURLException) {
-                log.info("Skipping schema population since {} was not found.", dataSetName);
+                log.debug("Skipping schema population since {} was not found.", dataSetName);
             } else {
                 throw new RuntimeException(e);
             }
@@ -103,7 +103,7 @@ public abstract class AbstractDataSourceConfigurer {
             Assertion.assertEquals(expectedDataSet, actualDataSet);
         } catch (Exception e) {
             if (e instanceof MalformedURLException) {
-                log.info("Skipping schema assertion since {} was not found.", dataSetName);
+                log.debug("Skipping schema assertion since {} was not found.", dataSetName);
             } else {
                 throw new RuntimeException(e);
             }
