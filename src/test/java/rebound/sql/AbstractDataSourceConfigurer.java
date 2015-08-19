@@ -19,7 +19,6 @@ package rebound.sql;
 import org.dbunit.Assertion;
 import org.dbunit.IDatabaseTester;
 import org.dbunit.JdbcDatabaseTester;
-import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
@@ -28,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
-import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -86,14 +85,12 @@ public abstract class AbstractDataSourceConfigurer {
             databaseTester.setSetUpOperation(DatabaseOperation.CLEAN_INSERT);
             databaseTester.setDataSet(dataSet);
             databaseTester.onSetup();
-        } catch (DataSetException dse) {
-            if (dse.getCause() instanceof FileNotFoundException) {
+        } catch (Exception e) {
+            if (e instanceof MalformedURLException) {
                 log.info("Skipping schema population since {} was not found.", dataSetName);
             } else {
-                throw new RuntimeException(dse);
+                throw new RuntimeException(e);
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -104,14 +101,12 @@ public abstract class AbstractDataSourceConfigurer {
             IDataSet actualDataSet = databaseTester.getConnection().createDataSet();
 
             Assertion.assertEquals(expectedDataSet, actualDataSet);
-        } catch (DataSetException dse) {
-            if (dse.getCause() instanceof FileNotFoundException) {
+        } catch (Exception e) {
+            if (e instanceof MalformedURLException) {
                 log.info("Skipping schema assertion since {} was not found.", dataSetName);
             } else {
-                throw new RuntimeException(dse);
+                throw new RuntimeException(e);
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 
