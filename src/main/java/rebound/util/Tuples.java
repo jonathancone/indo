@@ -14,32 +14,19 @@
  * limitations under the License.
  */
 
-package rebound.sql;
+package rebound.util;
 
-import javax.sql.DataSource;
-import java.io.Closeable;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.util.Collection;
 
 /**
- * Created by jcone on 8/7/15.
+ * Created by jcone on 8/12/15.
  */
-public class Quietly {
-
-    public static Connection getConnection(DataSource dataSource) {
-        try {
-            return dataSource.getConnection();
-        } catch (SQLException e) {
-            throw new UncheckedSQLException(e);
-        }
+public class Tuples {
+    public static boolean isNotEmpty(Object[] array) {
+        return array != null && array.length > 0;
     }
 
-    public static void close(Closeable closeable) {
-        try {
-            closeable.close();
-        } catch (IOException e) {
-            throw new UncheckedSQLException(e);
-        }
+    public static boolean isNotEmpty(Collection collection) {
+        return collection != null && collection.size() > 0;
     }
 }

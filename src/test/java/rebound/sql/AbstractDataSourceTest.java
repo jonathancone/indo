@@ -24,6 +24,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import rebound.util.Strings;
 
 import javax.sql.DataSource;
 import java.net.URL;
@@ -43,7 +44,7 @@ public abstract class AbstractDataSourceTest {
     @Parameterized.Parameters
     public static List<Object[]> dataSourceConfigurations() {
         Object[][] configs = new Object[][]{
-                {new H2Configurer("sa", "sa", "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "default-schema.sql", "org.h2.Driver")}
+                {new H2Configurer("sa", "sa", "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false", "default-schema.sql", "org.h2.Driver")}
         };
 
         return Arrays.asList(configs);
@@ -60,16 +61,20 @@ public abstract class AbstractDataSourceTest {
     }
 
     protected String beforeDataSetName() {
-        return fullyQualifiedPath(getClass().getSimpleName() + "-" + testName.getMethodName() + "-before.xml");
+        return fullyQualifiedPath(getClass().getSimpleName() + "-" + getSimpleTestMethodName() + "-before.xml");
     }
 
     protected String afterDataSetName() {
-        return fullyQualifiedPath(getClass().getSimpleName() + "-" + testName.getMethodName() + "-after.xml");
+        return fullyQualifiedPath(getClass().getSimpleName() + "-" + getSimpleTestMethodName() + "-after.xml");
     }
 
     protected String fullyQualifiedPath(String dataSetName) {
         URL url = getClass().getResource(dataSetName);
         return url != null ? url.toString() : dataSetName;
+    }
+
+    protected String getSimpleTestMethodName() {
+        return Strings.before(testName.getMethodName(), '[');
     }
 
     protected DataSource getDataSource() {

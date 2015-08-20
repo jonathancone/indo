@@ -16,6 +16,8 @@
 
 package rebound.sql;
 
+import rebound.util.Tuples;
+
 import java.util.Iterator;
 import java.util.List;
 

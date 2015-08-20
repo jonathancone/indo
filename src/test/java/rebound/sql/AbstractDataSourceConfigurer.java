@@ -64,7 +64,7 @@ public abstract class AbstractDataSourceConfigurer {
         try {
             return doCreateDataSource();
         } catch (Exception e) {
-            throw new UncheckedSQLException(e);
+            throw new JdbcException(e);
         }
     }
 

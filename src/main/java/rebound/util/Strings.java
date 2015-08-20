@@ -14,19 +14,22 @@
  * limitations under the License.
  */
 
-package rebound.sql;
-
-import java.util.Collection;
+package rebound.util;
 
 /**
- * Created by jcone on 8/12/15.
+ * String utility methods.
  */
-public class Tuples {
-    public static boolean isNotEmpty(Object[] array) {
-        return array != null && array.length > 0;
+public class Strings {
+    public static boolean isBlank(String s) {
+        return s == null || s.trim().equals("");
     }
 
-    public static boolean isNotEmpty(Collection collection) {
-        return collection != null && collection.size() > 0;
+    public static boolean isNotBlank(String s) {
+        return !isBlank(s);
+    }
+
+    public static String before(String input, char before) {
+        int i = input.indexOf(before);
+        return input.substring(0, (i > -1 ? i : input.length()));
     }
 }

@@ -14,29 +14,23 @@
  * limitations under the License.
  */
 
-package rebound.sql;
+package rebound.util;
+
+import java.io.Closeable;
 
 /**
  * Created by jcone on 8/7/15.
  */
-public class UncheckedSQLException extends RuntimeException {
-    public UncheckedSQLException() {
-    }
+public class Quietly {
 
-    public UncheckedSQLException(String message) {
-        super(message);
+    public static void close(Closeable closeable) {
+        try {
+            closeable.close();
+        } catch (Exception e) {
+            if (e instanceof RuntimeException) {
+                throw (RuntimeException) e;
+            }
+            throw new RuntimeException(e);
+        }
     }
-
-    public UncheckedSQLException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public UncheckedSQLException(Throwable cause) {
-        super(cause);
-    }
-
-    public UncheckedSQLException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
-
 }

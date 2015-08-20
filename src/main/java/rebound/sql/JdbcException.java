@@ -16,24 +16,27 @@
 
 package rebound.sql;
 
-import org.junit.Test;
-
 /**
- * Created by jcone on 8/16/15.
+ * Created by jcone on 8/7/15.
  */
-public class SimpleTest extends AbstractDataSourceTest {
-    @Test
-    public void testDo1() throws Exception {
-        log(getDataSource().toString());
+public class JdbcException extends RuntimeException {
+    public JdbcException() {
     }
 
-    @Test
-    public void testDo2() throws Exception {
-        log(getDataSource().toString());
+    public JdbcException(String message) {
+        super(message);
     }
 
-    @Test
-    public void testDo3() throws Exception {
-        log(getDataSource().toString());
+    public JdbcException(String message, Throwable cause) {
+        super(message, cause);
     }
+
+    public JdbcException(Throwable cause) {
+        super(cause);
+    }
+
+    public JdbcException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
+
 }

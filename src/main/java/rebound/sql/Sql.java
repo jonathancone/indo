@@ -16,6 +16,8 @@
 
 package rebound.sql;
 
+import rebound.util.Tuples;
+
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,21 +29,28 @@ import java.util.List;
 /**
  * Created by jcone on 8/12/15.
  */
-public class SQLEngine {
+public class Sql {
     private DataSource dataSource;
-    private SQLParser SQLParser;
+    private SqlParser sqlParser;
 
-    public SQLEngine(DataSource dataSource, SQLParser SQLParser) {
+    public Sql(DataSource dataSource) {
         this.dataSource = dataSource;
-        this.SQLParser = SQLParser;
+    }
+
+    public Sql(DataSource dataSource, SqlParser sqlParser) {
+        this.dataSource = dataSource;
+        this.sqlParser = sqlParser;
     }
 
     protected Connection getConnection() {
-        return Quietly.getConnection(dataSource);
+        return Jdbc.getConnection(dataSource);
     }
 
-    protected SQLParser getSQLParser() {
-        return this.SQLParser;
+    protected SqlParser getSqlParser() {
+        if (sqlParser == null) {
+            sqlParser = new StreamingSqlParser();
+        }
+        return sqlParser;
     }
 
     public DataSource getDataSource() {
@@ -74,7 +83,7 @@ public class SQLEngine {
             }
 
         } catch (SQLException e) {
-            throw new UncheckedSQLException(e);
+            throw new JdbcException(e);
         }
 
     }

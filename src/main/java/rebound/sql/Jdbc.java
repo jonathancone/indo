@@ -16,15 +16,19 @@
 
 package rebound.sql;
 
-/**
- * String utility methods.
- */
-public class Strings {
-    public static boolean isBlank(String s) {
-        return s == null || s.trim().equals("");
-    }
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 
-    public static boolean isNotBlank(String s) {
-        return !isBlank(s);
+/**
+ * Created by jcone on 8/19/15.
+ */
+public class Jdbc {
+    public static Connection getConnection(DataSource dataSource) {
+        try {
+            return dataSource.getConnection();
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
     }
 }

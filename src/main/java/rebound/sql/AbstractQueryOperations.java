@@ -28,14 +28,14 @@ public abstract class AbstractQueryOperations implements QueryOperations {
 
     private DataSource dataSource;
     private QueryMetaData queryMetaData;
-    private SQLEngine sqlEngine;
+    private Sql sql;
 
     public AbstractQueryOperations(DataSource dataSource) {
         this.dataSource = dataSource;
         this.queryMetaData = new QueryMetaData();
     }
 
-    protected abstract SQLParser getSQLParser();
+    protected abstract SqlParser getSQLParser();
 
     @Override
     public AbstractQueryOperations insert(String sql) {

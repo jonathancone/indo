@@ -16,24 +16,6 @@
 
 package rebound.sql;
 
-
-import javax.sql.DataSource;
-
-/**
- * Created by jcone on 8/7/15.
- */
-public class Query extends AbstractQueryOperations {
-    private static final SqlParser parser = new StreamingSqlParser();
-
-    public Query(DataSource dataSource) {
-        super(dataSource);
-    }
-
-    @Override
-    protected SqlParser getSQLParser() {
-        return parser;
-    }
-
-
-
+public interface SqlParser {
+    String parse(String sourceSql, Parameters parameters);
 }
