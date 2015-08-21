@@ -37,14 +37,21 @@ public class SqlTest extends AbstractDataSourceTest {
 
     @Test
     public void testQuery1() throws Exception {
-        sql().query("SELECT employeeId, firstName, lastName FROM Employee", new ResultMapper<Employee>() {
-            @Override
-            public Employee map(ResultSet rs, int rowNumber) throws SQLException {
-                return new Employee(rs.getInt("employeeId"),
-                        rs.getString("firstName"),
-                        rs.getString("lastName"));
-            }
-        });
+        sql().query("     SELECT        " +
+                        "   employeeId, " +
+                        "   firstName,  " +
+                        "   lastName    " +
+                        " FROM          " +
+                        "   Employee    ",
+                new Handler<ResultSet, Employee>() {
+                    @Override
+                    public Employee handle(ResultSet rs) throws SQLException {
+                        return new Employee(rs.getInt("employeeId"),
+                                rs.getString("firstName"),
+                                rs.getString("lastName"));
+                    }
+                });
+
     }
 
     private Sql sql() {

@@ -22,6 +22,6 @@ import java.sql.SQLException;
 /**
  * Created by jcone on 8/12/15.
  */
-public interface ResultMapper<T> {
-    T map(ResultSet rs, int rowNumber) throws SQLException;
+public interface InResultSet<T> {
+    T perform(ResultSet rs) throws SQLException;
 }

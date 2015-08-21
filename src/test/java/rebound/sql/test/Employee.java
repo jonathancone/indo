@@ -16,12 +16,20 @@
 
 package rebound.sql.test;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Employee {
+    private boolean active;
+
+    private BigDecimal salary;
+
+    private Date hireDate;
+    private Date departureDate;
+
     private Integer employeeId;
     private Integer payrollId;
-    private Date hireDate;
+
     private String firstName;
     private String lastName;
 
@@ -72,5 +80,29 @@ public class Employee {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Date getDepartureDate() {
+        return departureDate;
+    }
+
+    public void setDepartureDate(Date departureDate) {
+        this.departureDate = departureDate;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public BigDecimal getSalary() {
+        return salary;
+    }
+
+    public void setSalary(BigDecimal salary) {
+        this.salary = salary;
     }
 }

@@ -61,30 +61,36 @@ public class Sql {
         this.dataSource = dataSource;
     }
 
-    public <T> List<T> query(String sql, ResultMapper<T> mapper, Object... parameters) {
-
-        try (PreparedStatement stmt = getConnection().prepareStatement(sql)) {
-
-            if (Tuples.isNotEmpty(parameters)) {
-                for (int i = 0; i < parameters.length; i++) {
-                    stmt.setObject(i + 1, parameters[i]);
-                }
-            }
-
-            try (ResultSet rs = stmt.executeQuery()) {
-
-                List list = new ArrayList();
-
-                while (rs.next()) {
-                    list.add(mapper.map(rs, rs.getRow()));
-                }
-
-                return list;
-            }
-
+    public <T> T query(String sql, Handler<PreparedStatement, T> handler) {
+        T t = null;
+        try (PreparedStatement pstmt = getConnection().prepareStatement(sql)) {
+            t = handler.handle(pstmt);
         } catch (SQLException e) {
-            throw new JdbcException(e);
+            Thrower.rethrow(e);
         }
+        return t;
+    }
 
+    public <T> List<T> query(String sql, final Handler<ResultSet, T> handler, final Object... parameters) {
+        return query(sql, new Handler<PreparedStatement, List<T>>() {
+            @Override
+            public List<T> handle(PreparedStatement pstmt) throws SQLException {
+                if (Tuples.isNotEmpty(parameters)) {
+                    for (int i = 0; i < parameters.length; i++) {
+                        pstmt.setObject(i + 1, parameters[i]);
+                    }
+                }
+
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    List<T> list = new ArrayList<>();
+
+                    while (rs.next()) {
+                        list.add(handler.handle(rs));
+                    }
+
+                    return list;
+                }
+            }
+        });
     }
 }
