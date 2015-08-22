@@ -16,7 +16,7 @@
 
 package rebound.sql;
 
-import rebound.util.Tuples;
+import rebound.util.Multi;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -29,53 +29,46 @@ import java.util.List;
 /**
  * Created by jcone on 8/12/15.
  */
-public class Sql {
+public class Sql implements SqlOperations {
     private DataSource dataSource;
-    private SqlParser sqlParser;
 
     public Sql(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    public Sql(DataSource dataSource, SqlParser sqlParser) {
-        this.dataSource = dataSource;
-        this.sqlParser = sqlParser;
+    public static Connection getConnection(DataSource dataSource) {
+        try {
+            return dataSource.getConnection();
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
     }
 
     protected Connection getConnection() {
-        return Jdbc.getConnection(dataSource);
-    }
-
-    protected SqlParser getSqlParser() {
-        if (sqlParser == null) {
-            sqlParser = new StreamingSqlParser();
-        }
-        return sqlParser;
+        return getConnection(dataSource);
     }
 
     public DataSource getDataSource() {
         return dataSource;
     }
 
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
-
-    public <T> T query(String sql, Handler<PreparedStatement, T> handler) {
+    @Override
+    public <T> T query(String sql, PreparedStatementCommand<T> psc) {
         T t = null;
         try (PreparedStatement pstmt = getConnection().prepareStatement(sql)) {
-            t = handler.handle(pstmt);
+            t = psc.perform(pstmt);
         } catch (SQLException e) {
             Thrower.rethrow(e);
         }
         return t;
     }
 
-    public <T> List<T> query(String sql, final Handler<ResultSet, T> handler, final Object... parameters) {
-        return query(sql, new Handler<PreparedStatement, List<T>>() {
+    @Override
+    public <T> List<T> query(String sql, final ResultSetCommand<T> rsc, final Object... parameters) {
+        return query(sql, new PreparedStatementCommand<List<T>>() {
             @Override
-            public List<T> handle(PreparedStatement pstmt) throws SQLException {
-                if (Tuples.isNotEmpty(parameters)) {
+            public List<T> perform(PreparedStatement pstmt) throws SQLException {
+                if (Multi.isNotEmpty(parameters)) {
                     for (int i = 0; i < parameters.length; i++) {
                         pstmt.setObject(i + 1, parameters[i]);
                     }
@@ -85,7 +78,7 @@ public class Sql {
                     List<T> list = new ArrayList<>();
 
                     while (rs.next()) {
-                        list.add(handler.handle(rs));
+                        list.add(rsc.perform(rs));
                     }
 
                     return list;

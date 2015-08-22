@@ -35,8 +35,6 @@ public abstract class AbstractQueryOperations implements QueryOperations {
         this.queryMetaData = new QueryMetaData();
     }
 
-    protected abstract SqlParser getSQLParser();
-
     @Override
     public AbstractQueryOperations insert(String sql) {
         return null;

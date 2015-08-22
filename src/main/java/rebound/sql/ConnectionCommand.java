@@ -16,25 +16,12 @@
 
 package rebound.sql;
 
-import rebound.util.Multi;
-
-import java.util.Iterator;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
- * Created by jcone on 8/1/15.
+ * Created by jcone on 8/20/15.
  */
-public class Parameters implements Iterable<Parameter> {
-
-    private List<Parameter> parameters;
-
-    @Override
-    public Iterator<Parameter> iterator() {
-        return parameters.iterator();
-    }
-
-    public boolean hasParameters() {
-        return Multi.isNotEmpty(parameters);
-    }
-
+public interface ConnectionCommand<T> {
+    T perform(Connection connection) throws SQLException;
 }

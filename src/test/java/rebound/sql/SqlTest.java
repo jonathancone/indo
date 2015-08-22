@@ -21,6 +21,7 @@ import rebound.sql.test.Employee;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -37,20 +38,35 @@ public class SqlTest extends AbstractDataSourceTest {
 
     @Test
     public void testQuery1() throws Exception {
-        sql().query("     SELECT        " +
-                        "   employeeId, " +
-                        "   firstName,  " +
-                        "   lastName    " +
-                        " FROM          " +
-                        "   Employee    ",
-                new Handler<ResultSet, Employee>() {
-                    @Override
-                    public Employee handle(ResultSet rs) throws SQLException {
-                        return new Employee(rs.getInt("employeeId"),
-                                rs.getString("firstName"),
-                                rs.getString("lastName"));
+        List<Employee> employees = sql().query("     SELECT           " +
+                        "   employeeId,    " +
+                        "   firstName,     " +
+                        "   lastName,      " +
+                        "   active,        " +
+                        "   departureDate, " +
+                        "   hireDate,      " +
+                        "   payrollId,     " +
+                        "   salary         " +
+                        " FROM             " +
+                        "   Employee       ",
+                new ResultSetCommand<Employee>() {
+                    public Employee perform(ResultSet rs) throws SQLException {
+                        Employee employee = new Employee();
+                        employee.setEmployeeId(rs.getInt("employeeId"));
+                        employee.setFirstName(rs.getString("firstName"));
+                        employee.setLastName(rs.getString("lastName"));
+                        employee.setActive(rs.getBoolean("active"));
+                        employee.setDepartureDate(rs.getDate("departureDate"));
+                        employee.setHireDate(rs.getDate("hireDate"));
+                        employee.setPayrollId(rs.getInt("payrollId"));
+                        employee.setSalary(rs.getBigDecimal("salary"));
+                        return employee;
                     }
                 });
+
+        for (Employee e : employees) {
+            System.out.println(e.getFirstName() + e.getLastName());
+        }
 
     }
 

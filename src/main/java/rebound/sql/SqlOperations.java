@@ -16,12 +16,13 @@
 
 package rebound.sql;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.List;
 
 /**
- * Created by jcone on 8/12/15.
+ * Created by jcone on 8/20/15.
  */
-public interface InResultSet<T> {
-    T perform(ResultSet rs) throws SQLException;
+public interface SqlOperations {
+    <T> T query(String sql, PreparedStatementCommand<T> psc);
+
+    <T> List<T> query(String sql, ResultSetCommand<T> rsc, Object... parameters);
 }

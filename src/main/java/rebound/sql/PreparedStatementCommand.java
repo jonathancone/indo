@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-package rebound.util;
+package rebound.sql;
 
-import java.util.Collection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
- * Created by jcone on 8/12/15.
+ * Created by jcone on 8/20/15.
  */
-public class Tuples {
-    public static boolean isNotEmpty(Object[] array) {
-        return array != null && array.length > 0;
-    }
-
-    public static boolean isNotEmpty(Collection collection) {
-        return collection != null && collection.size() > 0;
-    }
+public interface PreparedStatementCommand<T> {
+    T perform(PreparedStatement pstmt) throws SQLException;
 }

@@ -16,11 +16,12 @@
 
 package rebound.sql;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Created by jcone on 8/20/15.
+ * Created by jcone on 8/12/15.
  */
-public interface Handler<T, S> {
-    S handle(T t) throws SQLException;
+public interface ResultSetCommand<T> {
+    T perform(ResultSet rs) throws SQLException;
 }

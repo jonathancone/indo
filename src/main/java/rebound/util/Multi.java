@@ -14,21 +14,19 @@
  * limitations under the License.
  */
 
-package rebound.sql;
+package rebound.util;
 
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.util.Collection;
 
 /**
- * Created by jcone on 8/19/15.
+ * Created by jcone on 8/12/15.
  */
-public class Jdbc {
-    public static Connection getConnection(DataSource dataSource) {
-        try {
-            return dataSource.getConnection();
-        } catch (SQLException e) {
-            throw new JdbcException(e);
-        }
+public class Multi {
+    public static boolean isNotEmpty(Object[] array) {
+        return array != null && array.length > 0;
+    }
+
+    public static boolean isNotEmpty(Collection collection) {
+        return collection != null && collection.size() > 0;
     }
 }

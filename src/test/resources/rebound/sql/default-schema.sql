@@ -1,6 +1,10 @@
 CREATE TABLE Employee (
-    employeeId INT,
+    employeeId IDENTITY PRIMARY KEY,
     firstName VARCHAR(255),
     lastName VARCHAR(255),
-    hireDate DATE
+    active BOOLEAN,
+    hireDate DATE,
+    departureDate DATE,
+    payrollId INT,
+    salary DECIMAL(20,2)
 );

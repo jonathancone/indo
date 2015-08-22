@@ -15,5 +15,6 @@
   -->
 
 <dataset>
-  <Employee employeeId="1" firstName="John" lastName="Doe" hireDate="1999-07-15"/>
+  <Employee employeeId="100" firstName="John" lastName="Doe" hireDate="1999-07-15" departureDate="[null]" active="1"
+            payrollId="1000" salary="29000.00"/>
 </dataset>

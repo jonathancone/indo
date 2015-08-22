@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package rebound.sql;
+package rebound.util;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.ResultSet;
 
 /**
- * Created by jcone on 8/20/15.
+ * Created by jcone on 8/21/15.
  */
-public interface InPreparedStatement<T> {
-    T perform(PreparedStatement pstmt) throws SQLException;
+public class AsciiTable {
+    public static String fromResultSet(ResultSet rs) {
+        return "";
+    }
 }
