@@ -20,5 +20,5 @@ package rebound.sql;
  * Created by jcone on 8/14/15.
  */
 public enum Operation {
-    SELECT, INSERT, UPDATE, DELETE, CALL_PROCEDURE, CALL_FUNCTION;
+    SELECT, INSERT, UPDATE, INSERT_OR_UPDATE, DELETE, PROCEDURE, FUNCTION, UNKNOWN
 }

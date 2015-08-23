@@ -17,6 +17,7 @@
 package rebound.sql;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -28,76 +29,70 @@ public abstract class AbstractQueryOperations implements QueryOperations {
 
     private DataSource dataSource;
     private QueryMetaData queryMetaData;
-    private Sql sql;
+    private SqlOperations sqlOperations;
+    private Operation operation;
+
+    private Collection<?> targetCollection;
 
     public AbstractQueryOperations(DataSource dataSource) {
         this.dataSource = dataSource;
         this.queryMetaData = new QueryMetaData();
-    }
-
-    @Override
-    public AbstractQueryOperations insert(String sql) {
-        return null;
+        this.sqlOperations = new Sql(dataSource);
+        this.operation = Operation.UNKNOWN;
     }
 
     @Override
     public AbstractQueryOperations insert(Object object) {
-        return null;
+        return insert(Arrays.asList(object));
     }
 
     @Override
     public AbstractQueryOperations insert(Collection<?> objects) {
-        return null;
-    }
-
-    @Override
-    public AbstractQueryOperations update(String sql) {
-        return null;
+        this.operation = Operation.INSERT;
+        this.targetCollection = objects;
+        return this;
     }
 
     @Override
     public AbstractQueryOperations update(Object object) {
-        return null;
+        return update(Arrays.asList(object));
     }
 
     @Override
     public AbstractQueryOperations update(Collection<?> objects) {
-        return null;
+        this.operation = Operation.UPDATE;
+        this.targetCollection = objects;
+        return this;
     }
 
     @Override
     public AbstractQueryOperations insertOrUpdate(Object object) {
-        return null;
+        return insertOrUpdate(Arrays.asList(object));
     }
 
     @Override
     public AbstractQueryOperations insertOrUpdate(Collection<?> objects) {
-        return null;
-    }
-
-    @Override
-    public AbstractQueryOperations delete(String sql) {
-        return null;
+        this.operation = Operation.INSERT_OR_UPDATE;
+        this.targetCollection = objects;
+        return this;
     }
 
     @Override
     public AbstractQueryOperations delete(Object object) {
-        return null;
+        return delete(Arrays.asList(object));
     }
 
     @Override
     public AbstractQueryOperations delete(Collection<?> objects) {
-        return null;
+        this.operation = Operation.DELETE;
+        this.targetCollection = objects;
+        return this;
     }
 
     @Override
-    public AbstractQueryOperations select(String sql) {
-        return null;
-    }
-
-    @Override
-    public AbstractQueryOperations select() {
-        return null;
+    public AbstractQueryOperations sql(String sql) {
+        this.queryMetaData.setSourceSql(sql);
+        return this;
     }
 
     @Override

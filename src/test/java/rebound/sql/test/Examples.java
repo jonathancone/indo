@@ -41,29 +41,20 @@ public class Examples {
 
         Query query = new Query(dataSource);
 
-        // Find an employee based on the value of employeeId.
-        Employee employee = query
-                .select()
-                .bind("employeeId", 3)
-                .single(Employee.class);
-
-        // Find all employees with the name Steve Jobs.
-        List<Employee> employees1 = query
-                .select()
-                .bind("firstName", "Steve")
+        // Find all employees with the last name "Jobs"
+        List<Employee> employees = query
+                .sql(" SELECT                   " +
+                        "     employeeId,          " +
+                        "     firstName,           " +
+                        "     lastName             " +
+                        " FROM                     " +
+                        "     Employee             " +
+                        " WHERE                    " +
+                        "     lastName = :lastName ")
                 .bind("lastName", "Jobs")
                 .list(Employee.class);
 
-        // Similar to above, but override some of the defaults.
-        List<Employee> employees2 = query
-                .select()
-                .in("EmployeeTable")
-                .mapping("firstName", "F_NAME", "lastName", "L_NAME")
-                .bind("firstName", "Steve")
-                .bind("lastName", "Jobs")
-                .list(Employee.class);
-
-        // Complex joins can be mapped to an object graph using an "AS" mapping.  This example
+        // Complex joins can be mapped to a collection using an "AS" mapping.  This example
         // populates a list of Department objects, each containing a list of Employee objects in a
         // single query. E.g.
         //
@@ -75,25 +66,40 @@ public class Examples {
         //    -- Employee 4
         //    -- Employee 5
         //    -- Employee 6
-        Query departmentQuery = new Query(dataSource);
-
-        List<Department> departments = departmentQuery
-                .select("   SELECT                                              "
-                        + "     departmentId,                                   "
-                        + "     name,                                           "
-                        + "     firstName AS employees_firstName,               "
-                        + "     lastName  AS employees_lastName,                "
-                        + "     employeeId AS employees_employeeId              "
-                        + " FROM                                                "
-                        + "     Department                                      "
-                        + " LEFT OUTER JOIN                                     "
-                        + "     Employee                                        "
-                        + " ON                                                  "
-                        + "     Department.departmentId = Employee.departmentId "
-                        + " WHERE                                               "
-                        + "     Department.name LIKE :deptName                  ")
+        List<Department> departments = query
+                .sql(" SELECT                                              " +
+                        "     departmentId,                                   " +
+                        "     name,                                           " +
+                        "     firstName AS employees_firstName,               " +
+                        "     lastName  AS employees_lastName,                " +
+                        "     employeeId AS employees_employeeId              " +
+                        " FROM                                                " +
+                        "     Department                                      " +
+                        " LEFT OUTER JOIN                                     " +
+                        "     Employee                                        " +
+                        " ON                                                  " +
+                        "     Department.departmentId = Employee.departmentId " +
+                        " WHERE                                               " +
+                        "     Department.name LIKE :deptName                  ")
                 .bind("deptName", "%Operations%")
                 .list(Department.class);
+
+        // Similar to above, but assuming our data model doesn't match our Java object
+        // the API can figure out how to map it, i.e. EMPLOYEE_ID = employeeId.
+        Employee employee = query
+                .sql(" SELECT                        " +
+                        "      EMPLOYEE_ID,             " +
+                        "      FIRST_NAME,              " +
+                        "      LAST_NAME                " +
+                        " FROM                          " +
+                        "     EMPLOYEE                  " +
+                        " WHERE                         " +
+                        "     EMPLOYEE_ID > :employeeId " +
+                        "     OR HIRE_DATE < :hireDate  ")
+                .bind("employeeId", 2300)
+                .bind("hireDate", new Date())
+                .single(Employee.class);
+
     }
 
     void insertExamples() {

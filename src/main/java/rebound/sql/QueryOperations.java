@@ -24,13 +24,12 @@ import java.util.Map;
  * Created by jcone on 8/14/15.
  */
 public interface QueryOperations {
-    QueryOperations insert(String sql);
+
+    QueryOperations sql(String sql);
 
     QueryOperations insert(Object object);
 
     QueryOperations insert(Collection<?> objects);
-
-    QueryOperations update(String sql);
 
     QueryOperations update(Object object);
 
@@ -40,15 +39,9 @@ public interface QueryOperations {
 
     QueryOperations insertOrUpdate(Collection<?> objects);
 
-    QueryOperations delete(String sql);
-
     QueryOperations delete(Object object);
 
     QueryOperations delete(Collection<?> objects);
-
-    QueryOperations select(String sql);
-
-    QueryOperations select();
 
     QueryOperations in(String table);
 
