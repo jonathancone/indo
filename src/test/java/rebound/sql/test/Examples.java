@@ -121,7 +121,8 @@ public class Examples {
 
         // Insert a single record overriding the column names in the database
         query.insert(employee)
-                .mapping("firstName", "F_NAME", "lastName", "L_NAME")
+                .mapping("firstName", "F_NAME")
+                .mapping("lastName", "L_NAME")
                 .count();
 
         // Perform a bulk insert using a collection (uses JDBC batch statement) and
@@ -165,7 +166,8 @@ public class Examples {
 
         // Perform a bulk update (uses JDBC batch statement), overriding columns
         query.update(allEmployees)
-                .mapping("firstName", "F_NAME", "lastName", "L_NAME")
+                .mapping("firstName", "F_NAME")
+                .mapping("lastName", "L_NAME")
                 .count();
 
         // Perform a custom SQL update and supply our own parameter values

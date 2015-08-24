@@ -49,11 +49,15 @@ public interface QueryOperations {
 
     QueryOperations excludingOnly(String... fields);
 
-    QueryOperations mapping(String... fieldColumn);
+    QueryOperations mapping(String field, String column);
+
+    <T> QueryOperations mapping(String field, String column, TypeConverter<T> converter);
 
     QueryOperations mapping(Map<String, String> fieldColumn);
 
     QueryOperations bind(String field, Object value);
+
+    <T> QueryOperations bind(String field, Object value, Class<T> type);
 
     QueryOperations bind(Map<String, Object> fieldValues);
 

@@ -29,11 +29,13 @@ import java.util.List;
 /**
  * Created by jcone on 8/12/15.
  */
-public class Sql implements SqlOperations {
+public class SqlEngine implements SqlOperations {
     private DataSource dataSource;
+    private SqlParser sqlParser;
 
-    public Sql(DataSource dataSource) {
+    public SqlEngine(DataSource dataSource) {
         this.dataSource = dataSource;
+        this.sqlParser = new StreamingSqlParser();
     }
 
     public static Connection getConnection(DataSource dataSource) {
@@ -48,7 +50,7 @@ public class Sql implements SqlOperations {
         return getConnection(dataSource);
     }
 
-    public DataSource getDataSource() {
+    protected DataSource getDataSource() {
         return dataSource;
     }
 

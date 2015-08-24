@@ -44,7 +44,7 @@ public abstract class AbstractDataSourceTest {
     @Parameterized.Parameters
     public static List<Object[]> dataSourceConfigurations() {
         Object[][] configs = new Object[][]{
-                {new H2Configurer("sa", "sa", "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false", "default-schema.sql", "org.h2.Driver")}
+                {new H2Configurer("sa", "sa", "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=true", "default-schema.sql", "org.h2.Driver")}
         };
 
         return Arrays.asList(configs);

@@ -19,8 +19,9 @@ package rebound.sql;
 import org.dbunit.Assertion;
 import org.dbunit.IDatabaseTester;
 import org.dbunit.JdbcDatabaseTester;
+import org.dbunit.database.DatabaseConfig;
 import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.xml.FlatXmlDataSet;
+import org.dbunit.dataset.ReplacementDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.slf4j.Logger;
@@ -77,13 +78,24 @@ public abstract class AbstractDataSourceConfigurer {
         }
     }
 
+    private ReplacementDataSet createDataSet(String dataSetName) throws Exception {
+        ReplacementDataSet dataSet = new ReplacementDataSet(
+                new FlatXmlDataSetBuilder()
+                        .setCaseSensitiveTableNames(false)
+                        .build(new URL(dataSetName)));
+        dataSet.addReplacementObject("[null]", null);
+        return dataSet;
+    }
+
     protected void populateSchema(String dataSetName) {
         try {
-
-            FlatXmlDataSet dataSet = new FlatXmlDataSetBuilder().build(new URL(dataSetName));
             databaseTester = new JdbcDatabaseTester(getDriver(), getUrl(), getUser(), getPassword());
+
+            DatabaseConfig config = databaseTester.getConnection().getConfig();
+            config.setProperty(DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, Boolean.TRUE);
+
             databaseTester.setSetUpOperation(DatabaseOperation.CLEAN_INSERT);
-            databaseTester.setDataSet(dataSet);
+            databaseTester.setDataSet(createDataSet(dataSetName));
             databaseTester.onSetup();
         } catch (Exception e) {
             if (e instanceof MalformedURLException) {
@@ -97,7 +109,8 @@ public abstract class AbstractDataSourceConfigurer {
     protected void assertSchema(String dataSetName) {
 
         try {
-            IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(new URL(dataSetName));
+            IDataSet expectedDataSet = createDataSet(dataSetName);
+
             IDataSet actualDataSet = databaseTester.getConnection().createDataSet();
 
             Assertion.assertEquals(expectedDataSet, actualDataSet);

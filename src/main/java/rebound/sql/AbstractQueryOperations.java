@@ -37,7 +37,7 @@ public abstract class AbstractQueryOperations implements QueryOperations {
     public AbstractQueryOperations(DataSource dataSource) {
         this.dataSource = dataSource;
         this.queryMetaData = new QueryMetaData();
-        this.sqlOperations = new Sql(dataSource);
+        this.sqlOperations = new SqlEngine(dataSource);
         this.operation = Operation.UNKNOWN;
     }
 
@@ -112,7 +112,12 @@ public abstract class AbstractQueryOperations implements QueryOperations {
     }
 
     @Override
-    public AbstractQueryOperations mapping(String... fieldColumn) {
+    public AbstractQueryOperations mapping(String field, String column) {
+        return null;
+    }
+
+    @Override
+    public <T> AbstractQueryOperations mapping(String field, String column, TypeConverter<T> converter) {
         return null;
     }
 
@@ -123,6 +128,11 @@ public abstract class AbstractQueryOperations implements QueryOperations {
 
     @Override
     public AbstractQueryOperations bind(String field, Object value) {
+        return null;
+    }
+
+    @Override
+    public <T> AbstractQueryOperations bind(String field, Object value, Class<T> type) {
         return null;
     }
 
