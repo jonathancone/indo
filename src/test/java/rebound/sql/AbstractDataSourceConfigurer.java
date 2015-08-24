@@ -39,12 +39,13 @@ public abstract class AbstractDataSourceConfigurer {
 
     private DataSource dataSource;
 
-    private String user;
-    private String password;
-    private String url;
-    private String schemaSetupSql;
-    private String driver;
     private IDatabaseTester databaseTester;
+
+    private String driver;
+    private String password;
+    private String schemaSetupSql;
+    private String url;
+    private String user;
 
     public AbstractDataSourceConfigurer(String user, String password, String url, String schemaSetupSql, String driver) {
         this.user = user;
@@ -65,7 +66,7 @@ public abstract class AbstractDataSourceConfigurer {
         try {
             return doCreateDataSource();
         } catch (Exception e) {
-            throw new JdbcException(e);
+            throw Unchecked.exception(e);
         }
     }
 
@@ -74,7 +75,7 @@ public abstract class AbstractDataSourceConfigurer {
         try {
             doCreateSchema();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw Unchecked.exception(e);
         }
     }
 
@@ -97,29 +98,23 @@ public abstract class AbstractDataSourceConfigurer {
             databaseTester.setSetUpOperation(DatabaseOperation.CLEAN_INSERT);
             databaseTester.setDataSet(createDataSet(dataSetName));
             databaseTester.onSetup();
+        } catch (MalformedURLException m) {
+            log.debug("Skipping schema population since {} was not found.", dataSetName);
         } catch (Exception e) {
-            if (e instanceof MalformedURLException) {
-                log.debug("Skipping schema population since {} was not found.", dataSetName);
-            } else {
-                throw new RuntimeException(e);
-            }
+            throw Unchecked.exception(e);
         }
     }
 
     protected void assertSchema(String dataSetName) {
-
         try {
             IDataSet expectedDataSet = createDataSet(dataSetName);
-
             IDataSet actualDataSet = databaseTester.getConnection().createDataSet();
 
             Assertion.assertEquals(expectedDataSet, actualDataSet);
+        } catch (MalformedURLException m) {
+            log.debug("Skipping schema assertion since {} was not found.", dataSetName);
         } catch (Exception e) {
-            if (e instanceof MalformedURLException) {
-                log.debug("Skipping schema assertion since {} was not found.", dataSetName);
-            } else {
-                throw new RuntimeException(e);
-            }
+            throw Unchecked.exception(e);
         }
     }
 

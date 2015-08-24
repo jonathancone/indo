@@ -19,16 +19,19 @@ package rebound.sql;
 import java.sql.SQLException;
 
 /**
- * Created by jcone on 8/20/15.
+ * A helper utility to handle checked exceptions.
+ *
+ * @author Jonathan Cone
  */
-public class Thrower {
-    public static <T extends Throwable> void rethrow(T t) {
+public class Unchecked {
+    public static <T extends Exception> RuntimeException exception(T t) {
         if (t instanceof RuntimeException) {
-            throw (RuntimeException) t;
+            return (RuntimeException) t;
         } else {
             if (t instanceof SQLException) {
-                throw new JdbcException(t);
+                return new JdbcException(t);
             }
+            return new RuntimeException(t);
         }
     }
 }

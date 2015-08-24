@@ -60,7 +60,7 @@ public class SqlEngine implements SqlOperations {
         try (PreparedStatement pstmt = getConnection().prepareStatement(sql)) {
             t = psc.perform(pstmt);
         } catch (SQLException e) {
-            Thrower.rethrow(e);
+            Unchecked.exception(e);
         }
         return t;
     }
