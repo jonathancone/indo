@@ -16,6 +16,8 @@
 
 package rebound.sql;
 
+import java.sql.SQLException;
+
 /**
  * Created by jcone on 8/7/15.
  */
@@ -37,6 +39,14 @@ public class JdbcException extends RuntimeException {
 
     public JdbcException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
+    }
+
+    public boolean hasSQLExceptionCause() {
+        return getCause() instanceof SQLException;
+    }
+
+    public SQLException getSQLExceptionCause() {
+        return (SQLException) getCause();
     }
 
 }
