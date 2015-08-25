@@ -1,5 +1,5 @@
 CREATE TABLE Employee (
-    employeeId IDENTITY PRIMARY KEY,
+    employeeId INT PRIMARY KEY,
     firstName VARCHAR(255),
     lastName VARCHAR(255),
     active BOOLEAN,

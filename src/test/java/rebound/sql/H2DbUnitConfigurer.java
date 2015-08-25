@@ -16,6 +16,8 @@
 
 package rebound.sql;
 
+import org.dbunit.dataset.datatype.DefaultDataTypeFactory;
+import org.dbunit.ext.h2.H2DataTypeFactory;
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.h2.tools.RunScript;
 
@@ -25,9 +27,9 @@ import java.nio.charset.Charset;
 /**
  * Created by jcone on 8/15/15.
  */
-public class H2Configurer extends AbstractDataSourceConfigurer {
+public class H2DbUnitConfigurer extends AbstractDbUnitConfigurer {
 
-    public H2Configurer(String user, String password, String url, String schemaSetupSql, String driver) {
+    public H2DbUnitConfigurer(String user, String password, String url, String schemaSetupSql, String driver) {
         super(user, password, url, schemaSetupSql, driver);
     }
 
@@ -39,6 +41,11 @@ public class H2Configurer extends AbstractDataSourceConfigurer {
     @Override
     protected void doCreateSchema() throws Exception {
         RunScript.execute(getUrl(), getUser(), getPassword(), getFullSchemaSetupSqlPath(), Charset.forName("UTF-8"), false);
+    }
+
+    @Override
+    protected DefaultDataTypeFactory getDataTypeFactory() {
+        return new H2DataTypeFactory();
     }
 
 }

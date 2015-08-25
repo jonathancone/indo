@@ -22,6 +22,7 @@ import org.dbunit.JdbcDatabaseTester;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ReplacementDataSet;
+import org.dbunit.dataset.datatype.DefaultDataTypeFactory;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.slf4j.Logger;
@@ -34,8 +35,8 @@ import java.net.URL;
 /**
  * Created by jcone on 8/16/15.
  */
-public abstract class AbstractDataSourceConfigurer {
-    private static final Logger log = LoggerFactory.getLogger(AbstractDataSourceConfigurer.class);
+public abstract class AbstractDbUnitConfigurer {
+    private static final Logger log = LoggerFactory.getLogger(AbstractDbUnitConfigurer.class);
 
     private DataSource dataSource;
 
@@ -47,7 +48,7 @@ public abstract class AbstractDataSourceConfigurer {
     private String url;
     private String user;
 
-    public AbstractDataSourceConfigurer(String user, String password, String url, String schemaSetupSql, String driver) {
+    public AbstractDbUnitConfigurer(String user, String password, String url, String schemaSetupSql, String driver) {
         this.user = user;
         this.password = password;
         this.url = url;
@@ -60,6 +61,8 @@ public abstract class AbstractDataSourceConfigurer {
     protected abstract DataSource doCreateDataSource() throws Exception;
 
     protected abstract void doCreateSchema() throws Exception;
+
+    protected abstract DefaultDataTypeFactory getDataTypeFactory();
 
     protected final DataSource createDataSource() {
         log.info("Creating {} data source configuration...", getClass().getName());
@@ -94,6 +97,7 @@ public abstract class AbstractDataSourceConfigurer {
 
             DatabaseConfig config = databaseTester.getConnection().getConfig();
             config.setProperty(DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, Boolean.TRUE);
+            config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, getDataTypeFactory());
 
             databaseTester.setSetUpOperation(DatabaseOperation.CLEAN_INSERT);
             databaseTester.setDataSet(createDataSet(dataSetName));
@@ -113,6 +117,18 @@ public abstract class AbstractDataSourceConfigurer {
             Assertion.assertEquals(expectedDataSet, actualDataSet);
         } catch (MalformedURLException m) {
             log.debug("Skipping schema assertion since {} was not found.", dataSetName);
+        } catch (Exception e) {
+            throw Unchecked.exception(e);
+        }
+    }
+
+    public Object getValue(String tableName, String column, int row) {
+        try {
+            return databaseTester
+                    .getConnection()
+                    .createDataSet()
+                    .getTable(tableName)
+                    .getValue(row, column);
         } catch (Exception e) {
             throw Unchecked.exception(e);
         }

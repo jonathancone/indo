@@ -28,28 +28,27 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by jcone on 8/16/15.
  */
-public class SqlEngineTest extends AbstractDataSourceTest {
-    private SqlEngine sqlEngine;
+public class SqlEngineTest extends AbstractDbUnitTest {
 
     @Test
     public void testGetDataSource() throws Exception {
-        assertEquals(getDataSource(), new SqlEngine(getDataSource()).getDataSource());
+        assertEquals(getDataSource(), getEngine().getDataSource());
     }
 
     @Test
-    public void testQuery1() throws Exception {
-        List<Employee> employees = sql()
-                .query("     SELECT           " +
-                                "   employeeId,    " +
-                                "   firstName,     " +
-                                "   lastName,      " +
-                                "   active,        " +
-                                "   departureDate, " +
-                                "   hireDate,      " +
-                                "   payrollId,     " +
-                                "   salary         " +
-                                " FROM             " +
-                                "   Employee       ",
+    public void testQueryResultSetCommand1() throws Exception {
+        List<Employee> employees =
+                getEngine().query(" SELECT           " +
+                                "     employeeId,    " +
+                                "     firstName,     " +
+                                "     lastName,      " +
+                                "     active,        " +
+                                "     departureDate, " +
+                                "     hireDate,      " +
+                                "     payrollId,     " +
+                                "     salary         " +
+                                "   FROM             " +
+                                "     Employee       ",
                         new ResultSetCommand<Employee>() {
                             public Employee perform(ResultSet rs) throws SQLException {
                                 Employee employee = new Employee();
@@ -65,16 +64,12 @@ public class SqlEngineTest extends AbstractDataSourceTest {
                             }
                         });
 
-        for (Employee e : employees) {
-            System.out.println(e.getFirstName() + e.getLastName());
+        for (int i = 0; i < employees.size(); i++) {
+            assertRowValue("Employee", "employeeId", i, employees.get(i).getEmployeeId());
         }
-
     }
 
-    private SqlEngine sql() {
-        if (sqlEngine == null) {
-            sqlEngine = new SqlEngine(getDataSource());
-        }
-        return sqlEngine;
+    protected SqlEngine getEngine() {
+        return new SqlEngine(getDataSource());
     }
 }

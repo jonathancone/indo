@@ -17,6 +17,7 @@
 package rebound.sql;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestName;
@@ -32,19 +33,19 @@ import java.util.Arrays;
 import java.util.List;
 
 @RunWith(Parameterized.class)
-public abstract class AbstractDataSourceTest {
-    private static final Logger log = LoggerFactory.getLogger(AbstractDataSourceTest.class);
+public class AbstractDbUnitTest {
+    private static final Logger log = LoggerFactory.getLogger(AbstractDbUnitTest.class);
 
     @Rule
     public TestName testName = new TestName();
 
     @Parameterized.Parameter(0)
-    public AbstractDataSourceConfigurer dataSourceConfig;
+    public AbstractDbUnitConfigurer dbUnitConfigurer;
 
     @Parameterized.Parameters
     public static List<Object[]> dataSourceConfigurations() {
         Object[][] configs = new Object[][]{
-                {new H2Configurer("sa", "sa", "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=true", "default-schema.sql", "org.h2.Driver")}
+                {new H2DbUnitConfigurer("sa", "sa", "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=true", "default-schema.sql", "org.h2.Driver")}
         };
 
         return Arrays.asList(configs);
@@ -52,12 +53,12 @@ public abstract class AbstractDataSourceTest {
 
     @Before
     public void setupDataSource() {
-        dataSourceConfig.populateSchema(beforeDataSetName());
+        dbUnitConfigurer.populateSchema(beforeDataSetName());
     }
 
     @After
     public void tearDownDataSource() {
-        dataSourceConfig.assertSchema(afterDataSetName());
+        dbUnitConfigurer.assertSchema(afterDataSetName());
     }
 
     protected String beforeDataSetName() {
@@ -78,10 +79,15 @@ public abstract class AbstractDataSourceTest {
     }
 
     protected DataSource getDataSource() {
-        return dataSourceConfig.getDataSource();
+        return dbUnitConfigurer.getDataSource();
+    }
+
+    protected void assertRowValue(String expectedTable, String expectedColumn, int expectedRow, Object actual) {
+        Object expected = dbUnitConfigurer.getValue(expectedTable, expectedColumn, expectedRow);
+        Assert.assertEquals(expected, actual);
     }
 
     protected void log(String message, Object... args) {
-        LoggerFactory.getLogger(getClass()).info(message, args);
+        LoggerFactory.getLogger(getClass()).debug(message, args);
     }
 }
