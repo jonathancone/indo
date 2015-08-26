@@ -32,4 +32,8 @@ public class Strings {
         int i = input.indexOf(before);
         return input.substring(0, (i > -1 ? i : input.length()));
     }
+
+    public static String wordCase(String input) {
+        return isBlank(input) ? input : input.substring(0, 1).toUpperCase() + input.substring(1, input.length());
+    }
 }
