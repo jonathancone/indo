@@ -16,7 +16,9 @@
 
 package rebound.sql;
 
+import rebound.util.JdbcException;
 import rebound.util.Multi;
+import rebound.util.Unchecked;
 
 import javax.sql.DataSource;
 import java.sql.Connection;

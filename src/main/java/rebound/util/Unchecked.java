@@ -14,24 +14,28 @@
  * limitations under the License.
  */
 
-package rebound.sql;
-
-import java.sql.SQLException;
+package rebound.util;
 
 /**
  * A helper utility to handle checked exceptions.
  *
  * @author Jonathan Cone
  */
+@SuppressWarnings({"unchecked", "ThrowableResultOfMethodCallIgnored"})
 public class Unchecked {
-    public static <T extends Exception> RuntimeException exception(T t) {
+    public static <T extends Exception, E extends Exception, W extends RuntimeException> W exception(T t, Class<E> matching, Class<W> wrapper) {
         if (t instanceof RuntimeException) {
-            return (RuntimeException) t;
+            return (W) t;
         } else {
-            if (t instanceof SQLException) {
-                return new JdbcException(t);
+            if (matching.isAssignableFrom(t.getClass())) {
+                return (W) Reflect.on(wrapper).newInstance().initCause(t);
             }
-            return new RuntimeException(t);
+            return (W) new RuntimeException(t);
         }
     }
+
+    public static <T extends Exception> RuntimeException exception(T t) {
+        return exception(t, Exception.class, RuntimeException.class);
+    }
+
 }

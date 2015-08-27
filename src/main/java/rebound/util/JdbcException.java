@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package rebound.sql;
+package rebound.util;
 
 import java.sql.SQLException;
 

@@ -66,6 +66,12 @@ public class SqlEngineTest extends AbstractDbUnitTest {
 
         for (int i = 0; i < employees.size(); i++) {
             assertRowValue("Employee", "employeeId", i, employees.get(i).getEmployeeId());
+            Class<? extends Employee> aClass = employees.get(i).getClass();
+
+//            MethodR.get("employeeId")
+//            Method getEmployeeId = aClass.getMethod("getEmployeeId");
+//            Object result = getEmployeeId.invoke(employees.get(i));
+
         }
     }
 
