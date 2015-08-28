@@ -19,7 +19,7 @@ package rebound.util;
 import java.sql.SQLException;
 
 /**
- * Created by jcone on 8/7/15.
+ * A {@link RuntimeException} suitable for wrapping {@link SQLException}.
  */
 public class JdbcException extends RuntimeException {
     public JdbcException() {
@@ -41,10 +41,19 @@ public class JdbcException extends RuntimeException {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 
+    /**
+     * @return true if this instance is wrapping a {@link SQLException}.
+     */
     public boolean hasSQLExceptionCause() {
         return getCause() instanceof SQLException;
     }
 
+    /**
+     * Get the {@link SQLException} instance that is being wrapped, call {@link #hasSQLExceptionCause()}
+     * to ensure that the cause can be cast before calling this method.
+     *
+     * @return the {@link SQLException} cause this instance is wrapping.
+     */
     public SQLException getSQLExceptionCause() {
         return (SQLException) getCause();
     }
