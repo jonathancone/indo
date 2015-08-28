@@ -20,29 +20,35 @@ import org.junit.Test;
 
 import java.sql.SQLException;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
+
 
 /**
- * Created by jcone on 8/26/15.
+ * Unit tests for {@link Unchecked}.
+ *
+ * @author Jonathan Cone
  */
+@SuppressWarnings({"unchecked", "ThrowableResultOfMethodCallIgnored"})
 public class UncheckedTest {
 
     @Test
     public void testExceptionWrapExceptionWithMatch() throws Exception {
         SQLException initial = new SQLException();
 
-        JdbcException actual = Unchecked.exception(initial, SQLException.class, JdbcException.class);
+        RuntimeException actual = Unchecked.exception(initial, JdbcException.class, SQLException.class);
 
         assertEquals(initial, actual.getCause());
+        assertTrue(actual instanceof JdbcException);
     }
 
     @Test
     public void testExceptionWrapExceptionWithoutMatch() throws Exception {
         Exception initial = new Exception();
 
-        RuntimeException actual = Unchecked.exception(initial, SQLException.class, RuntimeException.class);
+        RuntimeException actual = Unchecked.exception(initial, JdbcException.class, SQLException.class);
 
         assertEquals(initial, actual.getCause());
+        assertFalse(actual instanceof JdbcException);
 
     }
 
@@ -50,7 +56,7 @@ public class UncheckedTest {
     public void testExceptionDontWrapException() throws Exception {
         RuntimeException initial = new RuntimeException();
 
-        RuntimeException actual = Unchecked.exception(initial, SQLException.class, RuntimeException.class);
+        RuntimeException actual = Unchecked.exception(initial, RuntimeException.class, SQLException.class);
 
         assertEquals(initial, actual);
 
@@ -65,6 +71,4 @@ public class UncheckedTest {
         assertEquals(initial, actual.getCause());
 
     }
-
-
 }

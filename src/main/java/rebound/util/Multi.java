@@ -19,13 +19,27 @@ package rebound.util;
 import java.util.Collection;
 
 /**
- * Created by jcone on 8/12/15.
+ * Utilities for working with {@link Collection}s and arrays.
+ *
+ * @author Jonathan Cone
  */
 public class Multi {
+    /**
+     * Logical test to see if an array has any elements.
+     *
+     * @param array The array to test.
+     * @return true if the specified array is not null or has a length greater than 0.
+     */
     public static boolean isNotEmpty(Object[] array) {
         return array != null && array.length > 0;
     }
 
+    /**
+     * Logical test to see if a {@link Collection} has any elements.
+     *
+     * @param collection The {@link Collection} to test.
+     * @return true if the specified {@link Collection} is not null or has a size greater than 0.
+     */
     public static boolean isNotEmpty(Collection collection) {
         return collection != null && collection.size() > 0;
     }
