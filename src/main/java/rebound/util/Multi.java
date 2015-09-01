@@ -43,4 +43,12 @@ public class Multi {
     public static boolean isNotEmpty(Collection collection) {
         return collection != null && collection.size() > 0;
     }
+
+    public static int size(Object[] array) {
+        return array != null ? array.length : 0;
+    }
+
+    public static int size(Collection collection) {
+        return collection != null ? collection.size() : 0;
+    }
 }
