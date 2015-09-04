@@ -18,9 +18,11 @@ package rebound.util;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.Stack;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Created by jcone on 8/25/15.
@@ -174,33 +176,44 @@ public class Reflect<T> {
     }
 
     private Class<?>[] toType(Object... values) {
-        if (Multi.isNotEmpty(values)) {
+        if (values != null) {
+            return Arrays.stream(values)
+                    .map(value -> value != null ? value.getClass() : null)
+                    .collect(Collectors.toList())
+                    .toArray(new Class<?>[values.length]);
+        }
+        return null;
+    }
 
-            List<Class<?>> classes = new ArrayList<>();
+    private Method findMethod(Class<?> searchClass, String targetMethod, Class<?>... targetTypes) {
 
-            for (Object value : values) {
-                classes.add(value != null ? value.getClass() : null);
+        Optional<Method> publicMatch = findCompatibleMethod(searchClass.getMethods(), targetMethod, targetTypes);
+
+        if (publicMatch.isPresent()) {
+            return publicMatch.get();
+        } else {
+            Optional<Method> declaredMatch = findCompatibleMethod(searchClass.getDeclaredMethods(), targetMethod, targetTypes);
+
+            if (declaredMatch.isPresent()) {
+                if (!declaredMatch.get().isAccessible()) {
+                    declaredMatch.get().setAccessible(true);
+                }
+                return declaredMatch.get();
             }
         }
         return null;
     }
 
+    private Optional<Method> findCompatibleMethod(Method[] searchMethods, String targetMethod, Class<?>... targetTypes) {
 
-    private Method findMethod(Class<?> aClass, String method, Class<?>... parameterTypes) {
-        try {
-            return aClass.getMethod(method, parameterTypes);
-        } catch (NoSuchMethodException e) {
-            try {
-                Method declaredMethod = aClass.getDeclaredMethod(method, parameterTypes);
-
-                if (!declaredMethod.isAccessible()) {
-                    declaredMethod.setAccessible(true);
-                }
-                return declaredMethod;
-            } catch (NoSuchMethodException e1) {
-                return null;
-            }
-        }
+        return Arrays.stream(searchMethods)
+                .filter(m -> m.getName().equals(targetMethod))
+                .filter(m -> m.getParameterCount() == targetTypes.length)
+                .filter(m -> IntStream
+                        .range(0, targetTypes.length)
+                        .allMatch(index ->
+                                m.getParameterTypes()[index].isAssignableFrom(targetTypes[index])))
+                .findFirst();
     }
 
     private Method findSetter(Class<?> aClass, String property, Class<?> parameter) {
