@@ -18,6 +18,8 @@ package rebound.util;
 
 import org.junit.Test;
 
+import java.time.LocalTime;
+
 import static org.junit.Assert.*;
 import static rebound.util.Reflect.on;
 
@@ -31,7 +33,7 @@ public class ReflectTest {
 
         item.setObjTest("String");
 
-        assertEquals("String", on(item).invoke("getObjTest").pop(String.class));
+        assertEquals("String", on(item).invoke("getObjTest").pop());
     }
 
     @Test
@@ -215,17 +217,61 @@ public class ReflectTest {
     }
 
     @Test
-    public void testIs() throws Exception {
+    public void testIs1() throws Exception {
+        Item item = new Item();
 
+        assertFalse(on(item).property("booleanTest").is());
     }
 
     @Test
-    public void testGet() throws Exception {
+    public void testIs2() throws Exception {
+        Item item = new Item();
+        item.setBooleanTest(true);
 
+        assertTrue(on(item).property("booleanTest").is());
     }
 
     @Test
     public void testNewInstance() throws Exception {
+        assertNotNull(on(Item.class).newInstance().getInstance());
+    }
+
+
+    @Test
+    public void testNewInstanceSetters() throws Exception {
+
+        LocalTime lt = LocalTime.now();
+
+        Item instance = on(Item.class)
+                .newInstance()
+                .property("objTest").set(lt)
+                .property("booleanTest").set(true)
+                .property("intTest").set(400)
+                .getInstance();
+
+        assertNotNull(instance);
+        assertEquals(lt, instance.getObjTest());
+        assertTrue(instance.isBooleanTest());
+        assertEquals(400, instance.getIntTest());
+
+    }
+
+    @Test
+    public void testNewInstanceGetters() throws Exception {
+
+        LocalTime lt = LocalTime.now();
+
+        Item instance = on(Item.class)
+                .newInstance()
+                .property("objTest").set(lt).invokeGetter()
+                .property("booleanTest").set(true).invokeGetter()
+                .property("intTest").set(400).invokeGetter()
+                .getInstance();
+
+        assertNotNull(instance);
+        assertEquals(lt, instance.getObjTest());
+        assertTrue(instance.isBooleanTest());
+        assertEquals(400, instance.getIntTest());
 
     }
 

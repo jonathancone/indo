@@ -60,24 +60,28 @@ public class Reflect<T> {
         return this;
     }
 
-    public Object pop() {
-        return returnValues.pop();
-    }
-
-    public <S> S pop(Class<S> type) {
+    public <S> S pop() {
         return (S) returnValues.pop();
     }
 
-    public Reflect<T> is() {
+    public int returnValueSize() {
+        return returnValues != null ? returnValues.size() : 0;
+    }
+
+    public boolean hasReturnValues() {
+        return returnValueSize() > 0;
+    }
+
+    public boolean is() {
         return get();
     }
 
-    public Reflect<T> get() {
-        return invoke(findGetter(aClass, property));
+    public <S> S get() {
+        return invokeGetter(property).<S>pop();
     }
 
     public Reflect<T> set(Object value) {
-        return invoke(findSetter(aClass, property, value.getClass()), value);
+        return invokeSetter(property, value);
     }
 
     public Reflect<T> set(byte value) {
@@ -144,14 +148,36 @@ public class Reflect<T> {
         return invoke(findSetter(aClass, property, boolean[].class), value);
     }
 
+    public T getInstance() {
+        return instance;
+    }
+
     public Reflect<T> newInstance() {
         try {
-            returnValues.push(aClass.newInstance());
+            instance = aClass.newInstance();
             return this;
         } catch (InstantiationException | IllegalAccessException e) {
             throw exception(e);
         }
     }
+
+
+    public Reflect<T> invokeGetter(String property) {
+        return invoke(findGetter(aClass, property));
+    }
+
+    public Reflect<T> invokeGetter() {
+        return invokeGetter(property);
+    }
+
+    public Reflect<T> invokeSetter(String property, Object value) {
+        return invoke(findSetter(aClass, property, toType(value)[0]), value);
+    }
+
+    public Reflect<T> invokeSetter(Object value) {
+        return invokeSetter(property, value);
+    }
+
 
     public Reflect<T> invoke(String method, Object... values) {
         return invoke(findMethod(aClass, method, toType(values)), values);
@@ -205,7 +231,6 @@ public class Reflect<T> {
     }
 
     private Optional<Method> findCompatibleMethod(Method[] searchMethods, String targetMethod, Class<?>... targetTypes) {
-
         return Arrays.stream(searchMethods)
                 .filter(m -> m.getName().equals(targetMethod))
                 .filter(m -> m.getParameterCount() == targetTypes.length)
