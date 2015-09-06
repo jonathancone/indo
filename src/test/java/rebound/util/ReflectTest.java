@@ -41,7 +41,7 @@ public class ReflectTest {
 
         Item item = new Item();
 
-        on(item).property("objTest").set("test");
+        on(item).property("objTest", "test");
 
         assertEquals("test", item.getObjTest());
     }
@@ -51,7 +51,7 @@ public class ReflectTest {
 
         Item item = new Item();
 
-        on(item).property("objArrayTest").set(new String[]{"this", "is", "a", "test"});
+        on(item).property("objArrayTest", new String[]{"this", "is", "a", "test"});
 
         assertArrayEquals(new String[]{"this", "is", "a", "test"}, item.getObjArrayTest());
     }
@@ -61,7 +61,7 @@ public class ReflectTest {
 
         Item item = new Item();
 
-        on(item).property("booleanTest").set(true);
+        on(item).property("booleanTest", true);
 
         assertTrue(item.isBooleanTest());
     }
@@ -71,7 +71,7 @@ public class ReflectTest {
 
         Item item = new Item();
 
-        on(item).property("booleanArrayTest").set(new boolean[]{true, true, true});
+        on(item).property("booleanArrayTest", new boolean[]{true, true, true});
 
         assertArrayEquals(new boolean[]{true, true, true}, item.getBooleanArrayTest());
     }
@@ -81,7 +81,7 @@ public class ReflectTest {
 
         Item item = new Item();
 
-        on(item).property("charTest").set('C');
+        on(item).property("charTest", 'C');
 
         assertEquals('C', item.getCharTest());
     }
@@ -91,7 +91,7 @@ public class ReflectTest {
 
         Item item = new Item();
 
-        on(item).property("charArrayTest").set(new char[]{'D', 'E', 'F'});
+        on(item).property("charArrayTest", new char[]{'D', 'E', 'F'});
 
         assertArrayEquals(new char[]{'D', 'E', 'F'}, item.getCharArrayTest());
     }
@@ -101,7 +101,7 @@ public class ReflectTest {
 
         Item item = new Item();
 
-        on(item).property("byteTest").set((byte) 07);
+        on(item).property("byteTest", (byte) 07);
 
         assertEquals((byte) 07, item.getByteTest());
     }
@@ -111,7 +111,7 @@ public class ReflectTest {
 
         Item item = new Item();
 
-        on(item).property("byteArrayTest").set(new byte[]{02, 03, 05});
+        on(item).property("byteArrayTest", new byte[]{02, 03, 05});
 
         assertArrayEquals(new byte[]{02, 03, 05}, item.getByteArrayTest());
     }
@@ -121,7 +121,7 @@ public class ReflectTest {
 
         Item item = new Item();
 
-        on(item).property("shortTest").set((short) 64);
+        on(item).property("shortTest", (short) 64);
 
         assertEquals((short) 64, item.getShortTest());
     }
@@ -131,7 +131,7 @@ public class ReflectTest {
 
         Item item = new Item();
 
-        on(item).property("shortArrayTest").set(new short[]{16, 32, 48});
+        on(item).property("shortArrayTest", new short[]{16, 32, 48});
 
         assertArrayEquals(new short[]{16, 32, 48}, item.getShortArrayTest());
     }
@@ -141,7 +141,7 @@ public class ReflectTest {
 
         Item item = new Item();
 
-        on(item).property("intTest").set(64);
+        on(item).property("intTest", 64);
 
         assertEquals(64, item.getIntTest());
     }
@@ -151,7 +151,7 @@ public class ReflectTest {
 
         Item item = new Item();
 
-        on(item).property("intArrayTest").set(new int[]{16, 32, 48});
+        on(item).property("intArrayTest", new int[]{16, 32, 48});
 
         assertArrayEquals(new int[]{16, 32, 48}, item.getIntArrayTest());
     }
@@ -161,7 +161,7 @@ public class ReflectTest {
 
         Item item = new Item();
 
-        on(item).property("longTest").set((long) 64);
+        on(item).property("longTest", (long) 64);
 
         assertEquals((long) 64, item.getLongTest());
     }
@@ -171,7 +171,7 @@ public class ReflectTest {
 
         Item item = new Item();
 
-        on(item).property("longArrayTest").set(new long[]{16, 32, 48});
+        on(item).property("longArrayTest", new long[]{16, 32, 48});
 
         assertArrayEquals(new long[]{16, 32, 48}, item.getLongArrayTest());
     }
@@ -181,7 +181,7 @@ public class ReflectTest {
 
         Item item = new Item();
 
-        on(item).property("floatTest").set((float) 64);
+        on(item).property("floatTest", (float) 64);
 
         assertEquals((float) 64, item.getFloatTest(), .001);
     }
@@ -191,7 +191,7 @@ public class ReflectTest {
 
         Item item = new Item();
 
-        on(item).property("floatArrayTest").set(new float[]{16, 32, 48});
+        on(item).property("floatArrayTest", new float[]{16, 32, 48});
 
         assertArrayEquals(new float[]{16, 32, 48}, item.getFloatArrayTest(), (float) .001);
     }
@@ -201,7 +201,7 @@ public class ReflectTest {
 
         Item item = new Item();
 
-        on(item).property("doubleTest").set((double) 64);
+        on(item).property("doubleTest", (double) 64);
 
         assertEquals((double) 64, item.getDoubleTest(), .001);
     }
@@ -211,24 +211,9 @@ public class ReflectTest {
 
         Item item = new Item();
 
-        on(item).property("doubleArrayTest").set(new double[]{16, 32, 48});
+        on(item).property("doubleArrayTest", new double[]{16, 32, 48});
 
         assertArrayEquals(new double[]{16, 32, 48}, item.getDoubleArrayTest(), .001);
-    }
-
-    @Test
-    public void testIs1() throws Exception {
-        Item item = new Item();
-
-        assertFalse(on(item).property("booleanTest").is());
-    }
-
-    @Test
-    public void testIs2() throws Exception {
-        Item item = new Item();
-        item.setBooleanTest(true);
-
-        assertTrue(on(item).property("booleanTest").is());
     }
 
     @Test
@@ -244,9 +229,9 @@ public class ReflectTest {
 
         Item instance = on(Item.class)
                 .newInstance()
-                .property("objTest").set(lt)
-                .property("booleanTest").set(true)
-                .property("intTest").set(400)
+                .property("objTest", lt)
+                .property("booleanTest", true)
+                .property("intTest", 400)
                 .getInstance();
 
         assertNotNull(instance);
@@ -257,22 +242,38 @@ public class ReflectTest {
     }
 
     @Test
-    public void testNewInstanceGetters() throws Exception {
+    public void testPop() throws Exception {
 
         LocalTime lt = LocalTime.now();
 
-        Item instance = on(Item.class)
+        Reflect<Item> reflect = on(Item.class)
                 .newInstance()
-                .property("objTest").set(lt).invokeGetter()
-                .property("booleanTest").set(true).invokeGetter()
-                .property("intTest").set(400).invokeGetter()
-                .getInstance();
+                .property("objTest", lt).invokeGetter("objTest")
+                .property("booleanTest", true).invokeGetter("booleanTest")
+                .property("intTest", 400).invokeGetter("intTest");
 
-        assertNotNull(instance);
-        assertEquals(lt, instance.getObjTest());
-        assertTrue(instance.isBooleanTest());
-        assertEquals(400, instance.getIntTest());
+        assertEquals(3, reflect.returnValueSize());
 
+        assertEquals(400, (int) reflect.pop());
+        assertEquals(true, reflect.pop());
+        assertEquals(lt, reflect.pop());
+    }
+
+    @Test
+    public void testToType1() throws Exception {
+        assertArrayEquals(new Class<?>[]{String.class, Integer.class, Double.class},
+                Reflect.toType("String", 100, 4.5));
+    }
+
+    @Test
+    public void testToType2() throws Exception {
+        assertArrayEquals(new Class<?>[]{String.class},
+                Reflect.toType("String"));
+    }
+
+    @Test
+    public void testToType3() throws Exception {
+        assertArrayEquals(new Class<?>[]{}, Reflect.toType());
     }
 
     protected static class Item {

@@ -19,6 +19,7 @@ package rebound.util;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Stack;
 import java.util.stream.Collectors;
@@ -34,7 +35,6 @@ public class Reflect<T> {
 
     private Class<T> aClass;
     private T instance;
-    private String property;
     private Stack<Object> returnValues;
 
     private Reflect(Class<T> aClass) {
@@ -55,9 +55,11 @@ public class Reflect<T> {
         return new Reflect<>(instance);
     }
 
-    public Reflect<T> property(String property) {
-        this.property = property;
-        return this;
+    protected static Class<?>[] toType(Object... values) {
+        return Arrays.stream(values)
+                .map(value -> value != null ? value.getClass() : null)
+                .collect(Collectors.toList())
+                .toArray(new Class<?>[values.length]);
     }
 
     public <S> S pop() {
@@ -72,79 +74,75 @@ public class Reflect<T> {
         return returnValueSize() > 0;
     }
 
-    public boolean is() {
-        return get();
-    }
-
-    public <S> S get() {
+    public <S> S property(String property) {
         return invokeGetter(property).<S>pop();
     }
 
-    public Reflect<T> set(Object value) {
+    public Reflect<T> property(String property, Object value) {
         return invokeSetter(property, value);
     }
 
-    public Reflect<T> set(byte value) {
+    public Reflect<T> property(String property, byte value) {
         return invoke(findSetter(aClass, property, byte.class), value);
     }
 
-    public Reflect<T> set(byte[] value) {
+    public Reflect<T> property(String property, byte[] value) {
         return invoke(findSetter(aClass, property, byte[].class), value);
     }
 
-    public Reflect<T> set(short value) {
+    public Reflect<T> property(String property, short value) {
         return invoke(findSetter(aClass, property, short.class), value);
     }
 
-    public Reflect<T> set(short[] value) {
+    public Reflect<T> property(String property, short[] value) {
         return invoke(findSetter(aClass, property, short[].class), value);
     }
 
-    public Reflect<T> set(int value) {
+    public Reflect<T> property(String property, int value) {
         return invoke(findSetter(aClass, property, int.class), value);
     }
 
-    public Reflect<T> set(int[] value) {
+    public Reflect<T> property(String property, int[] value) {
         return invoke(findSetter(aClass, property, int[].class), value);
     }
 
-    public Reflect<T> set(long value) {
+    public Reflect<T> property(String property, long value) {
         return invoke(findSetter(aClass, property, long.class), value);
     }
 
-    public Reflect<T> set(long[] value) {
+    public Reflect<T> property(String property, long[] value) {
         return invoke(findSetter(aClass, property, long[].class), value);
     }
 
-    public Reflect<T> set(float value) {
+    public Reflect<T> property(String property, float value) {
         return invoke(findSetter(aClass, property, float.class), value);
     }
 
-    public Reflect<T> set(float[] value) {
+    public Reflect<T> property(String property, float[] value) {
         return invoke(findSetter(aClass, property, float[].class), value);
     }
 
-    public Reflect<T> set(double value) {
+    public Reflect<T> property(String property, double value) {
         return invoke(findSetter(aClass, property, double.class), value);
     }
 
-    public Reflect<T> set(double[] value) {
+    public Reflect<T> property(String property, double[] value) {
         return invoke(findSetter(aClass, property, double[].class), value);
     }
 
-    public Reflect<T> set(char value) {
+    public Reflect<T> property(String property, char value) {
         return invoke(findSetter(aClass, property, char.class), value);
     }
 
-    public Reflect<T> set(char[] value) {
+    public Reflect<T> property(String property, char[] value) {
         return invoke(findSetter(aClass, property, char[].class), value);
     }
 
-    public Reflect<T> set(boolean value) {
+    public Reflect<T> property(String property, boolean value) {
         return invoke(findSetter(aClass, property, boolean.class), value);
     }
 
-    public Reflect<T> set(boolean[] value) {
+    public Reflect<T> property(String property, boolean[] value) {
         return invoke(findSetter(aClass, property, boolean[].class), value);
     }
 
@@ -161,23 +159,13 @@ public class Reflect<T> {
         }
     }
 
-
     public Reflect<T> invokeGetter(String property) {
         return invoke(findGetter(aClass, property));
-    }
-
-    public Reflect<T> invokeGetter() {
-        return invokeGetter(property);
     }
 
     public Reflect<T> invokeSetter(String property, Object value) {
         return invoke(findSetter(aClass, property, toType(value)[0]), value);
     }
-
-    public Reflect<T> invokeSetter(Object value) {
-        return invokeSetter(property, value);
-    }
-
 
     public Reflect<T> invoke(String method, Object... values) {
         return invoke(findMethod(aClass, method, toType(values)), values);
@@ -185,7 +173,15 @@ public class Reflect<T> {
 
     public Reflect<T> invoke(Method method, Object... values) {
         try {
-            returnValues.push(method.invoke(instance, values));
+
+            Object result = method.invoke(instance, values);
+
+            Class<?> returnType = method.getReturnType();
+
+            if (!Objects.equals(returnType, void.class)) {
+                returnValues.push(result);
+            }
+
             return this;
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw exception(e);
@@ -199,16 +195,6 @@ public class Reflect<T> {
         }
 
         throw new RuntimeException(e);
-    }
-
-    private Class<?>[] toType(Object... values) {
-        if (values != null) {
-            return Arrays.stream(values)
-                    .map(value -> value != null ? value.getClass() : null)
-                    .collect(Collectors.toList())
-                    .toArray(new Class<?>[values.length]);
-        }
-        return null;
     }
 
     private Method findMethod(Class<?> searchClass, String targetMethod, Class<?>... targetTypes) {
