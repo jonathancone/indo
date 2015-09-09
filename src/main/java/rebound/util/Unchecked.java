@@ -51,7 +51,7 @@ public class Unchecked {
             if (Multi.isNotEmpty(matching)) {
                 for (Class<E> match : matching) {
                     if (match.isAssignableFrom(t.getClass())) {
-                        return (W) ((RuntimeException) Reflect.on(wrapper).newInstance().pop()).initCause(t);
+                        return (W) ((RuntimeException) Reflect.on(wrapper).newInstance().lastReturn().get()).initCause(t);
                     }
                 }
             }

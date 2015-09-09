@@ -18,10 +18,7 @@ package rebound.util;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Stack;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -35,11 +32,11 @@ public class Reflect<T> {
 
     private Class<T> aClass;
     private T instance;
-    private Stack<Object> returnValues;
+    private List<Object> returnValues;
 
     private Reflect(Class<T> aClass) {
         this.aClass = aClass;
-        this.returnValues = new Stack<>();
+        this.returnValues = new ArrayList<>();
     }
 
     private Reflect(T instance) {
@@ -62,24 +59,28 @@ public class Reflect<T> {
                 .toArray(new Class<?>[values.length]);
     }
 
-    public <S> S pop() {
-        return (S) returnValues.pop();
+    public <S> Optional<S> lastReturn() {
+        return returnedOn(returnValues.size() - 1);
     }
 
-    public int returnValueSize() {
+    public int returnCount() {
         return returnValues != null ? returnValues.size() : 0;
     }
 
-    public boolean hasReturnValues() {
-        return returnValueSize() > 0;
+    public boolean hasReturn() {
+        return returnCount() > 0;
     }
 
-    public <S> S property(String property) {
-        return invokeGetter(property).<S>pop();
+    public <S> Optional<S> returnedOn(int index) {
+        return Optional.ofNullable((S) (index > -1 && index < returnValues.size() ? returnValues.get(index) : null));
+    }
+
+    public <S> Optional<S> property(String property) {
+        return get(property).lastReturn();
     }
 
     public Reflect<T> property(String property, Object value) {
-        return invokeSetter(property, value);
+        return set(property, value);
     }
 
     public Reflect<T> property(String property, byte value) {
@@ -159,11 +160,11 @@ public class Reflect<T> {
         }
     }
 
-    public Reflect<T> invokeGetter(String property) {
+    public Reflect<T> get(String property) {
         return invoke(findGetter(aClass, property));
     }
 
-    public Reflect<T> invokeSetter(String property, Object value) {
+    public Reflect<T> set(String property, Object value) {
         return invoke(findSetter(aClass, property, toType(value)[0]), value);
     }
 
@@ -179,7 +180,7 @@ public class Reflect<T> {
             Class<?> returnType = method.getReturnType();
 
             if (!Objects.equals(returnType, void.class)) {
-                returnValues.push(result);
+                returnValues.add(result);
             }
 
             return this;

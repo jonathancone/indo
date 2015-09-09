@@ -33,7 +33,7 @@ public class ReflectTest {
 
         item.setObjTest("String");
 
-        assertEquals("String", on(item).invoke("getObjTest").pop());
+        assertEquals("String", on(item).invoke("getObjTest").lastReturn().get());
     }
 
     @Test
@@ -242,21 +242,21 @@ public class ReflectTest {
     }
 
     @Test
-    public void testPop() throws Exception {
+    public void testGetProperty() throws Exception {
 
         LocalTime lt = LocalTime.now();
 
         Reflect<Item> reflect = on(Item.class)
                 .newInstance()
-                .property("objTest", lt).invokeGetter("objTest")
-                .property("booleanTest", true).invokeGetter("booleanTest")
-                .property("intTest", 400).invokeGetter("intTest");
+                .property("objTest", lt)
+                .property("booleanTest", true)
+                .property("intTest", 400);
 
-        assertEquals(3, reflect.returnValueSize());
+        assertEquals(0, reflect.returnCount());
 
-        assertEquals(400, (int) reflect.pop());
-        assertEquals(true, reflect.pop());
-        assertEquals(lt, reflect.pop());
+        assertEquals(lt, reflect.property("objTest").get());
+        assertEquals(true, reflect.property("booleanTest").get());
+        assertEquals(400, (int) reflect.property("intTest").get());
     }
 
     @Test
@@ -274,6 +274,11 @@ public class ReflectTest {
     @Test
     public void testToType3() throws Exception {
         assertArrayEquals(new Class<?>[]{}, Reflect.toType());
+    }
+
+    @Test
+    public void testProperty1() throws Exception {
+        assertFalse(on(new Item()).<Boolean>property("booleanTest").get());
     }
 
     protected static class Item {
