@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Indo Contributors
+ * Copyright 2015  Jonathan Cone
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import java.util.stream.IntStream;
 /**
  * Created by jcone on 8/25/15.
  */
+@SuppressWarnings("PrimitiveArrayArgumentToVariableArgMethod")
 public class Reflect<T> {
     private static final String GET_PREFIX = "get";
     private static final String IS_PREFIX = "is";
@@ -39,6 +40,7 @@ public class Reflect<T> {
         this.returnValues = new ArrayList<>();
     }
 
+    @SuppressWarnings("unchecked")
     private Reflect(T instance) {
         this((Class<T>) instance.getClass());
         this.instance = instance;
@@ -71,6 +73,7 @@ public class Reflect<T> {
         return returnCount() > 0;
     }
 
+    @SuppressWarnings("unchecked")
     public <S> Optional<S> returnedOn(int index) {
         return Optional.ofNullable((S) (index > -1 && index < returnValues.size() ? returnValues.get(index) : null));
     }
