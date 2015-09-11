@@ -16,12 +16,13 @@
 
 package indo.sql;
 
-import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
- * Created by jcone on 8/12/15.
+ * Created by jcone on 8/20/15.
  */
-public interface ResultSetCommand<T> {
-    T perform(ResultSet rs) throws SQLException;
+@FunctionalInterface
+public interface OnPreparedStatement<T> {
+    T apply(PreparedStatement pstmt) throws SQLException;
 }

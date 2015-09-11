@@ -37,7 +37,7 @@ public abstract class AbstractQueryOperations implements QueryOperations {
     public AbstractQueryOperations(DataSource dataSource) {
         this.dataSource = dataSource;
         this.queryMetaData = new QueryMetaData();
-        this.sqlOperations = new SqlEngine(dataSource);
+        this.sqlOperations = new SqlRunner(dataSource);
         this.operation = Operation.UNKNOWN;
     }
 

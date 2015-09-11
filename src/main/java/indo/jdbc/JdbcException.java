@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package indo.util;
+package indo.jdbc;
 
 import java.sql.SQLException;
 

@@ -16,6 +16,7 @@
 
 package indo.util;
 
+import indo.jdbc.JdbcException;
 import org.junit.Test;
 
 import java.sql.SQLException;

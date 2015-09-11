@@ -28,17 +28,17 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by jcone on 8/16/15.
  */
-public class SqlEngineTest extends AbstractDbUnitTest {
+public class SqlRunnerTest extends AbstractDbUnitTest {
 
     @Test
     public void testGetDataSource() throws Exception {
-        assertEquals(getDataSource(), getEngine().getDataSource());
+        assertEquals(getDataSource(), runner().getDataSource());
     }
 
     @Test
     public void testQueryResultSetCommand1() throws Exception {
         List<Employee> employees =
-                getEngine().query(" SELECT           " +
+                runner().list(" SELECT           " +
                                 "     employeeId,    " +
                                 "     firstName,     " +
                                 "     lastName,      " +
@@ -49,33 +49,25 @@ public class SqlEngineTest extends AbstractDbUnitTest {
                                 "     salary         " +
                                 "   FROM             " +
                                 "     Employee       ",
-                        new ResultSetCommand<Employee>() {
-                            public Employee perform(ResultSet rs) throws SQLException {
-                                Employee employee = new Employee();
-                                employee.setEmployeeId(rs.getInt("employeeId"));
-                                employee.setFirstName(rs.getString("firstName"));
-                                employee.setLastName(rs.getString("lastName"));
-                                employee.setActive(rs.getBoolean("active"));
-                                employee.setDepartureDate(rs.getDate("departureDate"));
-                                employee.setHireDate(rs.getDate("hireDate"));
-                                employee.setPayrollId(rs.getInt("payrollId"));
-                                employee.setSalary(rs.getBigDecimal("salary"));
-                                return employee;
-                            }
+                        (rs) -> {
+                            Employee employee = new Employee();
+                            employee.setEmployeeId(rs.getInt("employeeId"));
+                            employee.setFirstName(rs.getString("firstName"));
+                            employee.setLastName(rs.getString("lastName"));
+                            employee.setActive(rs.getBoolean("active"));
+                            employee.setDepartureDate(rs.getDate("departureDate"));
+                            employee.setHireDate(rs.getDate("hireDate"));
+                            employee.setPayrollId(rs.getInt("payrollId"));
+                            employee.setSalary(rs.getBigDecimal("salary"));
+                            return employee;
                         });
 
         for (int i = 0; i < employees.size(); i++) {
             assertRowValue("Employee", "employeeId", i, employees.get(i).getEmployeeId());
-            Class<? extends Employee> aClass = employees.get(i).getClass();
-
-//            MethodR.get("employeeId")
-//            Method getEmployeeId = aClass.getMethod("getEmployeeId");
-//            Object result = getEmployeeId.invoke(employees.get(i));
-
         }
     }
 
-    protected SqlEngine getEngine() {
-        return new SqlEngine(getDataSource());
+    protected SqlRunner runner() {
+        return new SqlRunner(getDataSource());
     }
 }

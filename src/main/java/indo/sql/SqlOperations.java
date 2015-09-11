@@ -22,7 +22,7 @@ import java.util.List;
  * Created by jcone on 8/20/15.
  */
 public interface SqlOperations {
-    <T> T query(String sql, PreparedStatementCommand<T> psc);
+    <T> T query(String sql, OnPreparedStatement<T> psc);
 
-    <T> List<T> query(String sql, ResultSetCommand<T> rsc, Object... parameters);
+    <T> List<Row> list(String sql, Object... parameters);
 }
