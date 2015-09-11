@@ -17,18 +17,22 @@
 package indo.sql;
 
 import indo.jdbc.ResultSets;
-import indo.util.*;
+import indo.jdbc.Statements;
+import indo.util.CheckedConsumer;
+import indo.util.Unchecked;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static java.util.Objects.*;
+import static java.util.Objects.nonNull;
 
 /**
  * Created by jcone on 8/12/15.
@@ -48,18 +52,18 @@ public class SqlRunner implements SqlOperations {
     @Override
     public <T> T query(String sql, OnPreparedStatement<T> psc) {
         T t;
-        try (PreparedStatement pstmt = getConnection().prepareStatement(sql)) {
-            t = psc.apply(pstmt);
+        PreparedStatement ps = null;
+        try {
+            ps = getConnection().prepareStatement(sql);
+            t = psc.apply(ps);
         } catch (SQLException e) {
             throw Unchecked.exception(e);
-        } finally {
-
         }
+
         return t;
     }
 
-    @Override
-    public List<Row> list(String sql, Object... parameters) {
+    Stream<ResultSet> stream(String sql, Object... parameters) {
         return query(sql, ps -> {
 
             AtomicInteger index = new AtomicInteger();
@@ -69,12 +73,16 @@ public class SqlRunner implements SqlOperations {
                         (CheckedConsumer<Object>) param -> ps.setObject(index.incrementAndGet(), param));
             }
 
-            return ResultSets
-                    .stream(ps.executeQuery())
-                    .map(rs -> Row.from(rs))
-                    .collect(Collectors.toList());
+            return ResultSets.stream(ps);
 
         });
+    }
+
+    @Override
+    public List<Row> list(String sql, Object... parameters) {
+        return stream(sql, parameters)
+                .map(rs -> Row.from(rs))
+                .collect(Collectors.toList());
     }
 
     public static Connection getConnection(DataSource dataSource) {
@@ -86,7 +94,7 @@ public class SqlRunner implements SqlOperations {
     }
 
     protected Connection getConnection() {
-        if (connection != null) {
+        if (connection == null) {
             return getConnection(dataSource);
         }
         return connection;

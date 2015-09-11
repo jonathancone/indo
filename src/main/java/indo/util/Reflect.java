@@ -160,6 +160,10 @@ public class Reflect<T> {
         }
     }
 
+    public T newInstanceNow() {
+        return newInstance().getInstance();
+    }
+
     public Reflect<T> get(String property) {
         return invoke(findGetter(aClass, property));
     }

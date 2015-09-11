@@ -30,7 +30,7 @@ public class Unchecked {
      * {@link RuntimeException} classes, then a new wrapper instance of the supplied type will be created to
      * wrap the {@link Exception}.  If there are no matching candidates, then a generic {@link RuntimeException}
      * will be created.
-     * <p/>
+     * <p>
      * Note: This method does not accomplish anything that cannot be accomplished do with multiple catch blocks.
      * However, using this method may be less verbose in some circumstances.
      *
@@ -51,7 +51,7 @@ public class Unchecked {
             if (Multi.isNotEmpty(matching)) {
                 for (Class<E> match : matching) {
                     if (match.isAssignableFrom(t.getClass())) {
-                        return (W) ((RuntimeException) Reflect.on(wrapper).newInstance().lastReturn().get()).initCause(t);
+                        return (W) (Reflect.on(wrapper).newInstanceNow()).initCause(t);
                     }
                 }
             }
@@ -62,7 +62,7 @@ public class Unchecked {
     /**
      * Given an {@link Exception}, wrap it as a {@link RuntimeException} if needed, otherwise return the
      * original {@link Exception}.
-     * <p/>
+     * <p>
      * Note: This method does not accomplish anything that cannot be accomplished do with multiple catch blocks.
      * However, using this method may be less verbose in some circumstances.
      *

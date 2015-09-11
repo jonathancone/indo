@@ -1737,9 +1737,9 @@ public class ResultSets {
         }
     }
 
-    public static Stream<ResultSet> stream(ResultSet rs) {
+    public static Stream<ResultSet> stream(PreparedStatement ps) {
         return StreamSupport
                 .stream(Spliterators.spliteratorUnknownSize(
-                        new ResultSetIterator(rs), 0), false);
+                        new ResultSetIterator(ps), 0), false);
     }
 }

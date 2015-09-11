@@ -42,6 +42,17 @@ public class Employee {
         this.lastName = lastName;
     }
 
+    public Employee(boolean active, BigDecimal salary, Date hireDate, Date departureDate, Integer employeeId, Integer payrollId, String firstName, String lastName) {
+        this.active = active;
+        this.salary = salary;
+        this.hireDate = hireDate;
+        this.departureDate = departureDate;
+        this.employeeId = employeeId;
+        this.payrollId = payrollId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
     public Integer getEmployeeId() {
         return employeeId;
     }
@@ -104,5 +115,10 @@ public class Employee {
 
     public void setSalary(BigDecimal salary) {
         this.salary = salary;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s %s (%d)", getFirstName(), getLastName(), getEmployeeId());
     }
 }

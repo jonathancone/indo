@@ -30,7 +30,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
+import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 /**
@@ -164,6 +167,6 @@ public abstract class AbstractDbUnitConfigurer {
     }
 
     protected String getFullSchemaSetupSqlPath() {
-        return getClass().getResource(getSchemaSetupSql()).toString();
+        return new File(getClass().getResource(getSchemaSetupSql()).getFile()).getAbsolutePath();
     }
 }
