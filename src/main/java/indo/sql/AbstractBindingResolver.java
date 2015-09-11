@@ -14,24 +14,11 @@
  * limitations under the License.
  */
 
-apply plugin: 'java'
-apply plugin: 'idea'
+package indo.sql;
 
-repositories {
-    jcenter()
-}
+public abstract class AbstractBindingResolver implements BindingResolver {
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-dependencies {
-
-    compile 'org.slf4j:slf4j-api:1.7.12'
-
-    testCompile 'org.slf4j:slf4j-simple:1.7.12'
-    testCompile 'com.h2database:h2:1.4.187'
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.+'
-    testCompile 'org.dbunit:dbunit:2.5.1'
-
+    protected String generateBindingPlaceholders(int length) {
+        return Binding.repeatPlaceholders(length);
+    }
 }

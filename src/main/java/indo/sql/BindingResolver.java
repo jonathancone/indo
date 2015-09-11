@@ -14,24 +14,18 @@
  * limitations under the License.
  */
 
-apply plugin: 'java'
-apply plugin: 'idea'
+package indo.sql;
 
-repositories {
-    jcenter()
-}
+/**
+ * A {@link BindingResolver} is responsible for generating bind variables in a SQL statement for a specific parameter.
+ * How these are generated might vary based on the Java object being bound, so this interface can be used to
+ * implement a specific strategy depending on the object.
+ *
+ * @see ArrayBindingResolver
+ * @see CollectionBindingResolver
+ */
+public interface BindingResolver {
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-dependencies {
-
-    compile 'org.slf4j:slf4j-api:1.7.12'
-
-    testCompile 'org.slf4j:slf4j-simple:1.7.12'
-    testCompile 'com.h2database:h2:1.4.187'
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.+'
-    testCompile 'org.dbunit:dbunit:2.5.1'
+    String resolve(int nextIndex, Parameter parameter);
 
 }

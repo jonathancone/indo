@@ -1,0 +1,24 @@
+<!--
+  ~ Copyright (c) 2015 Indo Contributors
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<dataset>
+    <Employee employeeId="100" firstName="John" lastName="Joyner" hireDate="1997-07-15" departureDate="[null]"
+              active="1" payrollId="1000" salary="129000.00"/>
+    <Employee employeeId="101" firstName="Bill" lastName="Lamphere" hireDate="1999-02-11" departureDate="[null]"
+              active="1" payrollId="1001" salary="121000.00"/>
+    <Employee employeeId="102" firstName="Mary" lastName="Hitchens" hireDate="2007-07-21" departureDate="[null]"
+              active="1" payrollId="1002" salary="138000.00"/>
+</dataset>

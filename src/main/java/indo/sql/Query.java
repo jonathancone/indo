@@ -14,24 +14,17 @@
  * limitations under the License.
  */
 
-apply plugin: 'java'
-apply plugin: 'idea'
+package indo.sql;
 
-repositories {
-    jcenter()
-}
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+import javax.sql.DataSource;
 
-dependencies {
+/**
+ * Created by jcone on 8/7/15.
+ */
+public class Query extends AbstractQueryOperations {
 
-    compile 'org.slf4j:slf4j-api:1.7.12'
-
-    testCompile 'org.slf4j:slf4j-simple:1.7.12'
-    testCompile 'com.h2database:h2:1.4.187'
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.+'
-    testCompile 'org.dbunit:dbunit:2.5.1'
-
+    public Query(DataSource dataSource) {
+        super(dataSource);
+    }
 }

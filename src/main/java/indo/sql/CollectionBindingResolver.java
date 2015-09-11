@@ -14,24 +14,27 @@
  * limitations under the License.
  */
 
-apply plugin: 'java'
-apply plugin: 'idea'
+package indo.sql;
 
-repositories {
-    jcenter()
-}
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+import java.util.Collection;
 
-dependencies {
+/**
+ * Created by jcone on 8/4/15.
+ */
+public class CollectionBindingResolver extends AbstractBindingResolver {
+    @Override
+    public String resolve(int nextIndex, Parameter parameter) {
 
-    compile 'org.slf4j:slf4j-api:1.7.12'
+        int length = 0;
 
-    testCompile 'org.slf4j:slf4j-simple:1.7.12'
-    testCompile 'com.h2database:h2:1.4.187'
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.+'
-    testCompile 'org.dbunit:dbunit:2.5.1'
+        if (parameter.getValue() instanceof Collection) {
+            Collection collection = (Collection) parameter.getValue();
+            length = collection.size();
+            parameter.addIndexes(nextIndex, length);
+        }
 
+        return generateBindingPlaceholders(length);
+
+    }
 }

@@ -14,24 +14,27 @@
  * limitations under the License.
  */
 
-apply plugin: 'java'
-apply plugin: 'idea'
+package indo.sql;
 
-repositories {
-    jcenter()
-}
+import indo.util.Multi;
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+import java.util.Iterator;
+import java.util.List;
 
-dependencies {
+/**
+ * Created by jcone on 8/1/15.
+ */
+public class Parameters implements Iterable<Parameter> {
 
-    compile 'org.slf4j:slf4j-api:1.7.12'
+    private List<Parameter> parameters;
 
-    testCompile 'org.slf4j:slf4j-simple:1.7.12'
-    testCompile 'com.h2database:h2:1.4.187'
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.+'
-    testCompile 'org.dbunit:dbunit:2.5.1'
+    @Override
+    public Iterator<Parameter> iterator() {
+        return parameters.iterator();
+    }
+
+    public boolean hasParameters() {
+        return Multi.isNotEmpty(parameters);
+    }
 
 }

@@ -14,24 +14,15 @@
  * limitations under the License.
  */
 
-apply plugin: 'java'
-apply plugin: 'idea'
+package indo.sql;
 
-repositories {
-    jcenter()
-}
+import java.util.List;
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+/**
+ * Created by jcone on 8/20/15.
+ */
+public interface SqlOperations {
+    <T> T query(String sql, PreparedStatementCommand<T> psc);
 
-dependencies {
-
-    compile 'org.slf4j:slf4j-api:1.7.12'
-
-    testCompile 'org.slf4j:slf4j-simple:1.7.12'
-    testCompile 'com.h2database:h2:1.4.187'
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.+'
-    testCompile 'org.dbunit:dbunit:2.5.1'
-
+    <T> List<T> query(String sql, ResultSetCommand<T> rsc, Object... parameters);
 }

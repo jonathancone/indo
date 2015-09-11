@@ -14,24 +14,26 @@
  * limitations under the License.
  */
 
-apply plugin: 'java'
-apply plugin: 'idea'
+package indo.util;
 
-repositories {
-    jcenter()
-}
+/**
+ * String utility methods.
+ */
+public class Strings {
+    public static boolean isBlank(String s) {
+        return s == null || s.trim().equals("");
+    }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+    public static boolean isNotBlank(String s) {
+        return !isBlank(s);
+    }
 
-dependencies {
+    public static String before(String input, char before) {
+        int i = input.indexOf(before);
+        return input.substring(0, (i > -1 ? i : input.length()));
+    }
 
-    compile 'org.slf4j:slf4j-api:1.7.12'
-
-    testCompile 'org.slf4j:slf4j-simple:1.7.12'
-    testCompile 'com.h2database:h2:1.4.187'
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.+'
-    testCompile 'org.dbunit:dbunit:2.5.1'
-
+    public static String wordCase(String input) {
+        return isBlank(input) ? input : input.substring(0, 1).toUpperCase() + input.substring(1, input.length());
+    }
 }
