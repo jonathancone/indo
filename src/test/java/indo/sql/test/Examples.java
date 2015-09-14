@@ -43,7 +43,7 @@ public class Examples {
 
         // Find all employees with the last name "Jobs"
         List<Employee> employees = query
-                .sql(" SELECT                   " +
+                .sql("    SELECT                   " +
                         "     employeeId,          " +
                         "     firstName,           " +
                         "     lastName             " +
@@ -51,7 +51,7 @@ public class Examples {
                         "     Employee             " +
                         " WHERE                    " +
                         "     lastName = :lastName ")
-                .bind("lastName", "Jobs")
+                .bind("lastName", "Ellison")
                 .list(Employee.class);
 
         // Complex joins can be mapped to a collection using an "AS" mapping.  This example
@@ -67,7 +67,7 @@ public class Examples {
         //    -- Employee 5
         //    -- Employee 6
         List<Department> departments = query
-                .sql(" SELECT                                              " +
+                .sql("    SELECT                                              " +
                         "     departmentId,                                   " +
                         "     name,                                           " +
                         "     firstName AS employees_firstName,               " +
@@ -87,7 +87,7 @@ public class Examples {
         // Similar to above, but assuming our data model doesn't match our Java object
         // the API can figure out how to map it, i.e. EMPLOYEE_ID = employeeId.
         Employee employee = query
-                .sql(" SELECT                        " +
+                .sql("    SELECT                        " +
                         "      EMPLOYEE_ID,             " +
                         "      FIRST_NAME,              " +
                         "      LAST_NAME                " +
