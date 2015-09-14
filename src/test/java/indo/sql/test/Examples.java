@@ -192,7 +192,7 @@ public class Examples {
         // Delete a single record that matches the employeeId on employee.
         query.delete(employee).count();
 
-        // Perform a bulk delete (uses JDBC batch statment) using the employeeId field
+        // Perform a bulk delete (uses JDBC batch statement) using the employeeId field
         // as the matching WHERE clause.
         query.delete(allEmployees).usingKey("employeeId").execute();
 
