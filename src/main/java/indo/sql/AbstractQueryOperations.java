@@ -112,17 +112,17 @@ public abstract class AbstractQueryOperations implements QueryOperations {
     }
 
     @Override
-    public AbstractQueryOperations mapping(String field, String column) {
+    public AbstractQueryOperations mapColumn(String field, String column) {
         return null;
     }
 
     @Override
-    public <T> AbstractQueryOperations mapping(String field, String column, TypeConverter<T> converter) {
+    public <T> AbstractQueryOperations mapColumn(String field, String column, TypeConverter<T> converter) {
         return null;
     }
 
     @Override
-    public AbstractQueryOperations mapping(Map<String, String> fieldColumn) {
+    public AbstractQueryOperations mapColumn(Map<String, String> fieldColumn) {
         return null;
     }
 
@@ -154,6 +154,11 @@ public abstract class AbstractQueryOperations implements QueryOperations {
     @Override
     public Integer count() {
         return null;
+    }
+
+    @Override
+    public void execute() {
+
     }
 
     @Override
