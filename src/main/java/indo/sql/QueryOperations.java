@@ -49,11 +49,11 @@ public interface QueryOperations {
 
     QueryOperations excludingOnly(String... fields);
 
-    QueryOperations mapping(String field, String column);
+    QueryOperations mapColumn(String field, String column);
 
-    <T> QueryOperations mapping(String field, String column, TypeConverter<T> converter);
+    <T> QueryOperations mapColumn(String field, String column, TypeConverter<T> converter);
 
-    QueryOperations mapping(Map<String, String> fieldColumn);
+    QueryOperations mapColumn(Map<String, String> fieldColumn);
 
     QueryOperations bind(String field, Object value);
 
@@ -66,6 +66,8 @@ public interface QueryOperations {
     QueryOperations usingKey(String... fields);
 
     Integer count();
+
+    void execute();
 
     <T> List<T> list(Class<T> type);
 

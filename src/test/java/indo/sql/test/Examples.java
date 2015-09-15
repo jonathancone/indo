@@ -43,7 +43,7 @@ public class Examples {
 
         // Find all employees with the last name "Jobs"
         List<Employee> employees = query
-                .sql(" SELECT                   " +
+                .sql("    SELECT                   " +
                         "     employeeId,          " +
                         "     firstName,           " +
                         "     lastName             " +
@@ -51,7 +51,7 @@ public class Examples {
                         "     Employee             " +
                         " WHERE                    " +
                         "     lastName = :lastName ")
-                .bind("lastName", "Jobs")
+                .bind("lastName", "Ellison")
                 .list(Employee.class);
 
         // Complex joins can be mapped to a collection using an "AS" mapping.  This example
@@ -67,7 +67,7 @@ public class Examples {
         //    -- Employee 5
         //    -- Employee 6
         List<Department> departments = query
-                .sql(" SELECT                                              " +
+                .sql("    SELECT                                              " +
                         "     departmentId,                                   " +
                         "     name,                                           " +
                         "     firstName AS employees_firstName,               " +
@@ -87,7 +87,7 @@ public class Examples {
         // Similar to above, but assuming our data model doesn't match our Java object
         // the API can figure out how to map it, i.e. EMPLOYEE_ID = employeeId.
         Employee employee = query
-                .sql(" SELECT                        " +
+                .sql("    SELECT                        " +
                         "      EMPLOYEE_ID,             " +
                         "      FIRST_NAME,              " +
                         "      LAST_NAME                " +
@@ -108,26 +108,27 @@ public class Examples {
         // Default convention: insert Employee instance into a table named Employee and
         // map each of the fields on the Employee class to table columns with the same
         // name.
-        query.insert(employee).count();
+        query.insert(employee).execute();
 
         // Override the table name to EmployeeTable and insert a record. Also, set the
         // primary key value back into employee.employeeId by default.
-        query.insert(employee).in("EmployeeTable").count();
+        query.insert(employee).in("EmployeeTable").execute();
 
         // Insert a single record including only the specified fields
         query.insert(employee)
                 .includingOnly("firstName", "payrollId")
-                .count();
+                .execute();
 
         // Insert a single record overriding the column names in the database
         query.insert(employee)
-                .mapping("firstName", "F_NAME")
-                .mapping("lastName", "L_NAME")
-                .count();
+                .mapColumn("firstName", "F_NAME")
+                .mapColumn("lastName", "L_NAME")
+                .execute();
 
         // Perform a bulk insert using a collection (uses JDBC batch statement) and
         // return the generated key into payrollId (default would have been employeeId)
-        query.insert(allEmployees)
+        // Also, count the number of rows inserted.
+        Integer count = query.insert(allEmployees)
                 .usingKey("payrollId")
                 .count();
 
@@ -166,8 +167,8 @@ public class Examples {
 
         // Perform a bulk update (uses JDBC batch statement), overriding columns
         query.update(allEmployees)
-                .mapping("firstName", "F_NAME")
-                .mapping("lastName", "L_NAME")
+                .mapColumn("firstName", "F_NAME")
+                .mapColumn("lastName", "L_NAME")
                 .count();
 
         // Perform a custom SQL update and supply our own parameter values
@@ -191,9 +192,9 @@ public class Examples {
         // Delete a single record that matches the employeeId on employee.
         query.delete(employee).count();
 
-        // Perform a bulk delete (uses JDBC batch statment) using the employeeId field
+        // Perform a bulk delete (uses JDBC batch statement) using the employeeId field
         // as the matching WHERE clause.
-        query.delete(allEmployees).usingKey("employeeId").count();
+        query.delete(allEmployees).usingKey("employeeId").execute();
 
         // Perform an arbitrary delete with your own SQL using the properties
         // bound from the employee instance.
@@ -205,7 +206,7 @@ public class Examples {
                         " AND                            " +
                         "     lastName = :lastName       ")
                 .bind(employee)
-                .count();
+                .execute();
 
     }
 }
