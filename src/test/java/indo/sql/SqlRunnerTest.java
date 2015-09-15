@@ -1,5 +1,5 @@
 /*
- * Copyright 2015  Jonathan Cone
+ * Copyright 2015 Indo Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,11 @@
 package indo.sql;
 
 import indo.sql.test.Employee;
+import indo.util.SqlCollector;
 import org.junit.Test;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static indo.jdbc.ResultSets.*;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -49,7 +48,19 @@ public class SqlRunnerTest extends AbstractDbUnitTest {
 
     @Test
     public void testStream1() throws Exception {
-        List<Employee> employees = runner()
+/*
+        List<Row> list0 = runner()
+                .stream(SELECT_EMPLOYEE)
+                .map(Row::from)
+                .collect(Collectors.toList());
+
+        List<Employee> list1 = runner()
+                .stream(SELECT_EMPLOYEE)
+                .map(Employee::new)
+                .collect(Collectors.toList());
+
+
+        List<Employee> list2 = runner()
                 .stream(SELECT_EMPLOYEE)
                 .map((rs) ->
                         new Employee(
@@ -64,11 +75,32 @@ public class SqlRunnerTest extends AbstractDbUnitTest {
                         ))
                 .collect(Collectors.toList());
 
+        List<Employee> list3 = runner()
+                .stream(SELECT_EMPLOYEE)
+                .map(rs -> Bean.to(rs, Employee.class))
+                .collect(Collectors.toList());
 
-        for (int i = 0; i < employees.size(); i++) {
-            // assertRowValue("Employee", "employeeId", i, employees.get(i).getEmployeeId());
-        }
 
+        List<Employee> list4 = runner()
+                .stream(SELECT_EMPLOYEE)
+                .collect(new SqlCollector());
+
+        List<Employee> list5 = runner()
+                .stream(SELECT_EMPLOYEE)
+                .collect(Collector.of(ArrayList::new,
+                        (employees, resultSet) -> employees.add(new Employee(-1, getString(resultSet, "firstName"), null)),
+                        (left, right) -> {
+                            left.addAll(right);
+                            return left;
+                        }
+                ));
+*/
+
+        List<Employee> list6 = runner()
+                .stream(SELECT_EMPLOYEE)
+                .collect(SqlCollector.toListOf(Employee.class));
+
+        System.out.println(list6);
     }
 
     @Test

@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package indo.sql;
+package indo.util;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+
+import java.sql.ResultSet;
 
 /**
- * Created by jcone on 8/20/15.
+ * Created by jcone on 9/11/15.
  */
-@FunctionalInterface
-public interface OnPreparedStatement<T> {
-    T apply(PreparedStatement pstmt) throws SQLException;
+
+public class Bean {
+
+    public static <X> X to(ResultSet rs, Class<X> aClass) {
+        return null;
+    }
+
 }

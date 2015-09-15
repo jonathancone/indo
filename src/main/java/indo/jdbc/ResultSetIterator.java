@@ -1,5 +1,5 @@
 /*
- * Copyright 2015  Jonathan Cone
+ * Copyright 2015 Indo Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package indo.jdbc;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Iterator;
+import java.util.Objects;
 
 /**
  * Created by jcone on 9/11/2015.
@@ -32,23 +33,21 @@ public class ResultSetIterator implements Iterator<ResultSet>, AutoCloseable {
         this.ps = ps;
     }
 
-    private void open() {
-        if (rs == null) {
-            this.rs = Statements.executeQuery(ps);
-        }
-    }
-
     @Override
     public boolean hasNext() {
 
-        open();
+        if (Objects.isNull(rs)) {
+            rs = Statements.executeQuery(ps);
+        }
 
-        boolean closed = ResultSets.isClosed(rs);
+        boolean next = false;
 
-        boolean next = !closed && ResultSets.next(rs);
+        if (ResultSets.isOpen(rs)) {
+            next = ResultSets.next(rs);
 
-        if (!next && !closed) {
-            close();
+            if (!next) {
+                close();
+            }
         }
 
         return next;
@@ -56,12 +55,7 @@ public class ResultSetIterator implements Iterator<ResultSet>, AutoCloseable {
 
     @Override
     public ResultSet next() {
-        try {
-            return rs;
-        } catch (RuntimeException e) {
-            close();
-            throw e;
-        }
+        return rs;
     }
 
 

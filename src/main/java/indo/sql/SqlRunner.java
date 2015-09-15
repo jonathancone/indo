@@ -1,5 +1,5 @@
 /*
- * Copyright 2015  Jonathan Cone
+ * Copyright 2015 Indo Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package indo.sql;
 
 import indo.jdbc.ResultSets;
-import indo.jdbc.Statements;
 import indo.util.CheckedConsumer;
 import indo.util.Unchecked;
 
@@ -49,6 +48,14 @@ public class SqlRunner implements SqlOperations {
         this.dataSource = dataSource;
     }
 
+    public static Connection getConnection(DataSource dataSource) {
+        try {
+            return dataSource.getConnection();
+        } catch (SQLException e) {
+            throw Unchecked.exception(e);
+        }
+    }
+
     @Override
     public <T> T query(String sql, OnPreparedStatement<T> psc) {
         T t;
@@ -63,6 +70,7 @@ public class SqlRunner implements SqlOperations {
         return t;
     }
 
+    @SuppressWarnings("RedundantCast")
     Stream<ResultSet> stream(String sql, Object... parameters) {
         return query(sql, ps -> {
 
@@ -81,16 +89,8 @@ public class SqlRunner implements SqlOperations {
     @Override
     public List<Row> list(String sql, Object... parameters) {
         return stream(sql, parameters)
-                .map(rs -> Row.from(rs))
+                .map(Row::from)
                 .collect(Collectors.toList());
-    }
-
-    public static Connection getConnection(DataSource dataSource) {
-        try {
-            return dataSource.getConnection();
-        } catch (SQLException e) {
-            throw Unchecked.exception(e);
-        }
     }
 
     protected Connection getConnection() {

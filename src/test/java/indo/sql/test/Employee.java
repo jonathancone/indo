@@ -1,5 +1,5 @@
 /*
- * Copyright 2015  Jonathan Cone
+ * Copyright 2015 Indo Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,10 @@
 package indo.sql.test;
 
 import java.math.BigDecimal;
+import java.sql.ResultSet;
 import java.util.Date;
+
+import static indo.jdbc.ResultSets.*;
 
 public class Employee {
     private boolean active;
@@ -36,11 +39,23 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(Integer employeId, String firstName, String lastName) {
-        this.employeeId = employeId;
+    public Employee(Integer employeeId, String firstName, String lastName) {
+        this.employeeId = employeeId;
         this.firstName = firstName;
         this.lastName = lastName;
     }
+
+    public Employee(ResultSet rs) {
+        this(getBoolean(rs, "active"),
+                getBigDecimal(rs, "salary"),
+                getDate(rs, "hireDate"),
+                getDate(rs, "departureDate"),
+                getInt(rs, "employeeId"),
+                getInt(rs, "payrollId"),
+                getString(rs, "firstName"),
+                getString(rs, "lastName"));
+    }
+
 
     public Employee(boolean active, BigDecimal salary, Date hireDate, Date departureDate, Integer employeeId, Integer payrollId, String firstName, String lastName) {
         this.active = active;

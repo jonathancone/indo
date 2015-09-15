@@ -1,5 +1,5 @@
 /*
- * Copyright 2015  Jonathan Cone
+ * Copyright 2015 Indo Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -538,15 +538,6 @@ public class Statements {
     }
 
 
-    public static void setUnicodeStream(PreparedStatement ps, int parameterIndex, InputStream x, int length) {
-        try {
-            ps.setUnicodeStream(parameterIndex, x, length);
-        } catch (SQLException e) {
-            throw Unchecked.exception(e);
-        }
-    }
-
-
     public static void setBinaryStream(PreparedStatement ps, int parameterIndex, InputStream x, int length) {
         try {
             ps.setBinaryStream(parameterIndex, x, length);
@@ -1010,16 +1001,6 @@ public class Statements {
     public static double getDouble(CallableStatement cs, int parameterIndex) {
         try {
             return cs.getDouble(parameterIndex);
-        } catch (SQLException e) {
-            throw Unchecked.exception(e);
-        }
-
-    }
-
-
-    public static BigDecimal getBigDecimal(CallableStatement cs, int parameterIndex, int scale) {
-        try {
-            return cs.getBigDecimal(parameterIndex, scale);
         } catch (SQLException e) {
             throw Unchecked.exception(e);
         }

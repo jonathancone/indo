@@ -1,5 +1,5 @@
 /*
- * Copyright 2015  Jonathan Cone
+ * Copyright 2015 Indo Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -132,15 +132,6 @@ public class ResultSets {
     }
 
 
-    public static BigDecimal getBigDecimal(ResultSet rs, int columnIndex, int scale) {
-        try {
-            return rs.getBigDecimal(columnIndex, scale);
-        } catch (SQLException e) {
-            throw Unchecked.exception(e);
-        }
-    }
-
-
     public static byte[] getBytes(ResultSet rs, int columnIndex) {
         try {
             rs.getBytes(columnIndex);
@@ -181,15 +172,6 @@ public class ResultSets {
     public static InputStream getAsciiStream(ResultSet rs, int columnIndex) {
         try {
             return rs.getAsciiStream(columnIndex);
-        } catch (SQLException e) {
-            throw Unchecked.exception(e);
-        }
-    }
-
-
-    public static InputStream getUnicodeStream(ResultSet rs, int columnIndex) {
-        try {
-            return rs.getUnicodeStream(columnIndex);
         } catch (SQLException e) {
             throw Unchecked.exception(e);
         }
@@ -277,15 +259,6 @@ public class ResultSets {
     }
 
 
-    public static BigDecimal getBigDecimal(ResultSet rs, String columnLabel, int scale) {
-        try {
-            return rs.getBigDecimal(columnLabel, scale);
-        } catch (SQLException e) {
-            throw Unchecked.exception(e);
-        }
-    }
-
-
     public static byte[] getBytes(ResultSet rs, String columnLabel) {
         try {
             rs.getBytes(columnLabel);
@@ -326,15 +299,6 @@ public class ResultSets {
     public static InputStream getAsciiStream(ResultSet rs, String columnLabel) {
         try {
             return rs.getAsciiStream(columnLabel);
-        } catch (SQLException e) {
-            throw Unchecked.exception(e);
-        }
-    }
-
-
-    public static InputStream getUnicodeStream(ResultSet rs, String columnLabel) {
-        try {
-            return rs.getUnicodeStream(columnLabel);
         } catch (SQLException e) {
             throw Unchecked.exception(e);
         }
@@ -1330,6 +1294,10 @@ public class ResultSets {
         }
     }
 
+
+    public static boolean isOpen(ResultSet rs) {
+        return !isClosed(rs);
+    }
 
     public static boolean isClosed(ResultSet rs) {
         try {

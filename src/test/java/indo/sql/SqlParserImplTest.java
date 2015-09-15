@@ -1,5 +1,5 @@
 /*
- * Copyright 2015  Jonathan Cone
+ * Copyright 2015 Indo Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,10 @@ public class SqlParserImplTest {
     @Parameterized.Parameters
     public static Collection<Object[]> statements() {
 
-        Employee employee = new Employee(1, "First", "Last");
+        Employee employee = new Employee();
+        employee.setEmployeeId(1);
+        employee.setFirstName("First");
+        employee.setLastName("Last");
 
         Parameters pojoParams = new Parameters();
         Parameters mapParams = new Parameters();

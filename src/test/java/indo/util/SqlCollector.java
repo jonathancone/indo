@@ -14,15 +14,24 @@
  * limitations under the License.
  */
 
-package indo.sql;
+package indo.util;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collector;
 
 /**
- * Created by jcone on 8/20/15.
+ * Created by jcone on 9/12/15.
  */
-@FunctionalInterface
-public interface OnPreparedStatement<T> {
-    T apply(PreparedStatement pstmt) throws SQLException;
+
+public class SqlCollector {
+    public static <T> Collector<ResultSet, List<T>, List<T>> toListOf(Class<T> aClass) {
+        return Collector.of(ArrayList::new,
+                (list, resultSet) -> list.add((T) null),
+                (left, right) -> {
+                    left.addAll(right);
+                    return left;
+                });
+    }
 }
