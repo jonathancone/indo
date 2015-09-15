@@ -15,5 +15,5 @@ public enum MapMode {
     /**
      * Attempt to convert columns to the closest matching property regardless of case.
      */
-    CONVERT_CASE,
+    CONVERT_CASE
 }

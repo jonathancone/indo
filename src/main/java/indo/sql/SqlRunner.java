@@ -16,6 +16,7 @@
 
 package indo.sql;
 
+import indo.util.RowMappers;
 import indo.util.Unchecked;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,13 @@ import java.util.function.Supplier;
  */
 public class SqlRunner implements SqlOperations {
     private static final Logger log = LoggerFactory.getLogger(SqlRunner.class);
+
+    public <T> List<T> query(Connection connection,
+                             String sql,
+                             Class<T> type,
+                             Object... parameters) {
+        return query(connection, sql, (rs) -> RowMappers.map(rs, type), Arrays::asList);
+    }
 
     public <T> List<T> query(Connection connection,
                              String sql,

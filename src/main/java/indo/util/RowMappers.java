@@ -26,11 +26,11 @@ import java.util.EnumSet;
 import java.util.stream.IntStream;
 
 public class RowMappers {
-    static <T> T map(ResultSet rs, Class<T> type) {
+    public static <T> T map(ResultSet rs, Class<T> type) {
         return map(rs, type, EnumSet.of(MapMode.CONVERT_CASE, MapMode.CONVERT_UNDERSCORE));
     }
 
-    static <T> T map(ResultSet rs, Class<T> type, EnumSet<MapMode> modes) {
+    public static <T> T map(ResultSet rs, Class<T> type, EnumSet<MapMode> modes) {
 
         ResultSetMetaData rsm = ResultSets.getMetaData(rs);
 
@@ -38,7 +38,16 @@ public class RowMappers {
 
         IntStream.range(0, ResultSetMetaDatas.getColumnCount(rsm))
                 .mapToObj(index -> ResultSetMetaDatas.getColumnName(rsm, index))
-                .forEach(column -> result.property(column, ResultSets.getObject(rs, column)));
+                .forEach(column -> {
+                    String resultColumn = column;
+                    if (modes.contains(MapMode.CONVERT_CASE)) {
+
+                    }
+                    if (modes.contains(MapMode.CONVERT_UNDERSCORE)) {
+
+                    }
+                    result.property(column, ResultSets.getObject(rs, column));
+                });
 
         return result.getInstance();
     }

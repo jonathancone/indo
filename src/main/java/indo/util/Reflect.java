@@ -16,11 +16,16 @@
 
 package indo.util;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.StreamSupport;
 
 /**
  * Created by jcone on 8/25/15.
@@ -31,9 +36,12 @@ public class Reflect<T> {
     private static final String IS_PREFIX = "is";
     private static final String SET_PREFIX = "set";
 
+    private static ConcurrentMap<Class<?>, ConcurrentMap<String, Field>> fieldCache = new ConcurrentHashMap<>();
+
     private Class<T> aClass;
     private T instance;
     private List<Object> returnValues;
+
 
     private Reflect(Class<T> aClass) {
         this.aClass = aClass;
@@ -59,6 +67,27 @@ public class Reflect<T> {
                 .map(value -> value != null ? value.getClass() : null)
                 .collect(Collectors.toList())
                 .toArray(new Class<?>[values.length]);
+    }
+
+    public Map<String, Field> fields() {
+
+        fieldCache.computeIfAbsent(aClass, (input) -> {
+            ArrayList<Field> fields = new ArrayList<>();
+
+            fields.addAll(Arrays.asList(input.getFields()));
+            fields.addAll(Arrays.asList(input.getDeclaredFields()));
+
+            ConcurrentMap<String, Field> result = fields.stream().
+                    collect(Collectors.toConcurrentMap(f -> f.getName(), Function.identity()));
+
+            result.values().stream()
+                    .filter(field -> !field.isAccessible())
+                    .forEach(field -> field.setAccessible(true));
+
+            return result;
+        });
+
+        return fieldCache.get(aClass);
     }
 
     public <S> Optional<S> lastReturn() {
@@ -181,6 +210,10 @@ public class Reflect<T> {
 
     public Reflect<T> invoke(Method method, Object... values) {
         try {
+
+            if (!method.isAccessible()) {
+                method.setAccessible(true);
+            }
 
             Object result = method.invoke(instance, values);
 
