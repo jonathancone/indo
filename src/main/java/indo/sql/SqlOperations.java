@@ -16,11 +16,19 @@
 
 package indo.sql;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Created by jcone on 8/20/15.
  */
 public interface SqlOperations {
-    <T> List<Row> list(String sql, Object... parameters);
+    <T> List<T> query(Connection connection,
+                      String sql,
+                      Function<ResultSet, T> rowMapper,
+                      Supplier<List<T>> resultContainer,
+                      Supplier<List<?>> parameters);
 }

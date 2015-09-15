@@ -83,7 +83,7 @@ public class Reflect<T> {
     }
 
     public Reflect<T> property(String property, Object value) {
-        return set(property, value);
+        return invoke(findSetter(aClass, property, toType(value)[0]), value);
     }
 
     public Reflect<T> property(String property, byte value) {
@@ -172,7 +172,7 @@ public class Reflect<T> {
     }
 
     public Reflect<T> set(String property, Object value) {
-        return invoke(findSetter(aClass, property, toType(value)[0]), value);
+        return property(property, value);
     }
 
     public Reflect<T> invoke(String method, Object... values) {

@@ -16,8 +16,68 @@
 
 package indo.sql;
 
+import indo.util.Unchecked;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
 /**
  * Created by jcone on 9/14/15.
  */
-public class SqlRunner {
+public class SqlRunner implements SqlOperations {
+    private static final Logger log = LoggerFactory.getLogger(SqlRunner.class);
+
+    public <T> List<T> query(Connection connection,
+                             String sql,
+                             Function<ResultSet, T> rowMapper,
+                             Object... parameters) {
+        return query(connection, sql, rowMapper, Arrays::asList);
+    }
+
+    public <T> List<T> query(Connection connection,
+                             String sql,
+                             Function<ResultSet, T> rowMapper,
+                             Supplier<List<?>> parameters) {
+        return query(connection, sql, rowMapper, ArrayList<T>::new, parameters);
+    }
+
+    @Override
+    public <T> List<T> query(Connection connection,
+                             String sql,
+                             Function<ResultSet, T> rowMapper,
+                             Supplier<List<T>> resultContainer,
+                             Supplier<List<?>> parameters) {
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            List<?> params = parameters.get();
+
+            int count = params.size();
+
+            for (int i = 0; i < count; i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+
+            List<T> results = resultContainer.get();
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    results.add(rowMapper.apply(rs));
+                }
+            }
+
+            return results;
+        } catch (SQLException e) {
+            throw Unchecked.sqlException(e);
+        }
+    }
 }

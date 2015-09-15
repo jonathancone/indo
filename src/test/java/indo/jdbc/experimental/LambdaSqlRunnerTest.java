@@ -19,7 +19,7 @@ package indo.jdbc.experimental;
 import indo.sql.AbstractDbUnitTest;
 import indo.sql.Row;
 import indo.sql.test.Employee;
-import indo.util.Bean;
+import indo.util.RowMappers;
 import org.junit.Test;
 
 import java.util.List;
@@ -80,7 +80,7 @@ public class LambdaSqlRunnerTest extends AbstractDbUnitTest {
 
         List<Employee> list3 = runner()
                 .stream(SELECT_EMPLOYEE)
-                .map(rs -> Bean.to(rs, Employee.class))
+                .map(rs -> RowMappers.to(rs, Employee.class))
                 .collect(Collectors.toList());
 
 
