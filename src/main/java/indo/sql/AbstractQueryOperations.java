@@ -16,6 +16,8 @@
 
 package indo.sql;
 
+import indo.jdbc.experimental.LambdaSqlRunner;
+
 import javax.sql.DataSource;
 import java.util.Arrays;
 import java.util.Collection;
@@ -37,7 +39,7 @@ public abstract class AbstractQueryOperations implements QueryOperations {
     public AbstractQueryOperations(DataSource dataSource) {
         this.dataSource = dataSource;
         this.queryMetaData = new QueryMetaData();
-        this.sqlOperations = new SqlRunner(dataSource);
+        this.sqlOperations = new LambdaSqlRunner(dataSource);
         this.operation = Operation.UNKNOWN;
     }
 

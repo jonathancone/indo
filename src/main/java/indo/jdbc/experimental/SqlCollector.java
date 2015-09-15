@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package indo.util;
+package indo.jdbc.experimental;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -26,6 +26,9 @@ import java.util.stream.Collector;
  */
 
 public class SqlCollector {
+    private SqlCollector() {
+    }
+
     public static <T> Collector<ResultSet, List<T>, List<T>> toListOf(Class<T> aClass) {
         return Collector.of(ArrayList::new,
                 (list, resultSet) -> list.add((T) null),

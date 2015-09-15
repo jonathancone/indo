@@ -34,7 +34,7 @@ public class Statements {
         try {
             return s.executeQuery(sql);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -42,7 +42,7 @@ public class Statements {
         try {
             return s.executeUpdate(sql);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -50,7 +50,7 @@ public class Statements {
         try {
             s.close();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -58,7 +58,7 @@ public class Statements {
         try {
             return s.getMaxFieldSize();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -66,7 +66,7 @@ public class Statements {
         try {
             s.setMaxFieldSize(max);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -74,7 +74,7 @@ public class Statements {
         try {
             return s.getMaxRows();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -82,7 +82,7 @@ public class Statements {
         try {
             s.setMaxRows(max);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -90,7 +90,7 @@ public class Statements {
         try {
             s.setEscapeProcessing(enable);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -98,7 +98,7 @@ public class Statements {
         try {
             return s.getQueryTimeout();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -106,7 +106,7 @@ public class Statements {
         try {
             s.setQueryTimeout(seconds);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -114,7 +114,7 @@ public class Statements {
         try {
             s.cancel();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -122,7 +122,7 @@ public class Statements {
         try {
             return s.getWarnings();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -130,7 +130,7 @@ public class Statements {
         try {
             s.clearWarnings();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -138,7 +138,7 @@ public class Statements {
         try {
             s.setCursorName(name);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -146,7 +146,7 @@ public class Statements {
         try {
             return s.execute(sql);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -154,7 +154,7 @@ public class Statements {
         try {
             return s.getResultSet();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -162,7 +162,7 @@ public class Statements {
         try {
             return s.getUpdateCount();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -170,7 +170,7 @@ public class Statements {
         try {
             return s.getMoreResults();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -178,7 +178,7 @@ public class Statements {
         try {
             s.setFetchDirection(direction);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -186,7 +186,7 @@ public class Statements {
         try {
             return s.getFetchDirection();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -194,7 +194,7 @@ public class Statements {
         try {
             s.setFetchSize(rows);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -202,7 +202,7 @@ public class Statements {
         try {
             return s.getFetchSize();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -210,7 +210,7 @@ public class Statements {
         try {
             return s.getResultSetConcurrency();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -218,7 +218,7 @@ public class Statements {
         try {
             return s.getResultSetType();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -226,7 +226,7 @@ public class Statements {
         try {
             s.addBatch(sql);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -234,7 +234,7 @@ public class Statements {
         try {
             s.clearBatch();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -242,7 +242,7 @@ public class Statements {
         try {
             s.executeBatch();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
         return new int[0];
     }
@@ -251,7 +251,7 @@ public class Statements {
         try {
             return s.getConnection();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -259,7 +259,7 @@ public class Statements {
         try {
             return s.getMoreResults(current);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -267,7 +267,7 @@ public class Statements {
         try {
             return s.getGeneratedKeys();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -275,7 +275,7 @@ public class Statements {
         try {
             return s.executeUpdate(sql, autoGeneratedKeys);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -283,7 +283,7 @@ public class Statements {
         try {
             return s.executeUpdate(sql, columnIndexes);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -291,7 +291,7 @@ public class Statements {
         try {
             return s.executeUpdate(sql, columnNames);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -299,7 +299,7 @@ public class Statements {
         try {
             return s.execute(sql, autoGeneratedKeys);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -307,7 +307,7 @@ public class Statements {
         try {
             return s.execute(sql, columnIndexes);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -315,7 +315,7 @@ public class Statements {
         try {
             return s.execute(sql, columnNames);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -323,7 +323,7 @@ public class Statements {
         try {
             return s.getResultSetHoldability();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -331,7 +331,7 @@ public class Statements {
         try {
             return s.isClosed();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -339,7 +339,7 @@ public class Statements {
         try {
             s.setPoolable(poolable);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -347,7 +347,7 @@ public class Statements {
         try {
             return s.isPoolable();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -355,7 +355,7 @@ public class Statements {
         try {
             s.closeOnCompletion();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -363,7 +363,7 @@ public class Statements {
         try {
             return s.isCloseOnCompletion();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -371,7 +371,7 @@ public class Statements {
         try {
             return s.unwrap(iface);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -379,7 +379,7 @@ public class Statements {
         try {
             return s.isWrapperFor(iface);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -389,7 +389,7 @@ public class Statements {
         try {
             return ps.executeQuery();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -398,7 +398,7 @@ public class Statements {
         try {
             return ps.executeUpdate();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -407,7 +407,7 @@ public class Statements {
         try {
             ps.setNull(parameterIndex, sqlType);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -416,7 +416,7 @@ public class Statements {
         try {
             ps.setBoolean(parameterIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -425,7 +425,7 @@ public class Statements {
         try {
             ps.setByte(parameterIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -434,7 +434,7 @@ public class Statements {
         try {
             ps.setShort(parameterIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -443,7 +443,7 @@ public class Statements {
         try {
             ps.setInt(parameterIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -452,7 +452,7 @@ public class Statements {
         try {
             ps.setLong(parameterIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -461,7 +461,7 @@ public class Statements {
         try {
             ps.setFloat(parameterIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -470,7 +470,7 @@ public class Statements {
         try {
             ps.setDouble(parameterIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -479,7 +479,7 @@ public class Statements {
         try {
             ps.setBigDecimal(parameterIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -488,7 +488,7 @@ public class Statements {
         try {
             ps.setString(parameterIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -497,7 +497,7 @@ public class Statements {
         try {
             ps.setBytes(parameterIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -506,7 +506,7 @@ public class Statements {
         try {
             ps.setDate(parameterIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -515,7 +515,7 @@ public class Statements {
         try {
             ps.setTime(parameterIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -524,7 +524,7 @@ public class Statements {
         try {
             ps.setTimestamp(parameterIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -533,7 +533,7 @@ public class Statements {
         try {
             ps.setAsciiStream(parameterIndex, x, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -542,7 +542,7 @@ public class Statements {
         try {
             ps.setBinaryStream(parameterIndex, x, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -551,7 +551,7 @@ public class Statements {
         try {
             ps.clearParameters();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -560,7 +560,7 @@ public class Statements {
         try {
             ps.setObject(parameterIndex, x, targetSqlType);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -569,7 +569,7 @@ public class Statements {
         try {
             ps.setObject(parameterIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -578,7 +578,7 @@ public class Statements {
         try {
             return ps.execute();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -587,7 +587,7 @@ public class Statements {
         try {
             ps.addBatch();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -596,7 +596,7 @@ public class Statements {
         try {
             ps.setCharacterStream(parameterIndex, reader, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -605,7 +605,7 @@ public class Statements {
         try {
             ps.setRef(parameterIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -614,7 +614,7 @@ public class Statements {
         try {
             ps.setBlob(parameterIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -623,7 +623,7 @@ public class Statements {
         try {
             ps.setClob(parameterIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -632,7 +632,7 @@ public class Statements {
         try {
             ps.setArray(parameterIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -641,7 +641,7 @@ public class Statements {
         try {
             return ps.getMetaData();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -650,7 +650,7 @@ public class Statements {
         try {
             ps.setDate(parameterIndex, x, cal);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -659,7 +659,7 @@ public class Statements {
         try {
             ps.setTime(parameterIndex, x, cal);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -668,7 +668,7 @@ public class Statements {
         try {
             ps.setTimestamp(parameterIndex, x, cal);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -677,7 +677,7 @@ public class Statements {
         try {
             ps.setNull(parameterIndex, sqlType, typeName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -686,7 +686,7 @@ public class Statements {
         try {
             ps.setURL(parameterIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -695,7 +695,7 @@ public class Statements {
         try {
             return ps.getParameterMetaData();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -704,7 +704,7 @@ public class Statements {
         try {
             ps.setRowId(parameterIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -713,7 +713,7 @@ public class Statements {
         try {
             ps.setNString(parameterIndex, value);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -722,7 +722,7 @@ public class Statements {
         try {
             ps.setNCharacterStream(parameterIndex, value, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -731,7 +731,7 @@ public class Statements {
         try {
             ps.setNClob(parameterIndex, value);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -740,7 +740,7 @@ public class Statements {
         try {
             ps.setClob(parameterIndex, reader, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -749,7 +749,7 @@ public class Statements {
         try {
             ps.setBlob(parameterIndex, inputStream, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -758,7 +758,7 @@ public class Statements {
         try {
             ps.setNClob(parameterIndex, reader, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -767,7 +767,7 @@ public class Statements {
         try {
             ps.setSQLXML(parameterIndex, xmlObject);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -776,7 +776,7 @@ public class Statements {
         try {
             ps.setObject(parameterIndex, x, targetSqlType, scaleOrLength);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -785,7 +785,7 @@ public class Statements {
         try {
             ps.setAsciiStream(parameterIndex, x, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -794,7 +794,7 @@ public class Statements {
         try {
             ps.setBinaryStream(parameterIndex, x, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -803,7 +803,7 @@ public class Statements {
         try {
             ps.setCharacterStream(parameterIndex, reader, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -812,7 +812,7 @@ public class Statements {
         try {
             ps.setAsciiStream(parameterIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -821,7 +821,7 @@ public class Statements {
         try {
             ps.setBinaryStream(parameterIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -830,7 +830,7 @@ public class Statements {
         try {
             ps.setCharacterStream(parameterIndex, reader);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -839,7 +839,7 @@ public class Statements {
         try {
             ps.setNCharacterStream(parameterIndex, value);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -848,7 +848,7 @@ public class Statements {
         try {
             ps.setClob(parameterIndex, reader);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -857,7 +857,7 @@ public class Statements {
         try {
             ps.setBlob(parameterIndex, inputStream);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -866,7 +866,7 @@ public class Statements {
         try {
             ps.setNClob(parameterIndex, reader);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -875,7 +875,7 @@ public class Statements {
         try {
             ps.setObject(parameterIndex, x, targetSqlType, scaleOrLength);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -884,7 +884,7 @@ public class Statements {
         try {
             ps.setObject(parameterIndex, x, targetSqlType);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -892,7 +892,7 @@ public class Statements {
         try {
             return ps.executeLargeUpdate();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -902,7 +902,7 @@ public class Statements {
         try {
             cs.registerOutParameter(parameterIndex, sqlType);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -912,7 +912,7 @@ public class Statements {
         try {
             cs.registerOutParameter(parameterIndex, sqlType, scale);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -922,7 +922,7 @@ public class Statements {
         try {
             return cs.wasNull();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -932,7 +932,7 @@ public class Statements {
         try {
             return cs.getString(parameterIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -942,7 +942,7 @@ public class Statements {
         try {
             return cs.getBoolean(parameterIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -952,7 +952,7 @@ public class Statements {
         try {
             return cs.getByte(parameterIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -962,7 +962,7 @@ public class Statements {
         try {
             return cs.getShort(parameterIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -972,7 +972,7 @@ public class Statements {
         try {
             return cs.getInt(parameterIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -982,7 +982,7 @@ public class Statements {
         try {
             return cs.getLong(parameterIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -992,7 +992,7 @@ public class Statements {
         try {
             return cs.getFloat(parameterIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1002,7 +1002,7 @@ public class Statements {
         try {
             return cs.getDouble(parameterIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1012,7 +1012,7 @@ public class Statements {
         try {
             return cs.getBytes(parameterIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1022,7 +1022,7 @@ public class Statements {
         try {
             return cs.getDate(parameterIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1032,7 +1032,7 @@ public class Statements {
         try {
             return cs.getTime(parameterIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1042,7 +1042,7 @@ public class Statements {
         try {
             return cs.getTimestamp(parameterIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1052,7 +1052,7 @@ public class Statements {
         try {
             return cs.getObject(parameterIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1062,7 +1062,7 @@ public class Statements {
         try {
             return cs.getBigDecimal(parameterIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1072,7 +1072,7 @@ public class Statements {
         try {
             return cs.getObject(parameterIndex, map);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1082,7 +1082,7 @@ public class Statements {
         try {
             return cs.getRef(parameterIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1092,7 +1092,7 @@ public class Statements {
         try {
             return cs.getBlob(parameterIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1102,7 +1102,7 @@ public class Statements {
         try {
             return cs.getClob(parameterIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1112,7 +1112,7 @@ public class Statements {
         try {
             return cs.getArray(parameterIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1122,7 +1122,7 @@ public class Statements {
         try {
             return cs.getDate(parameterIndex, cal);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1132,7 +1132,7 @@ public class Statements {
         try {
             return cs.getTime(parameterIndex, cal);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1142,7 +1142,7 @@ public class Statements {
         try {
             return cs.getTimestamp(parameterIndex, cal);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1152,7 +1152,7 @@ public class Statements {
         try {
             cs.registerOutParameter(parameterIndex, sqlType, typeName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1162,7 +1162,7 @@ public class Statements {
         try {
             cs.registerOutParameter(parameterName, sqlType);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1172,7 +1172,7 @@ public class Statements {
         try {
             cs.registerOutParameter(parameterName, sqlType, scale);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1182,7 +1182,7 @@ public class Statements {
         try {
             cs.registerOutParameter(parameterName, sqlType, typeName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1192,7 +1192,7 @@ public class Statements {
         try {
             return cs.getURL(parameterIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1202,7 +1202,7 @@ public class Statements {
         try {
             cs.setURL(parameterName, val);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1212,7 +1212,7 @@ public class Statements {
         try {
             cs.setNull(parameterName, sqlType);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1222,7 +1222,7 @@ public class Statements {
         try {
             cs.setBoolean(parameterName, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1232,7 +1232,7 @@ public class Statements {
         try {
             cs.setByte(parameterName, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1242,7 +1242,7 @@ public class Statements {
         try {
             cs.setShort(parameterName, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1252,7 +1252,7 @@ public class Statements {
         try {
             cs.setInt(parameterName, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1262,7 +1262,7 @@ public class Statements {
         try {
             cs.setLong(parameterName, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1272,7 +1272,7 @@ public class Statements {
         try {
             cs.setFloat(parameterName, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1282,7 +1282,7 @@ public class Statements {
         try {
             cs.setDouble(parameterName, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1292,7 +1292,7 @@ public class Statements {
         try {
             cs.setBigDecimal(parameterName, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1302,7 +1302,7 @@ public class Statements {
         try {
             cs.setString(parameterName, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1312,7 +1312,7 @@ public class Statements {
         try {
             cs.setBytes(parameterName, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1322,7 +1322,7 @@ public class Statements {
         try {
             cs.setDate(parameterName, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1332,7 +1332,7 @@ public class Statements {
         try {
             cs.setTime(parameterName, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1342,7 +1342,7 @@ public class Statements {
         try {
             cs.setTimestamp(parameterName, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1352,7 +1352,7 @@ public class Statements {
         try {
             cs.setAsciiStream(parameterName, x, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1362,7 +1362,7 @@ public class Statements {
         try {
             cs.setBinaryStream(parameterName, x, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1372,7 +1372,7 @@ public class Statements {
         try {
             cs.setObject(parameterName, x, targetSqlType, scale);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1382,7 +1382,7 @@ public class Statements {
         try {
             cs.setObject(parameterName, x, targetSqlType);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1392,7 +1392,7 @@ public class Statements {
         try {
             cs.setObject(parameterName, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1402,7 +1402,7 @@ public class Statements {
         try {
             cs.setCharacterStream(parameterName, reader, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1412,7 +1412,7 @@ public class Statements {
         try {
             cs.setDate(parameterName, x, cal);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1422,7 +1422,7 @@ public class Statements {
         try {
             cs.setTime(parameterName, x, cal);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1432,7 +1432,7 @@ public class Statements {
         try {
             cs.setTimestamp(parameterName, x, cal);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1442,7 +1442,7 @@ public class Statements {
         try {
             cs.setNull(parameterName, sqlType, typeName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1452,7 +1452,7 @@ public class Statements {
         try {
             return cs.getString(parameterName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1462,7 +1462,7 @@ public class Statements {
         try {
             return cs.getBoolean(parameterName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1472,7 +1472,7 @@ public class Statements {
         try {
             return cs.getByte(parameterName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1482,7 +1482,7 @@ public class Statements {
         try {
             return cs.getShort(parameterName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1492,7 +1492,7 @@ public class Statements {
         try {
             return cs.getInt(parameterName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1502,7 +1502,7 @@ public class Statements {
         try {
             return cs.getLong(parameterName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1512,7 +1512,7 @@ public class Statements {
         try {
             return cs.getFloat(parameterName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1522,7 +1522,7 @@ public class Statements {
         try {
             return cs.getDouble(parameterName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1532,7 +1532,7 @@ public class Statements {
         try {
             return cs.getBytes(parameterName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1542,7 +1542,7 @@ public class Statements {
         try {
             return cs.getDate(parameterName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1552,7 +1552,7 @@ public class Statements {
         try {
             return cs.getTime(parameterName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1562,7 +1562,7 @@ public class Statements {
         try {
             return cs.getTimestamp(parameterName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1572,7 +1572,7 @@ public class Statements {
         try {
             return cs.getObject(parameterName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1582,7 +1582,7 @@ public class Statements {
         try {
             return cs.getBigDecimal(parameterName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1592,7 +1592,7 @@ public class Statements {
         try {
             return cs.getObject(parameterName, map);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1602,7 +1602,7 @@ public class Statements {
         try {
             return cs.getRef(parameterName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1612,7 +1612,7 @@ public class Statements {
         try {
             return cs.getBlob(parameterName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1622,7 +1622,7 @@ public class Statements {
         try {
             return cs.getClob(parameterName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1632,7 +1632,7 @@ public class Statements {
         try {
             return cs.getArray(parameterName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1642,7 +1642,7 @@ public class Statements {
         try {
             return cs.getDate(parameterName, cal);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1652,7 +1652,7 @@ public class Statements {
         try {
             return cs.getTime(parameterName, cal);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1662,7 +1662,7 @@ public class Statements {
         try {
             return cs.getTimestamp(parameterName, cal);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1672,7 +1672,7 @@ public class Statements {
         try {
             return cs.getURL(parameterName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1682,7 +1682,7 @@ public class Statements {
         try {
             return cs.getRowId(parameterIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1692,7 +1692,7 @@ public class Statements {
         try {
             return cs.getRowId(parameterName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1702,7 +1702,7 @@ public class Statements {
         try {
             cs.setRowId(parameterName, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1712,7 +1712,7 @@ public class Statements {
         try {
             cs.setNString(parameterName, value);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1722,7 +1722,7 @@ public class Statements {
         try {
             cs.setNCharacterStream(parameterName, value, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1732,7 +1732,7 @@ public class Statements {
         try {
             cs.setNClob(parameterName, value);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1742,7 +1742,7 @@ public class Statements {
         try {
             cs.setClob(parameterName, reader, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1752,7 +1752,7 @@ public class Statements {
         try {
             cs.setBlob(parameterName, inputStream, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1761,7 +1761,7 @@ public class Statements {
         try {
             cs.setNClob(parameterName, reader, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1771,7 +1771,7 @@ public class Statements {
         try {
             return cs.getNClob(parameterIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1781,7 +1781,7 @@ public class Statements {
         try {
             return cs.getNClob(parameterName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1791,7 +1791,7 @@ public class Statements {
         try {
             cs.setSQLXML(parameterName, xmlObject);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1801,7 +1801,7 @@ public class Statements {
         try {
             return cs.getSQLXML(parameterIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1811,7 +1811,7 @@ public class Statements {
         try {
             return cs.getSQLXML(parameterName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1821,7 +1821,7 @@ public class Statements {
         try {
             return cs.getNString(parameterIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1831,7 +1831,7 @@ public class Statements {
         try {
             return cs.getNString(parameterName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1841,7 +1841,7 @@ public class Statements {
         try {
             return cs.getNCharacterStream(parameterIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1851,7 +1851,7 @@ public class Statements {
         try {
             return cs.getNCharacterStream(parameterName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1861,7 +1861,7 @@ public class Statements {
         try {
             return cs.getCharacterStream(parameterIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1871,7 +1871,7 @@ public class Statements {
         try {
             return cs.getCharacterStream(parameterName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1881,7 +1881,7 @@ public class Statements {
         try {
             cs.setBlob(parameterName, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1891,7 +1891,7 @@ public class Statements {
         try {
             cs.setClob(parameterName, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1900,7 +1900,7 @@ public class Statements {
         try {
             cs.setAsciiStream(parameterName, x, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1909,7 +1909,7 @@ public class Statements {
         try {
             cs.setBinaryStream(parameterName, x, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1918,7 +1918,7 @@ public class Statements {
         try {
             cs.setCharacterStream(parameterName, reader, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1927,7 +1927,7 @@ public class Statements {
         try {
             cs.setAsciiStream(parameterName, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1936,7 +1936,7 @@ public class Statements {
         try {
             cs.setBinaryStream(parameterName, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1945,7 +1945,7 @@ public class Statements {
         try {
             cs.setCharacterStream(parameterName, reader);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1954,7 +1954,7 @@ public class Statements {
         try {
             cs.setNCharacterStream(parameterName, value);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1963,7 +1963,7 @@ public class Statements {
         try {
             cs.setClob(parameterName, reader);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1972,7 +1972,7 @@ public class Statements {
         try {
             cs.setBlob(parameterName, inputStream);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1981,7 +1981,7 @@ public class Statements {
         try {
             cs.setNClob(parameterName, reader);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1990,7 +1990,7 @@ public class Statements {
         try {
             return cs.getObject(parameterIndex, type);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -1999,7 +1999,7 @@ public class Statements {
         try {
             return cs.getObject(parameterName, type);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -2008,7 +2008,7 @@ public class Statements {
         try {
             cs.setObject(parameterName, x, targetSqlType, scaleOrLength);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -2017,7 +2017,7 @@ public class Statements {
         try {
             cs.setObject(parameterName, x, targetSqlType);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -2026,7 +2026,7 @@ public class Statements {
         try {
             cs.registerOutParameter(parameterIndex, sqlType);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -2035,7 +2035,7 @@ public class Statements {
         try {
             cs.registerOutParameter(parameterIndex, sqlType, scale);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -2044,7 +2044,7 @@ public class Statements {
         try {
             cs.registerOutParameter(parameterIndex, sqlType, typeName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -2053,7 +2053,7 @@ public class Statements {
         try {
             cs.registerOutParameter(parameterName, sqlType);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -2062,7 +2062,7 @@ public class Statements {
         try {
             cs.registerOutParameter(parameterName, sqlType, scale);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }
@@ -2071,7 +2071,7 @@ public class Statements {
         try {
             cs.registerOutParameter(parameterName, sqlType, typeName);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
 
     }

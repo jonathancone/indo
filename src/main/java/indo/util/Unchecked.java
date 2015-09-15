@@ -16,6 +16,10 @@
 
 package indo.util;
 
+import indo.jdbc.JdbcException;
+
+import java.sql.SQLException;
+
 /**
  * Utilities to make working with checked {@link Exception}s less painful by converting them to
  * unchecked {@link RuntimeException}s.
@@ -72,6 +76,10 @@ public class Unchecked {
      */
     public static <T extends Exception> RuntimeException exception(T t) {
         return exception(t, RuntimeException.class, Exception.class);
+    }
+
+    public static <T extends Exception> RuntimeException sqlException(T t) {
+        return exception(t, JdbcException.class, SQLException.class);
     }
 
 }

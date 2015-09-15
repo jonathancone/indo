@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-package indo.jdbc;
+package indo.jdbc.experimental;
+
+import indo.jdbc.ResultSets;
+import indo.jdbc.Statements;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

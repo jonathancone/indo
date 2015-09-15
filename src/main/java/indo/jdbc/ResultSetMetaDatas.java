@@ -30,7 +30,7 @@ public class ResultSetMetaDatas {
         try {
             rsm.getColumnCount();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
         return 0;
     }
@@ -39,7 +39,7 @@ public class ResultSetMetaDatas {
         try {
             rsm.isAutoIncrement(column);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
         return false;
     }
@@ -48,7 +48,7 @@ public class ResultSetMetaDatas {
         try {
             rsm.isCaseSensitive(column);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
         return false;
     }
@@ -57,7 +57,7 @@ public class ResultSetMetaDatas {
         try {
             rsm.isSearchable(column);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
         return false;
     }
@@ -66,7 +66,7 @@ public class ResultSetMetaDatas {
         try {
             rsm.isCurrency(column);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
         return false;
     }
@@ -75,7 +75,7 @@ public class ResultSetMetaDatas {
         try {
             rsm.isNullable(column);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
         return 0;
     }
@@ -84,7 +84,7 @@ public class ResultSetMetaDatas {
         try {
             rsm.isSigned(column);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
         return false;
     }
@@ -93,7 +93,7 @@ public class ResultSetMetaDatas {
         try {
             rsm.getColumnDisplaySize(column);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
         return 0;
     }
@@ -102,7 +102,7 @@ public class ResultSetMetaDatas {
         try {
             rsm.getColumnLabel(column);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
         return null;
     }
@@ -111,7 +111,7 @@ public class ResultSetMetaDatas {
         try {
             rsm.getColumnName(column);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
         return null;
     }
@@ -120,7 +120,7 @@ public class ResultSetMetaDatas {
         try {
             rsm.getSchemaName(column);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
         return null;
     }
@@ -129,7 +129,7 @@ public class ResultSetMetaDatas {
         try {
             rsm.getPrecision(column);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
         return 0;
     }
@@ -138,7 +138,7 @@ public class ResultSetMetaDatas {
         try {
             rsm.getScale(column);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
         return 0;
     }
@@ -147,7 +147,7 @@ public class ResultSetMetaDatas {
         try {
             rsm.getTableName(column);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
         return null;
     }
@@ -156,7 +156,7 @@ public class ResultSetMetaDatas {
         try {
             rsm.getCatalogName(column);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
         return null;
     }
@@ -165,7 +165,7 @@ public class ResultSetMetaDatas {
         try {
             rsm.getColumnType(column);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
         return 0;
     }
@@ -174,7 +174,7 @@ public class ResultSetMetaDatas {
         try {
             rsm.getColumnTypeName(column);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
         return null;
     }
@@ -183,7 +183,7 @@ public class ResultSetMetaDatas {
         try {
             rsm.isReadOnly(column);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
         return false;
     }
@@ -192,7 +192,7 @@ public class ResultSetMetaDatas {
         try {
             rsm.isWritable(column);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
         return false;
     }
@@ -201,7 +201,7 @@ public class ResultSetMetaDatas {
         try {
             rsm.isDefinitelyWritable(column);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
         return false;
     }
@@ -210,7 +210,7 @@ public class ResultSetMetaDatas {
         try {
             rsm.getColumnClassName(column);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
         return null;
     }
@@ -219,7 +219,7 @@ public class ResultSetMetaDatas {
         try {
             rsm.unwrap(iface);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
         return null;
     }
@@ -228,7 +228,7 @@ public class ResultSetMetaDatas {
         try {
             rsm.isWrapperFor(iface);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
         return false;
     }

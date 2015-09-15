@@ -14,20 +14,24 @@
  * limitations under the License.
  */
 
-package indo.sql;
+package indo.jdbc.experimental;
 
+import indo.sql.AbstractDbUnitTest;
+import indo.sql.Row;
 import indo.sql.test.Employee;
-import indo.util.SqlCollector;
+import indo.util.Bean;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static indo.jdbc.ResultSets.*;
 import static org.junit.Assert.assertEquals;
 
 /**
  * Created by jcone on 8/16/15.
  */
-public class SqlRunnerTest extends AbstractDbUnitTest {
+public class LambdaSqlRunnerTest extends AbstractDbUnitTest {
     private static final String SELECT_EMPLOYEE
             = " SELECT           " +
             "     employeeId,    " +
@@ -48,7 +52,6 @@ public class SqlRunnerTest extends AbstractDbUnitTest {
 
     @Test
     public void testStream1() throws Exception {
-/*
         List<Row> list0 = runner()
                 .stream(SELECT_EMPLOYEE)
                 .map(Row::from)
@@ -83,31 +86,16 @@ public class SqlRunnerTest extends AbstractDbUnitTest {
 
         List<Employee> list4 = runner()
                 .stream(SELECT_EMPLOYEE)
-                .collect(new SqlCollector());
-
-        List<Employee> list5 = runner()
-                .stream(SELECT_EMPLOYEE)
-                .collect(Collector.of(ArrayList::new,
-                        (employees, resultSet) -> employees.add(new Employee(-1, getString(resultSet, "firstName"), null)),
-                        (left, right) -> {
-                            left.addAll(right);
-                            return left;
-                        }
-                ));
-*/
-
-        List<Employee> list6 = runner()
-                .stream(SELECT_EMPLOYEE)
                 .collect(SqlCollector.toListOf(Employee.class));
 
-        System.out.println(list6);
+
     }
 
     @Test
     public void testQueryResultSetCommand1() throws Exception {
     }
 
-    protected SqlRunner runner() {
-        return new SqlRunner(getDataSource());
+    protected LambdaSqlRunner runner() {
+        return new LambdaSqlRunner(getDataSource());
     }
 }

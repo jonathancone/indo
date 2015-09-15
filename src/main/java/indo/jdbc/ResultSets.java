@@ -16,6 +16,7 @@
 
 package indo.jdbc;
 
+import indo.jdbc.experimental.ResultSetIterator;
 import indo.util.Unchecked;
 
 import java.io.InputStream;
@@ -37,7 +38,7 @@ public class ResultSets {
         try {
             return rs.next();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -46,7 +47,7 @@ public class ResultSets {
         try {
             rs.close();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -55,7 +56,7 @@ public class ResultSets {
         try {
             return rs.wasNull();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -64,7 +65,7 @@ public class ResultSets {
         try {
             return rs.getString(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -73,7 +74,7 @@ public class ResultSets {
         try {
             return rs.getBoolean(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -82,7 +83,7 @@ public class ResultSets {
         try {
             return rs.getByte(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -91,7 +92,7 @@ public class ResultSets {
         try {
             return rs.getShort(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -100,7 +101,7 @@ public class ResultSets {
         try {
             return rs.getInt(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -109,7 +110,7 @@ public class ResultSets {
         try {
             return rs.getLong(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -118,7 +119,7 @@ public class ResultSets {
         try {
             return rs.getFloat(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -127,7 +128,7 @@ public class ResultSets {
         try {
             return rs.getDouble(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -136,7 +137,7 @@ public class ResultSets {
         try {
             rs.getBytes(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
         return new byte[0];
     }
@@ -146,7 +147,7 @@ public class ResultSets {
         try {
             return rs.getDate(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -155,7 +156,7 @@ public class ResultSets {
         try {
             return rs.getTime(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -164,7 +165,7 @@ public class ResultSets {
         try {
             return rs.getTimestamp(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -173,7 +174,7 @@ public class ResultSets {
         try {
             return rs.getAsciiStream(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -182,7 +183,7 @@ public class ResultSets {
         try {
             return rs.getBinaryStream(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -191,7 +192,7 @@ public class ResultSets {
         try {
             return rs.getString(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -200,7 +201,7 @@ public class ResultSets {
         try {
             return rs.getBoolean(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -209,7 +210,7 @@ public class ResultSets {
         try {
             return rs.getByte(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -218,7 +219,7 @@ public class ResultSets {
         try {
             return rs.getShort(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -227,7 +228,7 @@ public class ResultSets {
         try {
             return rs.getInt(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -236,7 +237,7 @@ public class ResultSets {
         try {
             return rs.getLong(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -245,7 +246,7 @@ public class ResultSets {
         try {
             return rs.getFloat(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -254,7 +255,7 @@ public class ResultSets {
         try {
             return rs.getDouble(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -263,7 +264,7 @@ public class ResultSets {
         try {
             rs.getBytes(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
         return new byte[0];
     }
@@ -273,7 +274,7 @@ public class ResultSets {
         try {
             return rs.getDate(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -282,7 +283,7 @@ public class ResultSets {
         try {
             return rs.getTime(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -291,7 +292,7 @@ public class ResultSets {
         try {
             return rs.getTimestamp(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -300,7 +301,7 @@ public class ResultSets {
         try {
             return rs.getAsciiStream(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -309,7 +310,7 @@ public class ResultSets {
         try {
             return rs.getBinaryStream(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -318,7 +319,7 @@ public class ResultSets {
         try {
             return rs.getWarnings();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -327,7 +328,7 @@ public class ResultSets {
         try {
             rs.clearWarnings();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -336,7 +337,7 @@ public class ResultSets {
         try {
             return rs.getCursorName();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -345,7 +346,7 @@ public class ResultSets {
         try {
             return rs.getMetaData();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -354,7 +355,7 @@ public class ResultSets {
         try {
             return rs.getObject(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -363,7 +364,7 @@ public class ResultSets {
         try {
             return rs.getObject(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -372,7 +373,7 @@ public class ResultSets {
         try {
             return rs.findColumn(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -381,7 +382,7 @@ public class ResultSets {
         try {
             return rs.getCharacterStream(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -390,7 +391,7 @@ public class ResultSets {
         try {
             return rs.getCharacterStream(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -399,7 +400,7 @@ public class ResultSets {
         try {
             return rs.getBigDecimal(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -408,7 +409,7 @@ public class ResultSets {
         try {
             return rs.getBigDecimal(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -417,7 +418,7 @@ public class ResultSets {
         try {
             return rs.isBeforeFirst();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -426,7 +427,7 @@ public class ResultSets {
         try {
             return rs.isAfterLast();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -435,7 +436,7 @@ public class ResultSets {
         try {
             return rs.isFirst();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -444,7 +445,7 @@ public class ResultSets {
         try {
             return rs.isLast();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -453,7 +454,7 @@ public class ResultSets {
         try {
             rs.beforeFirst();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -462,7 +463,7 @@ public class ResultSets {
         try {
             rs.afterLast();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -471,7 +472,7 @@ public class ResultSets {
         try {
             return rs.first();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -480,7 +481,7 @@ public class ResultSets {
         try {
             return rs.last();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -489,7 +490,7 @@ public class ResultSets {
         try {
             return rs.getRow();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -498,7 +499,7 @@ public class ResultSets {
         try {
             return rs.absolute(row);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -507,7 +508,7 @@ public class ResultSets {
         try {
             return rs.relative(rows);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -516,7 +517,7 @@ public class ResultSets {
         try {
             return rs.previous();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -525,7 +526,7 @@ public class ResultSets {
         try {
             rs.setFetchDirection(direction);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -534,7 +535,7 @@ public class ResultSets {
         try {
             return rs.getFetchDirection();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -543,7 +544,7 @@ public class ResultSets {
         try {
             rs.setFetchSize(rows);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -552,7 +553,7 @@ public class ResultSets {
         try {
             return rs.getFetchSize();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -561,7 +562,7 @@ public class ResultSets {
         try {
             return rs.getType();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -570,7 +571,7 @@ public class ResultSets {
         try {
             return rs.getConcurrency();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -579,7 +580,7 @@ public class ResultSets {
         try {
             return rs.rowUpdated();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -588,7 +589,7 @@ public class ResultSets {
         try {
             return rs.rowInserted();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -597,7 +598,7 @@ public class ResultSets {
         try {
             return rs.rowDeleted();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -606,7 +607,7 @@ public class ResultSets {
         try {
             rs.updateNull(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -615,7 +616,7 @@ public class ResultSets {
         try {
             rs.updateBoolean(columnIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -624,7 +625,7 @@ public class ResultSets {
         try {
             rs.updateByte(columnIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -633,7 +634,7 @@ public class ResultSets {
         try {
             rs.updateShort(columnIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -642,7 +643,7 @@ public class ResultSets {
         try {
             rs.updateInt(columnIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -651,7 +652,7 @@ public class ResultSets {
         try {
             rs.updateLong(columnIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -660,7 +661,7 @@ public class ResultSets {
         try {
             rs.updateFloat(columnIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -669,7 +670,7 @@ public class ResultSets {
         try {
             rs.updateDouble(columnIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -678,7 +679,7 @@ public class ResultSets {
         try {
             rs.updateBigDecimal(columnIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -687,7 +688,7 @@ public class ResultSets {
         try {
             rs.updateString(columnIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -696,7 +697,7 @@ public class ResultSets {
         try {
             rs.updateBytes(columnIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -705,7 +706,7 @@ public class ResultSets {
         try {
             rs.updateDate(columnIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -714,7 +715,7 @@ public class ResultSets {
         try {
             rs.updateTime(columnIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -723,7 +724,7 @@ public class ResultSets {
         try {
             rs.updateTimestamp(columnIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -732,7 +733,7 @@ public class ResultSets {
         try {
             rs.updateAsciiStream(columnIndex, x, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -741,7 +742,7 @@ public class ResultSets {
         try {
             rs.updateBinaryStream(columnIndex, x, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -750,7 +751,7 @@ public class ResultSets {
         try {
             rs.updateCharacterStream(columnIndex, x, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -759,7 +760,7 @@ public class ResultSets {
         try {
             rs.updateObject(columnIndex, x, scaleOrLength);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -768,7 +769,7 @@ public class ResultSets {
         try {
             rs.updateObject(columnIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -777,7 +778,7 @@ public class ResultSets {
         try {
             rs.updateNull(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -786,7 +787,7 @@ public class ResultSets {
         try {
             rs.updateBoolean(columnLabel, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -795,7 +796,7 @@ public class ResultSets {
         try {
             rs.updateByte(columnLabel, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -804,7 +805,7 @@ public class ResultSets {
         try {
             rs.updateShort(columnLabel, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -813,7 +814,7 @@ public class ResultSets {
         try {
             rs.updateInt(columnLabel, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -822,7 +823,7 @@ public class ResultSets {
         try {
             rs.updateLong(columnLabel, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -831,7 +832,7 @@ public class ResultSets {
         try {
             rs.updateFloat(columnLabel, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -840,7 +841,7 @@ public class ResultSets {
         try {
             rs.updateDouble(columnLabel, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -849,7 +850,7 @@ public class ResultSets {
         try {
             rs.updateBigDecimal(columnLabel, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -858,7 +859,7 @@ public class ResultSets {
         try {
             rs.updateString(columnLabel, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -867,7 +868,7 @@ public class ResultSets {
         try {
             rs.updateBytes(columnLabel, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -876,7 +877,7 @@ public class ResultSets {
         try {
             rs.updateDate(columnLabel, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -885,7 +886,7 @@ public class ResultSets {
         try {
             rs.updateTime(columnLabel, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -894,7 +895,7 @@ public class ResultSets {
         try {
             rs.updateTimestamp(columnLabel, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -903,7 +904,7 @@ public class ResultSets {
         try {
             rs.updateAsciiStream(columnLabel, x, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -912,7 +913,7 @@ public class ResultSets {
         try {
             rs.updateBinaryStream(columnLabel, x, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -921,7 +922,7 @@ public class ResultSets {
         try {
             rs.updateCharacterStream(columnLabel, reader, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -930,7 +931,7 @@ public class ResultSets {
         try {
             rs.updateObject(columnLabel, x, scaleOrLength);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -939,7 +940,7 @@ public class ResultSets {
         try {
             rs.updateObject(columnLabel, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -948,7 +949,7 @@ public class ResultSets {
         try {
             rs.insertRow();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -957,7 +958,7 @@ public class ResultSets {
         try {
             rs.updateRow();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -966,7 +967,7 @@ public class ResultSets {
         try {
             rs.deleteRow();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -975,7 +976,7 @@ public class ResultSets {
         try {
             rs.refreshRow();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -984,7 +985,7 @@ public class ResultSets {
         try {
             rs.cancelRowUpdates();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -993,7 +994,7 @@ public class ResultSets {
         try {
             rs.moveToInsertRow();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1002,7 +1003,7 @@ public class ResultSets {
         try {
             rs.moveToCurrentRow();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1011,7 +1012,7 @@ public class ResultSets {
         try {
             return rs.getStatement();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1020,7 +1021,7 @@ public class ResultSets {
         try {
             return rs.getObject(columnIndex, map);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1029,7 +1030,7 @@ public class ResultSets {
         try {
             return rs.getRef(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1038,7 +1039,7 @@ public class ResultSets {
         try {
             return rs.getBlob(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1047,7 +1048,7 @@ public class ResultSets {
         try {
             return rs.getClob(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1056,7 +1057,7 @@ public class ResultSets {
         try {
             return rs.getArray(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1065,7 +1066,7 @@ public class ResultSets {
         try {
             return rs.getObject(columnLabel, map);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1074,7 +1075,7 @@ public class ResultSets {
         try {
             return rs.getRef(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1083,7 +1084,7 @@ public class ResultSets {
         try {
             return rs.getBlob(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1092,7 +1093,7 @@ public class ResultSets {
         try {
             return rs.getClob(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1101,7 +1102,7 @@ public class ResultSets {
         try {
             return rs.getArray(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1110,7 +1111,7 @@ public class ResultSets {
         try {
             return rs.getDate(columnIndex, cal);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1119,7 +1120,7 @@ public class ResultSets {
         try {
             return rs.getDate(columnLabel, cal);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1128,7 +1129,7 @@ public class ResultSets {
         try {
             return rs.getTime(columnIndex, cal);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1137,7 +1138,7 @@ public class ResultSets {
         try {
             return rs.getTime(columnLabel, cal);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1146,7 +1147,7 @@ public class ResultSets {
         try {
             return rs.getTimestamp(columnIndex, cal);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1155,7 +1156,7 @@ public class ResultSets {
         try {
             return rs.getTimestamp(columnLabel, cal);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1164,7 +1165,7 @@ public class ResultSets {
         try {
             return rs.getURL(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1173,7 +1174,7 @@ public class ResultSets {
         try {
             return rs.getURL(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1182,7 +1183,7 @@ public class ResultSets {
         try {
             rs.updateRef(columnIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1191,7 +1192,7 @@ public class ResultSets {
         try {
             rs.updateRef(columnLabel, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1200,7 +1201,7 @@ public class ResultSets {
         try {
             rs.updateBlob(columnIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1209,7 +1210,7 @@ public class ResultSets {
         try {
             rs.updateBlob(columnLabel, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1218,7 +1219,7 @@ public class ResultSets {
         try {
             rs.updateClob(columnIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1227,7 +1228,7 @@ public class ResultSets {
         try {
             rs.updateClob(columnLabel, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1236,7 +1237,7 @@ public class ResultSets {
         try {
             rs.updateArray(columnIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1245,7 +1246,7 @@ public class ResultSets {
         try {
             rs.updateArray(columnLabel, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1254,7 +1255,7 @@ public class ResultSets {
         try {
             return rs.getRowId(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1263,7 +1264,7 @@ public class ResultSets {
         try {
             return rs.getRowId(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1272,7 +1273,7 @@ public class ResultSets {
         try {
             rs.updateRowId(columnIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1281,7 +1282,7 @@ public class ResultSets {
         try {
             rs.updateRowId(columnLabel, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1290,7 +1291,7 @@ public class ResultSets {
         try {
             return rs.getHoldability();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1303,7 +1304,7 @@ public class ResultSets {
         try {
             return rs.isClosed();
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1312,7 +1313,7 @@ public class ResultSets {
         try {
             rs.updateNString(columnIndex, nString);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1321,7 +1322,7 @@ public class ResultSets {
         try {
             rs.updateNString(columnLabel, nString);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1330,7 +1331,7 @@ public class ResultSets {
         try {
             rs.updateNClob(columnIndex, nClob);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1339,7 +1340,7 @@ public class ResultSets {
         try {
             rs.updateNClob(columnLabel, nClob);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1348,7 +1349,7 @@ public class ResultSets {
         try {
             return rs.getNClob(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1357,7 +1358,7 @@ public class ResultSets {
         try {
             return rs.getNClob(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1366,7 +1367,7 @@ public class ResultSets {
         try {
             return rs.getSQLXML(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1375,7 +1376,7 @@ public class ResultSets {
         try {
             return rs.getSQLXML(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1384,7 +1385,7 @@ public class ResultSets {
         try {
             rs.updateSQLXML(columnIndex, xmlObject);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1393,7 +1394,7 @@ public class ResultSets {
         try {
             rs.updateSQLXML(columnLabel, xmlObject);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1402,7 +1403,7 @@ public class ResultSets {
         try {
             return rs.getNString(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1411,7 +1412,7 @@ public class ResultSets {
         try {
             return rs.getNString(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1420,7 +1421,7 @@ public class ResultSets {
         try {
             return rs.getNCharacterStream(columnIndex);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1429,7 +1430,7 @@ public class ResultSets {
         try {
             return rs.getNCharacterStream(columnLabel);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1438,7 +1439,7 @@ public class ResultSets {
         try {
             rs.updateNCharacterStream(columnIndex, x, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1447,7 +1448,7 @@ public class ResultSets {
         try {
             rs.updateNCharacterStream(columnLabel, reader, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1456,7 +1457,7 @@ public class ResultSets {
         try {
             rs.updateAsciiStream(columnIndex, x, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1465,7 +1466,7 @@ public class ResultSets {
         try {
             rs.updateBinaryStream(columnIndex, x, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1474,7 +1475,7 @@ public class ResultSets {
         try {
             rs.updateCharacterStream(columnIndex, x, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1483,7 +1484,7 @@ public class ResultSets {
         try {
             rs.updateAsciiStream(columnLabel, x, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1492,7 +1493,7 @@ public class ResultSets {
         try {
             rs.updateBinaryStream(columnLabel, x, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1501,7 +1502,7 @@ public class ResultSets {
         try {
             rs.updateCharacterStream(columnLabel, reader, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1510,7 +1511,7 @@ public class ResultSets {
         try {
             rs.updateBlob(columnIndex, inputStream, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1519,7 +1520,7 @@ public class ResultSets {
         try {
             rs.updateBlob(columnLabel, inputStream, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1528,7 +1529,7 @@ public class ResultSets {
         try {
             rs.updateClob(columnIndex, reader, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1537,7 +1538,7 @@ public class ResultSets {
         try {
             rs.updateClob(columnLabel, reader, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1546,7 +1547,7 @@ public class ResultSets {
         try {
             rs.updateNClob(columnIndex, reader, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1555,7 +1556,7 @@ public class ResultSets {
         try {
             rs.updateNClob(columnLabel, reader, length);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1564,7 +1565,7 @@ public class ResultSets {
         try {
             rs.updateNCharacterStream(columnIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1573,7 +1574,7 @@ public class ResultSets {
         try {
             rs.updateNCharacterStream(columnLabel, reader);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1582,7 +1583,7 @@ public class ResultSets {
         try {
             rs.updateAsciiStream(columnIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1591,7 +1592,7 @@ public class ResultSets {
         try {
             rs.updateBinaryStream(columnIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1600,7 +1601,7 @@ public class ResultSets {
         try {
             rs.updateCharacterStream(columnIndex, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1609,7 +1610,7 @@ public class ResultSets {
         try {
             rs.updateAsciiStream(columnLabel, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1618,7 +1619,7 @@ public class ResultSets {
         try {
             rs.updateBinaryStream(columnLabel, x);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1627,7 +1628,7 @@ public class ResultSets {
         try {
             rs.updateCharacterStream(columnLabel, reader);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1636,7 +1637,7 @@ public class ResultSets {
         try {
             rs.updateBlob(columnIndex, inputStream);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1645,7 +1646,7 @@ public class ResultSets {
         try {
             rs.updateBlob(columnLabel, inputStream);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1654,7 +1655,7 @@ public class ResultSets {
         try {
             rs.updateClob(columnIndex, reader);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1663,7 +1664,7 @@ public class ResultSets {
         try {
             rs.updateClob(columnLabel, reader);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1672,7 +1673,7 @@ public class ResultSets {
         try {
             rs.updateNClob(columnIndex, reader);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1681,7 +1682,7 @@ public class ResultSets {
         try {
             rs.updateNClob(columnLabel, reader);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1690,7 +1691,7 @@ public class ResultSets {
         try {
             return rs.getObject(columnIndex, type);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1699,7 +1700,7 @@ public class ResultSets {
         try {
             return rs.getObject(columnLabel, type);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1708,7 +1709,7 @@ public class ResultSets {
         try {
             return rs.unwrap(iface);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
@@ -1717,7 +1718,7 @@ public class ResultSets {
         try {
             return rs.isWrapperFor(iface);
         } catch (SQLException e) {
-            throw Unchecked.exception(e);
+            throw Unchecked.sqlException(e);
         }
     }
 
