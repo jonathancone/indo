@@ -18,8 +18,8 @@ package indo.jdbc.experimental;
 
 import indo.sql.AbstractDbUnitTest;
 import indo.sql.Row;
+import indo.sql.RowMappers;
 import indo.sql.test.Employee;
-import indo.util.RowMappers;
 import org.junit.Test;
 
 import java.util.List;

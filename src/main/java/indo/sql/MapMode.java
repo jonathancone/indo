@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package indo.util;
+package indo.sql;
 
 /**
  * An enumeration of the modes that columns can be matched upon.  This allows
@@ -27,9 +27,9 @@ public enum MapMode {
     /**
      * Attempt to convert column names that contain underscores to the closest matching property.
      */
-    CONVERT_UNDERSCORE,
+    IGNORE_UNDERSCORE,
     /**
      * Attempt to convert columns to the closest matching property regardless of case.
      */
-    CONVERT_CASE
+    IGNORE_CASE
 }

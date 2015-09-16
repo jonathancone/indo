@@ -25,7 +25,6 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.StreamSupport;
 
 /**
  * Created by jcone on 8/25/15.
@@ -69,7 +68,7 @@ public class Reflect<T> {
                 .toArray(new Class<?>[values.length]);
     }
 
-    public Map<String, Field> fields() {
+    public ConcurrentMap<String, Field> fields() {
 
         fieldCache.computeIfAbsent(aClass, (input) -> {
             ArrayList<Field> fields = new ArrayList<>();

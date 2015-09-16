@@ -25,6 +25,10 @@ public class JdbcException extends RuntimeException {
     public JdbcException() {
     }
 
+    public JdbcException(String message, Object... parameters) {
+        super(String.format(message, parameters));
+    }
+
     public JdbcException(String message) {
         super(message);
     }
