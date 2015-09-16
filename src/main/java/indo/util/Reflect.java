@@ -262,7 +262,7 @@ public class Reflect<T> {
                 .filter(m -> m.getParameterCount() == targetTypes.length)
                 .filter(m -> IntStream
                         .range(0, targetTypes.length)
-                        .allMatch(index ->
+                        .allMatch(index -> targetTypes[index] == null ||
                                 m.getParameterTypes()[index].isAssignableFrom(targetTypes[index])))
                 .findFirst();
     }

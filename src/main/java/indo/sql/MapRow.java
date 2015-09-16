@@ -25,43 +25,46 @@ import indo.util.Reflect;
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.util.EnumSet;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.IntStream;
 
 /**
  * @author Jonathan Cone
  */
-public class RowMappers {
-    public static <T> T map(ResultSet rs, Class<T> type) {
-        return map(rs, type, EnumSet.of(MapMode.IGNORE_CASE, MapMode.IGNORE_UNDERSCORE));
+public class MapRow {
+
+    public static <T> T to(ResultSet rs, T container, MapMode... modes) {
+        return to(ResultSets.getMetaData(rs), rs, Reflect.on(container), modes);
     }
 
-    public static <T> T map(ResultSet rs, Class<T> type, EnumSet<MapMode> modes) {
+    public static <T> T to(ResultSet rs, Class<T> container, MapMode... modes) {
+        return to(ResultSets.getMetaData(rs), rs, Reflect.on(container), modes);
+    }
 
-        ResultSetMetaData rsm = ResultSets.getMetaData(rs);
-
-        Reflect<T> result = Reflect.on(type).newInstance();
+    public static <T> T to(ResultSetMetaData rsm, ResultSet rs, Reflect<T> container, MapMode... modes) {
 
         IntStream.range(0, ResultSetMetaDatas.getColumnCount(rsm))
                 .mapToObj(index -> ResultSetMetaDatas.getColumnName(rsm, index))
                 .forEach(originalColumn -> {
 
-                    Map<String, Field> fields = result.fields();
+                    Map<String, Field> fields = container.fields();
 
                     if (fields.containsKey(originalColumn)) {
                         // We found a match, nothing else to be done except for setting the property.
-                        result.property(originalColumn, ResultSets.getObject(rs, originalColumn));
+                        Object object = ResultSets.getObject(rs, originalColumn);
+
+                        container.property(originalColumn, object);
                     } else {
 
                         String matchingColumn = originalColumn;
 
-                        if (modes.contains(MapMode.IGNORE_CASE)) {
+                        List<MapMode> mapModes = modes == null ? Collections.emptyList() : Arrays.asList(modes);
+
+                        if (mapModes.contains(MapMode.IGNORE_CASE)) {
                             matchingColumn = matchingColumn.toLowerCase();
                         }
 
-                        if (modes.contains(MapMode.IGNORE_UNDERSCORE)) {
+                        if (mapModes.contains(MapMode.IGNORE_UNDERSCORE)) {
                             matchingColumn = matchingColumn.replace("_", "");
                         }
 
@@ -72,12 +75,12 @@ public class RowMappers {
                                 .filter(fieldName -> fieldName.toLowerCase().equals(toTest))
                                 .findFirst();
 
-                        match.ifPresent(key -> result.property(key, ResultSets.getObject(rs, originalColumn)));
-                        match.orElseThrow(() -> new JdbcException("Could not map column \"%s\" to a property on class %s!", originalColumn, type));
+                        match.ifPresent(key -> container.property(key, ResultSets.getObject(rs, originalColumn)));
+                        match.orElseThrow(() -> new JdbcException("Could not map column \"%s\" to a property on %s!", originalColumn, container.getInstance().getClass()));
 
                     }
                 });
-        return result.getInstance();
+        return container.getInstance();
     }
 
 }

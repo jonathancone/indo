@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -78,7 +79,6 @@ public class LambdaSqlRunner implements SqlOperations {
         });
     }
 
-    @Override
     public List<Row> list(String sql, Object... parameters) {
         return stream(sql, parameters)
                 .map(Row::from)
@@ -94,5 +94,10 @@ public class LambdaSqlRunner implements SqlOperations {
 
     protected DataSource getDataSource() {
         return dataSource;
+    }
+
+    @Override
+    public <T> List<T> query(Connection connection, String sql, Function<ResultSet, T> rowMapper, Supplier<List<T>> resultContainer, Supplier<List<?>> parameters) {
+        return null;
     }
 }
