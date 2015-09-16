@@ -68,6 +68,10 @@ public class Reflect<T> {
                 .toArray(new Class<?>[values.length]);
     }
 
+    public Set<String> fieldNames() {
+        return fields().keySet();
+    }
+
     public ConcurrentMap<String, Field> fields() {
 
         fieldCache.computeIfAbsent(aClass, (input) -> {
