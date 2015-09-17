@@ -16,9 +16,8 @@
 
 package indo.sql;
 
-import indo.util.Reflect;
-
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * A MappingStrategy that requires an exact case-sensitive String match between column and property names.
@@ -28,7 +27,7 @@ import java.util.Optional;
 public class StrictMappingStrategy<T> implements MappingStrategy<T> {
 
     @Override
-    public Optional<String> findMatch(String column, Class<T> target) {
-        return Optional.ofNullable(Reflect.on(target).fieldNames().contains(column) ? column : null);
+    public Optional<String> findMatch(String column, Set<String> fieldNames) {
+        return Optional.ofNullable(fieldNames.contains(column) ? column : null);
     }
 }

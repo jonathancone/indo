@@ -22,10 +22,10 @@ import indo.jdbc.ResultSetMetaDatas;
 import indo.jdbc.ResultSets;
 import indo.util.Reflect;
 
-import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 /**
@@ -33,54 +33,40 @@ import java.util.stream.IntStream;
  */
 public class MapRow {
 
-    public static <T> T to(ResultSet rs, T container, MapMode... modes) {
-        return to(ResultSets.getMetaData(rs), rs, Reflect.on(container), modes);
+    public static <T> T to(ResultSet rs, T container, MappingStrategy<T>... strategy) {
+        return to(rs, Reflect.on(container), strategy);
     }
 
-    public static <T> T to(ResultSet rs, Class<T> container, MapMode... modes) {
-        return to(ResultSets.getMetaData(rs), rs, Reflect.on(container), modes);
+    public static <T> T to(ResultSet rs, Class<T> container, MappingStrategy<T>... strategy) {
+        return to(rs, Reflect.on(container), strategy);
     }
 
-    public static <T> T to(ResultSetMetaData rsm, ResultSet rs, Reflect<T> container, MapMode... modes) {
+    public static <T> T to(ResultSet rs, Reflect<T> container, MappingStrategy<T>... strategy) {
+
+        ResultSetMetaData rsm = ResultSets.getMetaData(rs);
 
         IntStream.range(0, ResultSetMetaDatas.getColumnCount(rsm))
                 .mapToObj(index -> ResultSetMetaDatas.getColumnName(rsm, index))
                 .forEach(originalColumn -> {
 
-                    Map<String, Field> fields = container.fields();
+                    Optional<String> matchedField = Arrays.stream(strategy)
+                            .map(s -> s.findMatch(originalColumn, container.fieldNames()))
+                            .filter(strategyMatch -> strategyMatch.isPresent())
+                            .map(strategyMatch -> strategyMatch.get())
+                            .findFirst();
 
-                    if (fields.containsKey(originalColumn)) {
-                        // We found a match, nothing else to be done except for setting the property.
+                    if (matchedField.isPresent()) {
                         Object object = ResultSets.getObject(rs, originalColumn);
 
-                        container.property(originalColumn, object);
+                        container.property(matchedField.get(), object);
                     } else {
-
-                        String matchingColumn = originalColumn;
-
-                        List<MapMode> mapModes = modes == null ? Collections.emptyList() : Arrays.asList(modes);
-
-                        if (mapModes.contains(MapMode.IGNORE_CASE)) {
-                            matchingColumn = matchingColumn.toLowerCase();
-                        }
-
-                        if (mapModes.contains(MapMode.IGNORE_UNDERSCORE)) {
-                            matchingColumn = matchingColumn.replace("_", "");
-                        }
-
-                        String toTest = matchingColumn;
-
-                        Optional<String> match = fields.keySet()
-                                .stream()
-                                .filter(fieldName -> fieldName.toLowerCase().equals(toTest))
-                                .findFirst();
-
-                        match.ifPresent(key -> container.property(key, ResultSets.getObject(rs, originalColumn)));
-                        match.orElseThrow(() -> new JdbcException("Could not map column \"%s\" to a property on %s!", originalColumn, container.getInstance().getClass()));
-
+                        throw new JdbcException("Could not map column \"%s\" to a property on %s!", originalColumn, container.getInstance().getClass());
                     }
+
                 });
+
         return container.getInstance();
     }
+
 
 }

@@ -17,6 +17,7 @@
 package indo.sql;
 
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * This interface is used to implement various query result mapping behaviors.
@@ -28,8 +29,8 @@ public interface MappingStrategy<T> {
      * Attempt to map a column to a target class.
      *
      * @param column The column to match to the target class.
-     * @param target The target type to match the column against.
+     * @param fieldNames The target field names to match the column against.
      * @return The matching property name on the target class.
      */
-    Optional<String> findMatch(String column, Class<T> target);
+    Optional<String> findMatch(String column, Set<String> fieldNames);
 }

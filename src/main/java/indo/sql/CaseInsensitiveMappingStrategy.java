@@ -16,9 +16,8 @@
 
 package indo.sql;
 
-import indo.util.Reflect;
-
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * A MappingStrategy that only requires that field names contain the same letters, regardless of letter
@@ -29,10 +28,9 @@ import java.util.Optional;
  */
 public class CaseInsensitiveMappingStrategy<T> implements MappingStrategy<T> {
     @Override
-    public Optional<String> findMatch(String column, Class<T> target) {
+    public Optional<String> findMatch(String column, Set<String> fieldNames) {
         // Find the first field that matches.
-        return Reflect.on(target)
-                .fieldNames()
+        return fieldNames
                 .stream()
                 .filter(fieldName -> fieldName.toLowerCase().equals(column.toLowerCase()))
                 .findFirst();

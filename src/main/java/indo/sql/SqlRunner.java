@@ -40,7 +40,7 @@ public class SqlRunner implements SqlOperations {
                              String sql,
                              Class<T> type,
                              Object... parameters) {
-        return query(connection, sql, (rs) -> MapRow.to(rs, type), Arrays::asList);
+        return query(connection, sql, (rs) -> MapRow.to(rs, type, new InclusiveMappingStrategy<T>()), Arrays::asList);
     }
 
     public <T> List<T> query(Connection connection,

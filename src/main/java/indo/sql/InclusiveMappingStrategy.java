@@ -16,9 +16,8 @@
 
 package indo.sql;
 
-import indo.util.Reflect;
-
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * A MappingStrategy that tries to match automatically overcoming a variety of criteria such as:
@@ -55,8 +54,7 @@ import java.util.Optional;
  */
 public class InclusiveMappingStrategy<T> implements MappingStrategy<T> {
     @Override
-    public Optional<String> findMatch(String column, Class<T> target) {
-        Reflect<T> typeInstance = Reflect.on(target);
+    public Optional<String> findMatch(String column, Set<String> fieldNames) {
 
         StringBuilder javaSafeColumn = new StringBuilder();
 
@@ -67,8 +65,7 @@ public class InclusiveMappingStrategy<T> implements MappingStrategy<T> {
 
 
         // Find the first field that matches.
-        return typeInstance.fieldNames()
-                .stream()
+        return fieldNames.stream()
                 .filter(fieldName -> fieldName.toLowerCase().equals(javaSafeColumn.toString().toLowerCase()))
                 .findFirst();
     }
