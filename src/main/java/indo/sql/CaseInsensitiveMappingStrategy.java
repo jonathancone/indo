@@ -1,35 +1,40 @@
+/*
+ * Copyright 2015 Indo Contributors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package indo.sql;
 
 import indo.util.Reflect;
 
-import java.lang.reflect.Field;
-import java.util.Map;
 import java.util.Optional;
 
 /**
  * A MappingStrategy that only requires that field names contain the same letters, regardless of letter
  * case.  If multiple fields on the target object would result in a match, the first field found will be
- * used.
+ * selected.
  *
  * @author Jonathan Cone
  */
 public class CaseInsensitiveMappingStrategy<T> implements MappingStrategy<T> {
     @Override
-    public boolean mapOnMatch(String column, Object value, T target) {
-        Reflect<T> typeInstance = Reflect.on(target);
-
+    public Optional<String> findMatch(String column, Class<T> target) {
         // Find the first field that matches.
-        Optional<String> firstField = typeInstance.fieldNames()
+        return Reflect.on(target)
+                .fieldNames()
                 .stream()
                 .filter(fieldName -> fieldName.toLowerCase().equals(column.toLowerCase()))
                 .findFirst();
-
-        boolean match = firstField.isPresent();
-
-        if (match) {
-            typeInstance.property(firstField.get(), value);
-        }
-
-        return match;
     }
 }

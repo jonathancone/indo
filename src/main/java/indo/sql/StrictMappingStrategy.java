@@ -16,20 +16,19 @@
 
 package indo.sql;
 
+import indo.util.Reflect;
+
 import java.util.Optional;
 
 /**
- * This interface is used to implement various query result mapping behaviors.
+ * A MappingStrategy that requires an exact case-sensitive String match between column and property names.
  *
  * @author Jonathan Cone
  */
-public interface MappingStrategy<T> {
-    /**
-     * Attempt to map a column to a target class.
-     *
-     * @param column The column to match to the target class.
-     * @param target The target type to match the column against.
-     * @return The matching property name on the target class.
-     */
-    Optional<String> findMatch(String column, Class<T> target);
+public class StrictMappingStrategy<T> implements MappingStrategy<T> {
+
+    @Override
+    public Optional<String> findMatch(String column, Class<T> target) {
+        return Optional.ofNullable(Reflect.on(target).fieldNames().contains(column) ? column : null);
+    }
 }
