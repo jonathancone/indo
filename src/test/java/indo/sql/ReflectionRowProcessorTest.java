@@ -36,7 +36,7 @@ import static org.mockito.Mockito.when;
  * Created by JCone on 9/16/2015.
  */
 @RunWith(Parameterized.class)
-public class MapRowTest {
+public class ReflectionRowProcessorTest {
 
     @Parameterized.Parameter(0)
     public Class<?> aClass;
@@ -118,7 +118,7 @@ public class MapRowTest {
 
         Object container = Reflect.on(aClass).newInstanceNow();
 
-        Object result = MapRow.to(mockResultSet, container, modes);
+        Object result = ReflectionRowProcessor.to(mockResultSet, container, modes);
 
         for (int i = 0; i < columns.length; i++) {
             assertEquals(values[i], Reflect.on(result).property(properties[i]).get());

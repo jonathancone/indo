@@ -16,6 +16,7 @@
 
 package indo.sql;
 
+import indo.util.Lists;
 import indo.util.Unchecked;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -40,14 +40,21 @@ public class SqlRunner implements SqlOperations {
                              String sql,
                              Class<T> type,
                              Object... parameters) {
-        return query(connection, sql, (rs) -> MapRow.to(rs, type, new InclusiveMappingStrategy<T>()), Arrays::asList);
+        return query(connection, sql, new ReflectionRowProcessor<>(type), Lists.fromArray(parameters));
+    }
+
+    public <T> List<T> query(Connection connection,
+                             String sql,
+                             ReflectionRowProcessor<T> rowProcessor,
+                             Object... parameters) {
+        return query(connection, sql, rowProcessor::map, Lists.fromArray(parameters));
     }
 
     public <T> List<T> query(Connection connection,
                              String sql,
                              Function<ResultSet, T> rowMapper,
                              Object... parameters) {
-        return query(connection, sql, rowMapper, Arrays::asList);
+        return query(connection, sql, rowMapper, () -> Lists.fromArray(parameters));
     }
 
     public <T> List<T> query(Connection connection,

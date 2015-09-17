@@ -186,6 +186,11 @@ public class Reflect<T> {
         return instance;
     }
 
+    public Reflect<T> newInstanceIfAbsent() {
+        return instance == null ? this : newInstance();
+    }
+
+
     public Reflect<T> newInstance() {
         try {
             instance = aClass.newInstance();

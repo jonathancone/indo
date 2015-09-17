@@ -18,7 +18,7 @@ package indo.jdbc.experimental;
 
 import indo.sql.AbstractDbUnitTest;
 import indo.sql.Row;
-import indo.sql.MapRow;
+import indo.sql.ReflectionRowProcessor;
 import indo.sql.test.Employee;
 import org.junit.Test;
 
@@ -80,7 +80,7 @@ public class LambdaSqlRunnerTest extends AbstractDbUnitTest {
 
         List<Employee> list3 = runner()
                 .stream(SELECT_EMPLOYEE)
-                .map(rs -> MapRow.to(rs, Employee.class))
+                .map(rs -> ReflectionRowProcessor.to(rs, Employee.class))
                 .collect(Collectors.toList());
 
 
