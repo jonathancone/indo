@@ -16,16 +16,18 @@
 
 package indo.util;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-
+/**
+ * This class follows the fluent builder pattern to allow working with Java classes via reflection.
+ *
+ * @param <T> The type to reflect upon.
+ */
 public class Reflect<T> {
     private static final String GET_PREFIX = "get";
     private static final String IS_PREFIX = "is";
@@ -121,78 +123,6 @@ public class Reflect<T> {
         return invoke(findSetter(aClass, property, toType(value)[0]), value);
     }
 
-    public Reflect<T> property(String property, byte value) {
-        return invoke(findSetter(aClass, property, byte.class), value);
-    }
-
-    @SuppressWarnings("PrimitiveArrayArgumentToVariableArgMethod")
-    public Reflect<T> property(String property, byte[] value) {
-        return invoke(findSetter(aClass, property, byte[].class), value);
-    }
-
-    public Reflect<T> property(String property, short value) {
-        return invoke(findSetter(aClass, property, short.class), value);
-    }
-
-    @SuppressWarnings("PrimitiveArrayArgumentToVariableArgMethod")
-    public Reflect<T> property(String property, short[] value) {
-        return invoke(findSetter(aClass, property, short[].class), value);
-    }
-
-    public Reflect<T> property(String property, int value) {
-        return invoke(findSetter(aClass, property, int.class), value);
-    }
-
-    @SuppressWarnings("PrimitiveArrayArgumentToVariableArgMethod")
-    public Reflect<T> property(String property, int[] value) {
-        return invoke(findSetter(aClass, property, int[].class), value);
-    }
-
-    public Reflect<T> property(String property, long value) {
-        return invoke(findSetter(aClass, property, long.class), value);
-    }
-
-    @SuppressWarnings("PrimitiveArrayArgumentToVariableArgMethod")
-    public Reflect<T> property(String property, long[] value) {
-        return invoke(findSetter(aClass, property, long[].class), value);
-    }
-
-    public Reflect<T> property(String property, float value) {
-        return invoke(findSetter(aClass, property, float.class), value);
-    }
-
-    @SuppressWarnings("PrimitiveArrayArgumentToVariableArgMethod")
-    public Reflect<T> property(String property, float[] value) {
-        return invoke(findSetter(aClass, property, float[].class), value);
-    }
-
-    public Reflect<T> property(String property, double value) {
-        return invoke(findSetter(aClass, property, double.class), value);
-    }
-
-    @SuppressWarnings("PrimitiveArrayArgumentToVariableArgMethod")
-    public Reflect<T> property(String property, double[] value) {
-        return invoke(findSetter(aClass, property, double[].class), value);
-    }
-
-    public Reflect<T> property(String property, char value) {
-        return invoke(findSetter(aClass, property, char.class), value);
-    }
-
-    @SuppressWarnings("PrimitiveArrayArgumentToVariableArgMethod")
-    public Reflect<T> property(String property, char[] value) {
-        return invoke(findSetter(aClass, property, char[].class), value);
-    }
-
-    public Reflect<T> property(String property, boolean value) {
-        return invoke(findSetter(aClass, property, boolean.class), value);
-    }
-
-    @SuppressWarnings("PrimitiveArrayArgumentToVariableArgMethod")
-    public Reflect<T> property(String property, boolean[] value) {
-        return invoke(findSetter(aClass, property, boolean[].class), value);
-    }
-
     public T getInstance() {
         return instance;
     }
@@ -203,11 +133,23 @@ public class Reflect<T> {
 
 
     public Reflect<T> newInstance() {
+        Constructor<T> constructor = null;
         try {
-            instance = aClass.getConstructor().newInstance();
+            try {
+                constructor = aClass.getConstructor();
+            } catch (NoSuchMethodException nsm) {
+                constructor = aClass.getDeclaredConstructor();
+            }
+
+            if (!constructor.isAccessible()) {
+                constructor.setAccessible(true);
+            }
+
+            instance = constructor.newInstance();
             return this;
-        } catch (InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {
-            throw exception(e);
+
+        } catch (Exception e) {
+            throw Unchecked.exception(e);
         }
     }
 
@@ -244,17 +186,8 @@ public class Reflect<T> {
 
             return this;
         } catch (IllegalAccessException | InvocationTargetException e) {
-            throw exception(e);
+            throw Unchecked.exception(e);
         }
-    }
-
-    private RuntimeException exception(Exception e) {
-
-        if (e instanceof RuntimeException) {
-            throw (RuntimeException) e;
-        }
-
-        throw new RuntimeException(e);
     }
 
     private Method findMethod(Class<?> searchClass, String targetMethod, Class<?>... targetTypes) {
@@ -271,6 +204,27 @@ public class Reflect<T> {
                     declaredMatch.get().setAccessible(true);
                 }
                 return declaredMatch.get();
+            } else if (Objects.nonNull(targetTypes) && targetTypes.length == 1) {
+                // If we take a single parameter, lets introspect the type and see if
+                // we can coerce it to a primitive.
+                Class<?> targetType = targetTypes[0];
+                if (targetType == Boolean.class) {
+                    return findMethod(searchClass, targetMethod, boolean.class);
+                } else if (targetType == Byte.class) {
+                    return findMethod(searchClass, targetMethod, byte.class);
+                } else if (targetType == Character.class) {
+                    return findMethod(searchClass, targetMethod, char.class);
+                } else if (targetType == Short.class) {
+                    return findMethod(searchClass, targetMethod, short.class);
+                } else if (targetType == Integer.class) {
+                    return findMethod(searchClass, targetMethod, int.class);
+                } else if (targetType == Long.class) {
+                    return findMethod(searchClass, targetMethod, long.class);
+                } else if (targetType == Float.class) {
+                    return findMethod(searchClass, targetMethod, float.class);
+                } else if (targetType == Double.class) {
+                    return findMethod(searchClass, targetMethod, double.class);
+                }
             }
         }
         return null;

@@ -18,13 +18,18 @@ package indo.util;
 
 import org.junit.Test;
 
+import java.lang.reflect.Field;
 import java.time.LocalTime;
+import java.util.Map;
+import java.util.Set;
 
 import static indo.util.Reflect.on;
 import static org.junit.Assert.*;
 
 /**
- * Created by jcone on 8/27/15.
+ * Unit test cases for {@link Reflect}.
+ *
+ * @author Jonathan Cone
  */
 public class ReflectTest {
     @Test
@@ -279,6 +284,93 @@ public class ReflectTest {
     @Test
     public void testProperty1() throws Exception {
         assertFalse(on(new Item()).<Boolean>property("booleanTest").get());
+    }
+
+    @Test
+    public void testSet() throws Exception {
+        LocalTime lt = LocalTime.now();
+
+        Reflect<Item> reflect = on(Item.class)
+                .newInstance()
+                .set("objTest", lt)
+                .set("booleanTest", true)
+                .set("intTest", 400);
+
+        assertEquals(0, reflect.returnCount());
+
+        assertEquals(lt, reflect.property("objTest").get());
+        assertEquals(true, reflect.property("booleanTest").get());
+        assertEquals(400, (int) reflect.property("intTest").get());
+
+    }
+
+
+    @Test
+    public void testFields() throws Exception {
+        Map<String, Field> fields = on(Item.class).fields();
+
+        Set<String> fieldNames = fields.keySet();
+
+        assertEquals(18, fieldNames.size());
+
+        fieldNames.stream()
+                .forEach((name) -> assertTrue("The test field should have ended with the word 'Test'", name.endsWith("Test")));
+
+    }
+
+    @Test
+    public void testFieldNames() throws Exception {
+        Reflect<Item> reflect = on(Item.class);
+        Map<String, Field> fields = reflect.fields();
+
+        Set<String> fieldNames = fields.keySet();
+
+        assertEquals(fieldNames, reflect.fieldNames());
+    }
+
+    @Test
+    public void testHasReturn1() throws Exception {
+        LocalTime lt = LocalTime.now();
+
+        Reflect<Item> reflect = on(Item.class)
+                .newInstance()
+                .set("objTest", lt);
+
+        assertFalse(reflect.hasReturn());
+    }
+
+    @Test
+    public void testHasReturn2() throws Exception {
+        LocalTime lt = LocalTime.now();
+
+        Reflect<Item> reflect = on(Item.class)
+                .newInstance()
+                .set("objTest", lt)
+                .get("objTest");
+
+        assertTrue(reflect.hasReturn());
+    }
+
+    @Test
+    public void testNewInstanceIfAbsent() throws Exception {
+        Reflect<Item> reflect = on(Item.class);
+
+        assertNull(reflect.getInstance());
+
+        Item instance1 = reflect.newInstanceIfAbsent().getInstance();
+
+        assertNotNull(instance1);
+
+        Item instance2 = reflect.newInstanceIfAbsent().getInstance();
+
+        assertEquals(instance1, instance2);
+    }
+
+    @Test
+    public void testNewInstanceNow() throws Exception {
+        Item item = on(Item.class).newInstanceNow();
+
+        assertNotNull(item);
     }
 
     protected static class Item {
