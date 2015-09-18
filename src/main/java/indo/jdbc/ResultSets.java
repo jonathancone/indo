@@ -16,7 +16,6 @@
 
 package indo.jdbc;
 
-import indo.jdbc.experimental.ResultSetIterator;
 import indo.util.Unchecked;
 
 import java.io.InputStream;
@@ -26,12 +25,12 @@ import java.net.URL;
 import java.sql.*;
 import java.util.Calendar;
 import java.util.Map;
-import java.util.Spliterators;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 /**
- * Created by jcone on 9/11/2015.
+ * Utility methods for working with {@link ResultSet} objects without throwing checked {@link SQLException}s.
+ *
+ * @author Jonathan Cone
+ * @see ResultSet
  */
 public class ResultSets {
     public static boolean next(ResultSet rs) {
@@ -1720,11 +1719,5 @@ public class ResultSets {
         } catch (SQLException e) {
             throw Unchecked.sqlException(e);
         }
-    }
-
-    public static Stream<ResultSet> stream(PreparedStatement ps) {
-        return StreamSupport
-                .stream(Spliterators.spliteratorUnknownSize(
-                        new ResultSetIterator(ps), 0), false);
     }
 }

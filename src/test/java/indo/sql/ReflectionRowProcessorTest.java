@@ -51,7 +51,7 @@ public class ReflectionRowProcessorTest {
     public Object[] values;
 
     @Parameterized.Parameter(4)
-    public MapMode[] modes;
+    public MappingStrategy[] strategies;
 
     @Parameterized.Parameters
     public static List<Object[]> parameters() {
@@ -61,42 +61,42 @@ public class ReflectionRowProcessorTest {
                         new String[]{"employeeId", "firstName", "lastName", "salary"},
                         new String[]{"employeeId", "firstName", "lastName", "salary"},
                         new Object[]{0, "firstName", "lastName", BigDecimal.valueOf(33.33)},
-                        new MapMode[]{}
+                        new MappingStrategy[] {MappingStrategy.EXCLUSIVE}
                 },
                 {
                         Employee.class,
                         new String[]{"employeeId", "firstName", "lastName", "salary"},
                         new String[]{"EmployeeId", "FirstName", "LastName", "Salary"},
                         new Object[]{0, "firstName", "lastName", BigDecimal.valueOf(33.33)},
-                        new MapMode[]{MapMode.IGNORE_CASE}
+                        new MappingStrategy[] {MappingStrategy.CASE_INSENSITIVE}
                 },
                 {
                         Employee.class,
                         new String[]{"employeeId", "firstName", "lastName", "salary"},
                         new String[]{"employeeId", "firstname", "lastname", "salary"},
                         new Object[]{0, "firstName", "lastName", BigDecimal.valueOf(33.33)},
-                        new MapMode[]{MapMode.IGNORE_CASE}
+                        new MappingStrategy[] {MappingStrategy.CASE_INSENSITIVE}
                 },
                 {
                         Employee.class,
                         new String[]{"employeeId", "firstName", "lastName", "salary"},
                         new String[]{"EMPLOYEEID", "FIRSTNAME", "LASTNAME", "SALARY"},
                         new Object[]{0, "firstName", "lastName", BigDecimal.valueOf(33.33)},
-                        new MapMode[]{MapMode.IGNORE_CASE}
+                        new MappingStrategy[] {MappingStrategy.CASE_INSENSITIVE}
                 },
                 {
                         Employee.class,
                         new String[]{"employeeId", "firstName", "lastName", "salary"},
                         new String[]{"employee_id", "first_name", "last_name", "salary"},
                         new Object[]{0, "firstName", "lastName", BigDecimal.valueOf(33.33)},
-                        new MapMode[]{MapMode.IGNORE_CASE, MapMode.IGNORE_UNDERSCORE}
+                        new MappingStrategy[] {MappingStrategy.INCLUSIVE}
                 },
                 {
                         Employee.class,
                         new String[]{"employeeId", "firstName", "lastName", "salary"},
                         new String[]{"EMPLOYEE_ID", "FIRST_NAME", "LAST_NAME", "SALARY"},
                         new Object[]{0, "firstName", "lastName", BigDecimal.valueOf(33.33)},
-                        new MapMode[]{MapMode.IGNORE_CASE, MapMode.IGNORE_UNDERSCORE}
+                        new MappingStrategy[] {MappingStrategy.INCLUSIVE}
                 }
         });
     }
@@ -116,9 +116,14 @@ public class ReflectionRowProcessorTest {
             when(mockResultSet.getObject(columns[i])).thenReturn(values[i]);
         }
 
-        Object container = Reflect.on(aClass).newInstanceNow();
+        ReflectionRowProcessor<?> rowProcessor = new ReflectionRowProcessor(aClass) {
+            @Override
+            protected List<MappingStrategy> getMappingStrategies() {
+                return Arrays.asList(strategies);
+            }
+        };
 
-        Object result = ReflectionRowProcessor.to(mockResultSet, container, modes);
+        Object result = rowProcessor.map(mockResultSet);
 
         for (int i = 0; i < columns.length; i++) {
             assertEquals(values[i], Reflect.on(result).property(properties[i]).get());

@@ -25,7 +25,10 @@ import java.sql.SQLException;
 import java.util.logging.Logger;
 
 /**
- * Created by jcone on 9/14/15.
+ * Utility methods for working with {@link DataSource} objects without throwing checked {@link SQLException}s.
+ *
+ * @author Jonathan Cone
+ * @see DataSource
  */
 public class DataSources {
     public static Connection getConnection(DataSource ds) {

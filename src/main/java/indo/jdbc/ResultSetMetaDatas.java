@@ -22,7 +22,10 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 /**
- * Created by jcone on 9/11/2015.
+ * Utility methods for working with {@link ResultSetMetaData} objects without throwing checked {@link SQLException}s.
+ *
+ * @author Jonathan Cone
+ * @see ResultSetMetaData
  */
 public class ResultSetMetaDatas {
 

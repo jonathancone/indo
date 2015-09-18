@@ -32,19 +32,12 @@ import java.util.Set;
 @FunctionalInterface
 public interface MappingStrategy {
 
-    List<MappingStrategy> DEFAULTS = Arrays.asList(inclusive());
+    MappingStrategy EXCLUSIVE = new Exclusive();
+    MappingStrategy INCLUSIVE = new Inclusive();
+    MappingStrategy CASE_INSENSITIVE = new CaseInsensitive();
 
-    static MappingStrategy exclusive() {
-        return new Exclusive();
-    }
+    List<MappingStrategy> DEFAULTS = Arrays.asList(INCLUSIVE);
 
-    static MappingStrategy inclusive() {
-        return new Inclusive();
-    }
-
-    static MappingStrategy caseInsensitive() {
-        return new CaseInsensitive();
-    }
 
     /**
      * Attempt to map a column to a target class. If the column could be mapped, return the name of the property that
@@ -118,6 +111,9 @@ public interface MappingStrategy {
      * </table>
      */
     class Inclusive implements ReflectionBased {
+        private Inclusive() {
+        }
+
         @Override
         public Optional<String> findMatch(String column, Set<String> fieldNames) {
 
@@ -139,6 +135,8 @@ public interface MappingStrategy {
      * A MappingStrategy that requires an exact case-sensitive String match between column and property names.
      */
     class Exclusive implements ReflectionBased {
+        private Exclusive() {
+        }
 
         @Override
         public Optional<String> findMatch(String column, Set<String> fieldNames) {
@@ -152,6 +150,9 @@ public interface MappingStrategy {
      * selected.
      */
     class CaseInsensitive implements ReflectionBased {
+        private CaseInsensitive() {
+        }
+
         @Override
         public Optional<String> findMatch(String column, Set<String> fieldNames) {
             // Find the first field that matches.

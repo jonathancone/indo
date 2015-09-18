@@ -19,7 +19,14 @@ package indo.jdbc;
 import java.sql.SQLException;
 
 /**
- * A {@link RuntimeException} suitable for wrapping {@link SQLException}.
+ * A {@link RuntimeException} suitable for wrapping {@link
+ * SQLException} instances. This class provides {@link
+ * #hasSQLExceptionCause()} and {@link #getSQLExceptionCause()}
+ * methods for interacting with chained causes that are
+ * instances of {@link SQLException}.
+ *
+ * @author Jonathan Cone
+ * @see SQLException
  */
 public class JdbcException extends RuntimeException {
     public JdbcException() {
@@ -46,17 +53,21 @@ public class JdbcException extends RuntimeException {
     }
 
     /**
-     * @return true if this instance is wrapping a {@link SQLException}.
+     * @return true if this instance is wrapping a {@link
+     * SQLException}.
      */
     public boolean hasSQLExceptionCause() {
         return getCause() instanceof SQLException;
     }
 
     /**
-     * Get the {@link SQLException} instance that is being wrapped, call {@link #hasSQLExceptionCause()}
-     * to ensure that the cause can be cast before calling this method.
+     * Get the {@link SQLException} instance that is being
+     * wrapped, call {@link #hasSQLExceptionCause()} to
+     * ensure that the cause can be cast before calling this
+     * method.
      *
-     * @return the {@link SQLException} cause this instance is wrapping.
+     * @return the {@link SQLException} cause this instance
+     * is wrapping.
      */
     public SQLException getSQLExceptionCause() {
         return (SQLException) getCause();

@@ -24,7 +24,10 @@ import java.util.Properties;
 import java.util.concurrent.Executor;
 
 /**
- * Created by jcone on 9/14/15.
+ * Utility methods for working with {@link Connection} objects without throwing checked {@link SQLException}s.
+ *
+ * @author Jonathan Cone
+ * @see Connection
  */
 public class Connections {
     private Connections() {

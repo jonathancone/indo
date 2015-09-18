@@ -20,22 +20,25 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-/**
- * Created by jcone on 8/25/15.
- */
-@SuppressWarnings("PrimitiveArrayArgumentToVariableArgMethod")
+
 public class Reflect<T> {
     private static final String GET_PREFIX = "get";
     private static final String IS_PREFIX = "is";
     private static final String SET_PREFIX = "set";
 
-    private static ConcurrentMap<Class<?>, ConcurrentMap<String, Field>> fieldCache = new ConcurrentHashMap<>();
+    /**
+     * This is a cache of the fields that we're aware of.
+     * WeakHashMap keys have == identity semantics which
+     * allow us to safely key on the class object since it
+     * also has == identity semantics.
+     */
+    private static Map<Class<?>, Map<String, Field>> fieldCache =
+            Collections.synchronizedMap(new WeakHashMap<>());
 
     private Class<T> aClass;
     private T instance;
@@ -72,7 +75,7 @@ public class Reflect<T> {
         return fields().keySet();
     }
 
-    public ConcurrentMap<String, Field> fields() {
+    public Map<String, Field> fields() {
 
         fieldCache.computeIfAbsent(aClass, (input) -> {
             ArrayList<Field> fields = new ArrayList<>();
@@ -81,13 +84,13 @@ public class Reflect<T> {
             fields.addAll(Arrays.asList(input.getDeclaredFields()));
 
             ConcurrentMap<String, Field> result = fields.stream().
-                    collect(Collectors.toConcurrentMap(f -> f.getName(), Function.identity()));
+                    collect(Collectors.toConcurrentMap(Field::getName, Function.identity()));
 
             result.values().stream()
                     .filter(field -> !field.isAccessible())
                     .forEach(field -> field.setAccessible(true));
 
-            return result;
+            return Collections.unmodifiableMap(result);
         });
 
         return fieldCache.get(aClass);
@@ -122,6 +125,7 @@ public class Reflect<T> {
         return invoke(findSetter(aClass, property, byte.class), value);
     }
 
+    @SuppressWarnings("PrimitiveArrayArgumentToVariableArgMethod")
     public Reflect<T> property(String property, byte[] value) {
         return invoke(findSetter(aClass, property, byte[].class), value);
     }
@@ -130,6 +134,7 @@ public class Reflect<T> {
         return invoke(findSetter(aClass, property, short.class), value);
     }
 
+    @SuppressWarnings("PrimitiveArrayArgumentToVariableArgMethod")
     public Reflect<T> property(String property, short[] value) {
         return invoke(findSetter(aClass, property, short[].class), value);
     }
@@ -138,6 +143,7 @@ public class Reflect<T> {
         return invoke(findSetter(aClass, property, int.class), value);
     }
 
+    @SuppressWarnings("PrimitiveArrayArgumentToVariableArgMethod")
     public Reflect<T> property(String property, int[] value) {
         return invoke(findSetter(aClass, property, int[].class), value);
     }
@@ -146,6 +152,7 @@ public class Reflect<T> {
         return invoke(findSetter(aClass, property, long.class), value);
     }
 
+    @SuppressWarnings("PrimitiveArrayArgumentToVariableArgMethod")
     public Reflect<T> property(String property, long[] value) {
         return invoke(findSetter(aClass, property, long[].class), value);
     }
@@ -154,6 +161,7 @@ public class Reflect<T> {
         return invoke(findSetter(aClass, property, float.class), value);
     }
 
+    @SuppressWarnings("PrimitiveArrayArgumentToVariableArgMethod")
     public Reflect<T> property(String property, float[] value) {
         return invoke(findSetter(aClass, property, float[].class), value);
     }
@@ -162,6 +170,7 @@ public class Reflect<T> {
         return invoke(findSetter(aClass, property, double.class), value);
     }
 
+    @SuppressWarnings("PrimitiveArrayArgumentToVariableArgMethod")
     public Reflect<T> property(String property, double[] value) {
         return invoke(findSetter(aClass, property, double[].class), value);
     }
@@ -170,6 +179,7 @@ public class Reflect<T> {
         return invoke(findSetter(aClass, property, char.class), value);
     }
 
+    @SuppressWarnings("PrimitiveArrayArgumentToVariableArgMethod")
     public Reflect<T> property(String property, char[] value) {
         return invoke(findSetter(aClass, property, char[].class), value);
     }
@@ -178,6 +188,7 @@ public class Reflect<T> {
         return invoke(findSetter(aClass, property, boolean.class), value);
     }
 
+    @SuppressWarnings("PrimitiveArrayArgumentToVariableArgMethod")
     public Reflect<T> property(String property, boolean[] value) {
         return invoke(findSetter(aClass, property, boolean[].class), value);
     }
@@ -187,15 +198,15 @@ public class Reflect<T> {
     }
 
     public Reflect<T> newInstanceIfAbsent() {
-        return instance == null ? this : newInstance();
+        return instance != null ? this : newInstance();
     }
 
 
     public Reflect<T> newInstance() {
         try {
-            instance = aClass.newInstance();
+            instance = aClass.getConstructor().newInstance();
             return this;
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {
             throw exception(e);
         }
     }

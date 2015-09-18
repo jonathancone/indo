@@ -27,7 +27,13 @@ import java.util.Calendar;
 import java.util.Map;
 
 /**
- * Created by jcone on 9/11/2015.
+ * Utility methods for working with {@link Statement}, {@link PreparedStatement} and {@link CallableStatement}
+ * objects without throwing checked {@link SQLException}s.
+ *
+ * @author Jonathan Cone
+ * @see Statement
+ * @see PreparedStatement
+ * @see CallableStatement
  */
 public class Statements {
     public static ResultSet executeQuery(Statement s, String sql) {
