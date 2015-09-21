@@ -16,7 +16,6 @@
 
 package indo.sql;
 
-import indo.util.Lists;
 import indo.util.Unchecked;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +26,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
+import java.util.Map;
 import java.util.function.Supplier;
 
 /**
@@ -40,52 +39,67 @@ public class SqlRunner implements SqlOperations {
                              String sql,
                              Class<T> type,
                              Object... parameters) {
-        return query(connection, sql, new ReflectionRowProcessor<>(type), Lists.fromArray(parameters));
+        return query(connection, sql, new ReflectionRowProcessor<>(type), Parameters.fromArray(parameters));
     }
 
     public <T> List<T> query(Connection connection,
                              String sql,
-                             ReflectionRowProcessor<T> rowProcessor,
+                             Class<T> type,
+                             Map<String, Object> parameters) {
+        return query(connection, sql, new ReflectionRowProcessor<>(type), Parameters.fromMap(parameters));
+    }
+
+    public <T> List<T> query(Connection connection,
+                             String sql,
+                             Class<T> type,
+                             List<Parameter> parameters) {
+        return query(connection, sql, new ReflectionRowProcessor<>(type), parameters);
+    }
+
+    public <T> List<T> query(Connection connection,
+                             String sql,
+                             RowProcessor<T> rowProcessor,
                              Object... parameters) {
-        return query(connection, sql, rowProcessor::map, Lists.fromArray(parameters));
+        return query(connection, sql, rowProcessor, ArrayList<T>::new, Parameters.fromArray(parameters));
     }
 
     public <T> List<T> query(Connection connection,
                              String sql,
-                             Function<ResultSet, T> rowMapper,
-                             Object... parameters) {
-        return query(connection, sql, rowMapper, () -> Lists.fromArray(parameters));
+                             RowProcessor<T> rowProcessor,
+                             Map<String, Object> parameters) {
+        return query(connection, sql, rowProcessor, ArrayList<T>::new, Parameters.fromMap(parameters));
     }
 
     public <T> List<T> query(Connection connection,
                              String sql,
-                             Function<ResultSet, T> rowMapper,
-                             Supplier<List<?>> parameters) {
-        return query(connection, sql, rowMapper, ArrayList<T>::new, parameters);
+                             RowProcessor<T> rowProcessor,
+                             List<Parameter> parameters) {
+        return query(connection, sql, rowProcessor, ArrayList<T>::new, parameters);
     }
 
-    @Override
+
     public <T> List<T> query(Connection connection,
                              String sql,
-                             Function<ResultSet, T> rowMapper,
+                             RowProcessor<T> rowProcessor,
                              Supplier<List<T>> resultContainer,
-                             Supplier<List<?>> parameters) {
+                             List<Parameter> parameters) {
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-
-            List<?> params = parameters.get();
-
-            int count = params.size();
-
-            for (int i = 0; i < count; i++) {
-                ps.setObject(i + 1, params.get(i));
+            for (Parameter parameter : parameters) {
+                for (Integer index : parameter.getIndexes()) {
+                    if (parameter.getType().isPresent()) {
+                        ps.setObject(index, parameter.getValue().get(), parameter.getType().get());
+                    } else {
+                        ps.setObject(index, parameter.getValue().get());
+                    }
+                }
             }
 
             List<T> results = resultContainer.get();
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    results.add(rowMapper.apply(rs));
+                    results.add(rowProcessor.map(rs));
                 }
             }
 

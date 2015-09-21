@@ -18,23 +18,40 @@ package indo.sql;
 
 import indo.util.Multi;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Created by jcone on 8/1/15.
  */
-public class Parameters implements Iterable<Parameter> {
+public class Parameters {
 
-    private List<Parameter> parameters;
+    /**
+     * Given an array of {@link Object}s, create a {@link List} of {@link Parameters} with indexes corresponding to
+     * the object's position in the array.
+     *
+     * @param parameters The array to convert into a List of Parameter objects.
+     * @return An unmodifiable List containing the Parameters.
+     */
+    public static List<Parameter> fromArray(Object[] parameters) {
 
-    @Override
-    public Iterator<Parameter> iterator() {
-        return parameters.iterator();
+        if (Multi.isNotEmpty(parameters)) {
+            return Collections.unmodifiableList(
+                    IntStream.range(0, parameters.length)
+                            .sequential()
+                            .mapToObj(i -> new Parameter(null, parameters[i], null, i))
+                            .collect(Collectors.toList()));
+        }
+
+        return Collections.emptyList();
     }
 
-    public boolean hasParameters() {
-        return Multi.isNotEmpty(parameters);
-    }
+    public static List<Parameter> fromMap(Map<String, Object> parameters) {
 
+        return null;
+    }
 }

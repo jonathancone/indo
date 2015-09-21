@@ -19,7 +19,7 @@ package indo.sql;
 /**
  * Created by jcone on 8/5/15.
  */
-public class Binding {
+public class Binder {
     public static final String DEFAULT_BINDING_PLACEHOLDER = "?";
     public static final String DEFAULT_BINDING_DELIMITER = ",";
 

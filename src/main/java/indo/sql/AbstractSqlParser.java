@@ -17,6 +17,7 @@
 package indo.sql;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class AbstractSqlParser implements SqlParser {
@@ -43,7 +44,7 @@ public abstract class AbstractSqlParser implements SqlParser {
     }
 
     public List<BindingResolver> getBindingResolvers() {
-        return new ArrayList<>(bindingResolvers);
+        return Collections.unmodifiableList(bindingResolvers);
     }
 
     public char getBindToken() {
@@ -62,8 +63,8 @@ public abstract class AbstractSqlParser implements SqlParser {
         return prefixToken;
     }
 
-    protected String normalizeParamName(Parameter sp) {
-        return getPrefixToken() + sp.getName();
+    protected String tokenizeParamName(Parameter sp) {
+        return getPrefixToken() + sp.getName().get();
     }
 
 }

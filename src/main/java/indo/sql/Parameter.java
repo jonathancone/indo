@@ -17,10 +17,12 @@
 package indo.sql;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import indo.util.Lists;
+import indo.util.Multi;
+
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Created by jcone on 8/1/15.
@@ -37,38 +39,43 @@ public class Parameter {
     /**
      * The type that this value should be bound as, can be inferred but is also able to be overridden.
      */
-    private Class<?> type;
+    private Integer type;
 
     private SortedSet<Integer> indexes;
 
-    public Parameter(String name, Object value, Class<?> type) {
+    public Parameter(String name, Object value, Integer type) {
         this.name = name;
         this.value = value;
         this.type = type;
         this.indexes = new TreeSet<>();
     }
 
-    public String getName() {
-        return name;
+    public Parameter(String name, Object value, Integer type, Integer index) {
+        this(name, value, type);
+        addIndex(index);
+    }
+
+    public Optional<String> getName() {
+        return Optional.ofNullable(name);
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public Object getValue() {
-        return value;
+    public Optional<Object> getValue() {
+        return Optional.ofNullable(value);
     }
 
     public void setValue(Object value) {
         this.value = value;
     }
 
-    public Class<?> getType() {
-        return type;
+    public Optional<Integer> getType() {
+        return Optional.ofNullable(type);
     }
 
-    public void setType(Class<?> type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 
@@ -76,17 +83,20 @@ public class Parameter {
         return new ArrayList<>(indexes);
     }
 
-    public void addIndex(Integer index) {
+    public Parameter addIndex(Integer index) {
         indexes.add(index);
+        return this;
     }
 
-    public void addIndexes(int start, int length) {
+    public Parameter addIndexes(Integer start, Integer length) {
         for (int i = start; i < length; i++) {
             addIndex(i);
         }
+        return this;
     }
 
     public Integer getMaxIndex() {
         return indexes.last();
     }
+
 }

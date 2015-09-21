@@ -18,6 +18,8 @@ package indo.sql;
 
 import indo.util.Strings;
 
+import java.util.List;
+
 /**
  * Created by jcone on 8/1/15.
  */
@@ -25,7 +27,7 @@ public class StreamingSqlParser extends AbstractSqlParser implements SqlParser {
 
 
     @Override
-    public String parse(String sourceSql, Parameters parameters) {
+    public String parse(String sourceSql, List<Parameter> parameters) {
 
         StringBuilder targetSql = new StringBuilder(sourceSql.length());
 
@@ -36,28 +38,28 @@ public class StreamingSqlParser extends AbstractSqlParser implements SqlParser {
             // We found what could appear to be a bind variable.
             if (isPrefixToken(sourceSql.charAt(c))) {
 
-                for (Parameter sp : parameters) {
+                for (Parameter parameter : parameters) {
 
-                    String name = normalizeParamName(sp);
+                    String tokenParamName = tokenizeParamName(parameter);
 
-                    if (sourceSql.substring(c).startsWith(name)) {
+                    if (sourceSql.substring(c).startsWith(tokenParamName)) {
                     /*
                         We found match, now we need to determine how to bind it.
                      */
+                        String sqlFragment;
                         for (BindingResolver bindingResolver : getBindingResolvers()) {
-                            String sqlFragment = bindingResolver.resolve(nextIndex, sp);
+                            sqlFragment = bindingResolver.resolve(nextIndex, parameter);
 
                             if (Strings.isNotBlank(sqlFragment)) {
-                                nextIndex = sp.getMaxIndex() + 1;
+                                nextIndex = parameter.getMaxIndex() + 1;
                                 targetSql.append(sqlFragment);
 
                                 // Fast-forward the index
-                                c += name.length();
+                                c += tokenParamName.length();
+                                match = true;
                                 break;
                             }
                         }
-                        match = true;
-                        break;
                     }
                 }
             }

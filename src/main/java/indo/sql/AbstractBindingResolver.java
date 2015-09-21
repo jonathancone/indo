@@ -19,6 +19,6 @@ package indo.sql;
 public abstract class AbstractBindingResolver implements BindingResolver {
 
     protected String generateBindingPlaceholders(int length) {
-        return Binding.repeatPlaceholders(length);
+        return Binder.repeatPlaceholders(length);
     }
 }

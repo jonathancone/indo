@@ -26,9 +26,4 @@ import java.util.function.Supplier;
  * Created by jcone on 8/20/15.
  */
 public interface SqlOperations {
-    <T> List<T> query(Connection connection,
-                      String sql,
-                      Function<ResultSet, T> rowMapper,
-                      Supplier<List<T>> resultContainer,
-                      Supplier<List<?>> parameters);
 }
