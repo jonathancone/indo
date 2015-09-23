@@ -14,23 +14,15 @@
  * limitations under the License.
  */
 
-package indo.util;
+package indo.sql;
 
-import java.util.function.IntConsumer;
+import java.sql.PreparedStatement;
+import java.util.List;
 
 /**
- * Created by jcone on 9/11/2015.
+ * Created by jcone on 8/12/15.
  */
 @FunctionalInterface
-public interface CheckedIntConsumer extends IntConsumer {
-    @Override
-    default void accept(int i) {
-        try {
-            acceptThrows(i);
-        } catch (Exception e) {
-            throw Unchecked.exception(e);
-        }
-    }
-
-    void acceptThrows(int i) throws Exception;
+public interface ParameterBinder {
+    void bindAll(PreparedStatement ps, List<Parameter> parameters);
 }

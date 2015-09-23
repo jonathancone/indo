@@ -52,7 +52,7 @@ public class Unchecked {
         if (t instanceof RuntimeException) {
             return (W) t;
         } else {
-            if (Multi.isNotEmpty(matching)) {
+            if (Collects.isNotEmpty(matching)) {
                 for (Class<E> match : matching) {
                     if (match.isAssignableFrom(t.getClass())) {
                         return (W) (Reflect.on(wrapper).newInstanceNow()).initCause(t);

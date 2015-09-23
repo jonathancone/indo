@@ -46,13 +46,11 @@ public class SqlParserImplTest {
         employee.setFirstName("First");
         employee.setLastName("Last");
 
-        Parameters pojoParams = new Parameters();
-        Parameters mapParams = new Parameters();
-        Parameters iterableParams = new Parameters();
+        Parameters pojoParams = Parameters.empty();
 
 
         return Arrays
-                .asList(new Object[][]{
+                .asList(new Object[][] {
                         {
                                 "SELECT * FROM table WHERE column = :column",
                                 "SELECT * FROM table WHERE column = ?",

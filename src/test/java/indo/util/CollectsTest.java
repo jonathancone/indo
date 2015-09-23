@@ -26,50 +26,50 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Unit tests for {@link Multi}.
+ * Unit tests for {@link Collects}.
  *
  * @author Jonathan Cone
  */
-public class MultiTest {
+public class CollectsTest {
 
     @Test
     public void testCollectionIsNotEmpty1() {
-        assertTrue(Multi.isNotEmpty(Arrays.asList("1")));
+        assertTrue(Collects.isNotEmpty(Arrays.asList("1")));
     }
 
     @Test
     public void testCollectionIsNotEmpty2() {
-        assertTrue(Multi.isNotEmpty(Arrays.asList("1", "2")));
+        assertTrue(Collects.isNotEmpty(Arrays.asList("1", "2")));
     }
 
     @Test
     public void testCollectionIsNotEmpty3() {
-        assertFalse(Multi.isNotEmpty((Collection) null));
+        assertFalse(Collects.isNotEmpty((Collection) null));
     }
 
     @Test
     public void testCollectionIsNotEmpty4() {
-        assertFalse(Multi.isNotEmpty(new ArrayList()));
+        assertFalse(Collects.isNotEmpty(new ArrayList()));
     }
 
     @Test
     public void testArrayIsNotEmpty1() {
-        assertTrue(Multi.isNotEmpty(new String[]{"1"}));
+        assertTrue(Collects.isNotEmpty(new String[] {"1"}));
     }
 
     @Test
     public void testArrayIsNotEmpty2() {
-        assertTrue(Multi.isNotEmpty(new String[]{"1", "2"}));
+        assertTrue(Collects.isNotEmpty(new String[] {"1", "2"}));
     }
 
     @Test
     public void testArrayIsNotEmpty3() {
-        assertFalse(Multi.isNotEmpty((Object[]) null));
+        assertFalse(Collects.isNotEmpty((Object[]) null));
     }
 
     @Test
     public void testArrayIsNotEmpty4() {
-        assertFalse(Multi.isNotEmpty(new String[]{}));
+        assertFalse(Collects.isNotEmpty(new String[] {}));
     }
 
 }

@@ -33,7 +33,7 @@ public class QueryMetaData {
     private Map<String, String> fieldColumnNameOverride;
 
     public QueryMetaData() {
-        this.parameters = new Parameters();
+        this.parameters = Parameters.empty();
         this.fieldColumnNameOverride = new HashMap<>();
     }
 

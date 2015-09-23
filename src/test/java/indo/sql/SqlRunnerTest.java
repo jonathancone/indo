@@ -16,8 +16,35 @@
 
 package indo.sql;
 
+import org.junit.Test;
+
 /**
- * Created by jcone on 8/12/15.
+ * Created by jcone on 9/18/15.
  */
-public interface ParameterMapper {
+public class SqlRunnerTest {
+
+    @Test
+    public void testQuery() throws Exception {
+
+    }
+
+    @Test
+    public void testQuery1() throws Exception {
+
+    }
+
+    @Test
+    public void testQuery2() throws Exception {
+
+    }
+
+    @Test
+    public void testQuery3() throws Exception {
+
+    }
+
+    @Test
+    public void testQuery4() throws Exception {
+
+    }
 }

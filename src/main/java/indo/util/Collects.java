@@ -23,7 +23,7 @@ import java.util.Collection;
  *
  * @author Jonathan Cone
  */
-public class Multi {
+public class Collects {
     /**
      * Logical test to see if an array has any elements.
      *

@@ -21,6 +21,7 @@ import java.util.function.Consumer;
 /**
  * Created by jcone on 9/11/2015.
  */
+@FunctionalInterface
 public interface CheckedConsumer<T> extends Consumer<T> {
 
     @Override

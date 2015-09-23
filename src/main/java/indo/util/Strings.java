@@ -17,7 +17,9 @@
 package indo.util;
 
 /**
- * String utility methods.
+ * A collection of static String utility methods.
+ *
+ * @author Jonathan Cone
  */
 public class Strings {
     public static boolean isBlank(String s) {

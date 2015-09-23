@@ -17,10 +17,7 @@
 package indo.sql;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * Created by jcone on 8/1/15.
@@ -30,22 +27,29 @@ public class Parameter {
     private String name;
 
     /**
-     * The actual value that is being bound, might be a String, Date, List, etc.
+     * The actual value that is being bound, might be a String, Date, List,
+     * etc.
      */
     private Object value;
 
     /**
-     * The type that this value should be bound as, can be inferred but is also able to be overridden.
+     * The type that this value should be bound as, can be inferred but is also
+     * able to be overridden.
      */
-    private Class<?> type;
+    private Integer type;
 
     private SortedSet<Integer> indexes;
 
-    public Parameter(String name, Object value, Class<?> type) {
+    public Parameter(Object value, Integer index) {
+        this(null, value, null, index);
+    }
+
+    public Parameter(String name, Object value, Integer type, Integer index) {
         this.name = name;
         this.value = value;
         this.type = type;
         this.indexes = new TreeSet<>();
+        this.indexes.add(index);
     }
 
     public String getName() {
@@ -64,11 +68,11 @@ public class Parameter {
         this.value = value;
     }
 
-    public Class<?> getType() {
-        return type;
+    public Optional<Integer> getType() {
+        return Optional.ofNullable(type);
     }
 
-    public void setType(Class<?> type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 

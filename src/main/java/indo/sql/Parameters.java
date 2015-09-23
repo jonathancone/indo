@@ -16,25 +16,64 @@
 
 package indo.sql;
 
-import indo.util.Multi;
+import indo.util.Collects;
+import indo.util.Lists;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Created by jcone on 8/1/15.
  */
 public class Parameters implements Iterable<Parameter> {
 
-    private List<Parameter> parameters;
+    private static final Parameters EMPTY = new Parameters();
+
+    private List<Parameter> parameterList;
+
+    private Parameters() {
+        this(0);
+    }
+
+    private Parameters(int capacity) {
+        this.parameterList = new ArrayList<>(capacity);
+    }
+
+    public static Parameters empty() {
+        return EMPTY;
+    }
+
+    public static Parameters fromList(List<?> list) {
+        if (Collects.isNotEmpty(list)) {
+            Parameters parameters = new Parameters(list.size());
+
+
+            for (int i = 0; i < list.size(); i++) {
+                parameters.parameterList.add(new Parameter(list.get(i), i + 1));
+            }
+
+            return parameters;
+        } else {
+            return empty();
+        }
+    }
+
+    public static <T> Parameters fromArray(T[] t) {
+        return fromList(Lists.fromArray(t));
+    }
 
     @Override
     public Iterator<Parameter> iterator() {
-        return parameters.iterator();
+        return parameterList.iterator();
+    }
+
+    public Stream<Parameter> stream() {
+        return parameterList.stream();
     }
 
     public boolean hasParameters() {
-        return Multi.isNotEmpty(parameters);
+        return Collects.isNotEmpty(parameterList);
     }
-
 }
