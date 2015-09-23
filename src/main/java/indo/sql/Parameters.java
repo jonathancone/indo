@@ -19,9 +19,8 @@ package indo.sql;
 import indo.util.Collects;
 import indo.util.Lists;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -37,6 +36,10 @@ public class Parameters implements Iterable<Parameter> {
         this(0);
     }
 
+    private Parameters(List<Parameter> parameters) {
+        this.parameterList = parameters;
+    }
+
     private Parameters(int capacity) {
         this.parameterList = new ArrayList<>(capacity);
     }
@@ -45,13 +48,25 @@ public class Parameters implements Iterable<Parameter> {
         return EMPTY;
     }
 
+    public static Parameters fromMap(Map<String, ?> map) {
+        if (Collects.isNotEmpty(map)) {
+            return new Parameters(map.keySet().stream()
+                    .map(key -> new Parameter(key, map.get(key)))
+                    .collect(Collectors.toList()));
+        } else {
+            return empty();
+        }
+    }
+
     public static Parameters fromList(List<?> list) {
         if (Collects.isNotEmpty(list)) {
+
             Parameters parameters = new Parameters(list.size());
 
+            int size = list.size();
 
-            for (int i = 0; i < list.size(); i++) {
-                parameters.parameterList.add(new Parameter(list.get(i), i + 1));
+            for (int i = 0; i < size; i++) {
+                parameters.parameterList.add(new Parameter(i + 1, list.get(i)));
             }
 
             return parameters;
@@ -62,6 +77,15 @@ public class Parameters implements Iterable<Parameter> {
 
     public static <T> Parameters fromArray(T[] t) {
         return fromList(Lists.fromArray(t));
+    }
+
+    public Optional<Parameter> get(String name) {
+        return stream().filter(parameter -> Objects.equals(name, parameter.name())).findFirst();
+    }
+
+    public Parameters add(Parameter parameter) {
+        parameterList.add(parameter);
+        return this;
     }
 
     @Override

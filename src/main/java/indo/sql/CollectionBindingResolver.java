@@ -17,26 +17,36 @@
 package indo.sql;
 
 
+import indo.util.Collects;
+
+import java.lang.reflect.Array;
 import java.util.Collection;
+import java.util.Optional;
 
 /**
- * Created by jcone on 8/4/15.
+ * A {@link BindingResolver} implementation that handles collections and arrays.
  */
-public class CollectionBindingResolver extends AbstractBindingResolver {
+public class CollectionBindingResolver implements BindingResolver {
     @Override
-    public String resolve(int nextIndex, Parameter parameter) {
-
+    public Optional<String> resolve(int nextIndex, Parameter parameter) {
         int length = 0;
 
+        Optional<Object> value = parameter.value();
 
-        if (parameter.getValue() instanceof Collection) {
-            Collection collection = (Collection) parameter.getValue();
-            length = collection.size();
+        if (value.isPresent()) {
+
+            Object object = value.get();
+
+            if (object instanceof Array) {
+                length = Array.getLength(object);
+            }
+
+            if (object instanceof Collection) {
+                length = Collects.size((Collection) object);
+            }
+
             parameter.addIndexes(nextIndex, length);
         }
-
-
-        return generateBindingPlaceholders(length);
-
+        return Optional.ofNullable(Binder.repeatPlaceholders(length));
     }
 }

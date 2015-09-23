@@ -16,18 +16,36 @@
 
 package indo.sql;
 
-import indo.util.Strings;
+import indo.util.Lists;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * Created by jcone on 8/1/15.
  */
 public class StreamingSqlParser extends AbstractSqlParser implements SqlParser {
 
+    @Override
+    public QueryMetaData parse(String sourceSql, Object... parameters) {
+        return parse(sourceSql, Lists.fromArray(parameters));
+    }
 
     @Override
-    public String parse(String sourceSql, List<Parameter> parameters) {
+    public QueryMetaData parse(String sourceSql, List<?> parameters) {
+        return parse(sourceSql, Parameters.fromList(parameters));
+    }
+
+    @Override
+    public QueryMetaData parse(String sourceSql, Map<String, ?> nameValues) {
+        return parse(sourceSql, Parameters.fromMap(nameValues));
+    }
+
+    @Override
+    public QueryMetaData parse(String sourceSql, Parameters parameters) {
+
+        QueryMetaData metaData = new QueryMetaData();
 
         StringBuilder targetSql = new StringBuilder(sourceSql.length());
 
@@ -43,18 +61,15 @@ public class StreamingSqlParser extends AbstractSqlParser implements SqlParser {
                     String tokenParamName = tokenizeParamName(parameter);
 
                     if (sourceSql.substring(c).startsWith(tokenParamName)) {
-                    /*
-                        We found match, now we need to determine how to bind it.
-                     */
-                        String sqlFragment;
+                        // We found match, now we need to determine how to bind it.
                         for (BindingResolver bindingResolver : getBindingResolvers()) {
-                            sqlFragment = bindingResolver.resolve(nextIndex, parameter);
+                            Optional<String> resolved = bindingResolver.resolve(nextIndex, parameter);
 
-                            if (Strings.isNotBlank(sqlFragment)) {
+                            if (resolved.isPresent()) {
                                 nextIndex = parameter.getMaxIndex() + 1;
-                                targetSql.append(sqlFragment);
+                                targetSql.append(resolved.get());
 
-                                // Fast-forward the index
+                                // Fast-forward the index past the parameter name.
                                 c += tokenParamName.length();
                                 match = true;
                                 break;
@@ -70,7 +85,7 @@ public class StreamingSqlParser extends AbstractSqlParser implements SqlParser {
 
         }
 
-        return targetSql.toString();
+        return metaData;
     }
 
 

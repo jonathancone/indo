@@ -17,31 +17,42 @@
 package indo.util;
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
- * Utilities for working with {@link Collection}s and arrays.
+ * Utilities for working with {@link Collection}s, {@link Map}s and arrays.
  *
  * @author Jonathan Cone
  */
 public class Collects {
     /**
-     * Logical test to see if an array has any elements.
+     * Determine if an array has any elements.
      *
      * @param array The array to test.
-     * @return true if the specified array is not null or has a length greater than 0.
+     * @return true if the specified array is not null and has a length greater than 0.
      */
     public static boolean isNotEmpty(Object[] array) {
         return array != null && array.length > 0;
     }
 
     /**
-     * Logical test to see if a {@link Collection} has any elements.
+     * Determine if a {@link Collection} has any elements.
      *
      * @param collection The {@link Collection} to test.
-     * @return true if the specified {@link Collection} is not null or has a size greater than 0.
+     * @return true if the specified {@link Collection} is not null and has a size greater than 0.
      */
     public static boolean isNotEmpty(Collection collection) {
         return collection != null && collection.size() > 0;
+    }
+
+    /**
+     * Determine if a {@link Map} has any elements.
+     *
+     * @param map The {@link Map} to test.
+     * @return true if the specified {@link Map} is not null and has a size greater than 0.
+     */
+    public static boolean isNotEmpty(Map map) {
+        return map != null && map.size() > 0;
     }
 
     public static int size(Object[] array) {

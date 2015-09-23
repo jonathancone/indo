@@ -17,10 +17,16 @@
 package indo.sql;
 
 
+import indo.util.Collects;
+
 import java.util.*;
 
+
 /**
- * Created by jcone on 8/1/15.
+ * Represents a high-level SQL bind parameter which may be bound to a value in a SQL statement using
+ * JDBC syntax or a familiar map key/value syntax.
+ *
+ * @author Jonathan Cone
  */
 public class Parameter {
 
@@ -40,40 +46,41 @@ public class Parameter {
 
     private SortedSet<Integer> indexes;
 
-    public Parameter(Object value, Integer index) {
-        this(null, value, null, index);
-    }
-
-    public Parameter(String name, Object value, Integer type, Integer index) {
+    public Parameter(String name, Object value) {
         this.name = name;
         this.value = value;
+    }
+
+    public Parameter(String name, Object value, Integer type) {
+        this(name, value);
         this.type = type;
+    }
+
+    public Parameter(Integer index, Object value) {
+        this.value = value;
         this.indexes = new TreeSet<>();
         this.indexes.add(index);
     }
 
-    public String getName() {
-        return name;
+    public Parameter(Integer index, Object value, Integer type) {
+        this(index, value);
+        this.type = type;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public Optional<String> name() {
+        return Optional.ofNullable(name);
     }
 
-    public Object getValue() {
-        return value;
+    public Optional<Object> value() {
+        return Optional.ofNullable(value);
     }
 
-    public void setValue(Object value) {
-        this.value = value;
-    }
-
-    public Optional<Integer> getType() {
+    public Optional<Integer> type() {
         return Optional.ofNullable(type);
     }
 
-    public void setType(Integer type) {
-        this.type = type;
+    public boolean hasIndexes() {
+        return Collects.isNotEmpty(getIndexes());
     }
 
     public List<Integer> getIndexes() {

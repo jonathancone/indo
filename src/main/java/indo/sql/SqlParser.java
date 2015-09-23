@@ -17,8 +17,14 @@
 package indo.sql;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SqlParser {
+    QueryMetaData parse(String sourceSql, Object... parameters);
 
-    String parse(String sourceSql, List<Parameter> parameters);
+    QueryMetaData parse(String sourceSql, List<?> parameters);
+
+    QueryMetaData parse(String sourceSql, Map<String, ?> parameters);
+
+    QueryMetaData parse(String sourceSql, Parameters parameters);
 }

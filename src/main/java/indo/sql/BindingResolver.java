@@ -16,16 +16,16 @@
 
 package indo.sql;
 
+import java.util.Optional;
+
 /**
  * A {@link BindingResolver} is responsible for generating bind variables in a SQL statement for a specific parameter.
  * How these are generated might vary based on the Java object being bound, so this interface can be used to
  * implement a specific strategy depending on the object.
  *
- * @see ArrayBindingResolver
  * @see CollectionBindingResolver
  */
+@FunctionalInterface
 public interface BindingResolver {
-
-    String resolve(int nextIndex, Parameter parameter);
-
+    Optional<String> resolve(int nextIndex, Parameter parameter);
 }

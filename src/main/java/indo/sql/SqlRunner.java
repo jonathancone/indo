@@ -26,6 +26,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -66,10 +67,14 @@ public class SqlRunner implements SqlOperations {
 
             for (Parameter parameter : parameters) {
                 for (Integer index : parameter.getIndexes()) {
-                    if (parameter.getType().isPresent()) {
-                        ps.setObject(index, parameter.getValue(), parameter.getType().get());
+
+                    Optional<Integer> type = parameter.type();
+                    Optional<Object> value = parameter.value();
+
+                    if (type.isPresent()) {
+                        ps.setObject(index, value.get(), type.get());
                     } else {
-                        ps.setObject(index, parameter.getValue());
+                        ps.setObject(index, value.get());
                     }
                 }
             }
