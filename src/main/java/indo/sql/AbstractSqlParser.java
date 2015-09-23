@@ -63,8 +63,8 @@ public abstract class AbstractSqlParser implements SqlParser {
         return prefixToken;
     }
 
-    protected String tokenizeParamName(Parameter sp) {
-        return getPrefixToken() + sp.getName().get();
+    protected String tokenizeParamName(Parameter parameter) {
+        return getPrefixToken() + parameter.getName();
     }
 
 }

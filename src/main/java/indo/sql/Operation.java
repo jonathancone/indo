@@ -16,27 +16,9 @@
 
 package indo.sql;
 
-
-import java.util.Collection;
-
 /**
- * Created by jcone on 8/4/15.
+ * Created by jcone on 9/22/15.
  */
-public class CollectionBindingResolver extends AbstractBindingResolver {
-    @Override
-    public String resolve(int nextIndex, Parameter parameter) {
-
-        int length = 0;
-
-
-        if (parameter.getValue() instanceof Collection) {
-            Collection collection = (Collection) parameter.getValue();
-            length = collection.size();
-            parameter.addIndexes(nextIndex, length);
-        }
-
-
-        return generateBindingPlaceholders(length);
-
-    }
+public enum Operation {
+    UNKNOWN, INSERT, INSERT_UPDATE, UPDATE, SELECT, DELETE
 }

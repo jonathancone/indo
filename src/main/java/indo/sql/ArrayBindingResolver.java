@@ -17,7 +17,6 @@
 package indo.sql;
 
 import java.lang.reflect.Array;
-import java.util.Optional;
 
 /**
  * Created by jcone on 8/3/15.
@@ -29,14 +28,10 @@ public class ArrayBindingResolver extends AbstractBindingResolver {
 
         int length = 0;
 
-        Optional<Object> value = parameter.getValue();
+        if (parameter.getValue() instanceof Array) {
+            length = Array.getLength(parameter.getValue());
+            parameter.addIndexes(nextIndex, length);
 
-        if (value.isPresent()) {
-
-            if (value.get() instanceof Array) {
-                length = Array.getLength(value.get());
-                parameter.addIndexes(nextIndex, length);
-            }
         }
 
         return generateBindingPlaceholders(length);

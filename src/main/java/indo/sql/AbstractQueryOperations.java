@@ -72,7 +72,7 @@ public abstract class AbstractQueryOperations implements QueryOperations {
 
     @Override
     public AbstractQueryOperations insertOrUpdate(Collection<?> objects) {
-        this.operation = Operation.INSERT_OR_UPDATE;
+        this.operation = Operation.INSERT_UPDATE;
         this.targetCollection = objects;
         return this;
     }

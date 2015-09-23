@@ -23,6 +23,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -35,8 +36,6 @@ public class SqlParserImplTest {
     @Parameter(1)
     public String expected;
 
-    @Parameter(2)
-    public Parameters parameters;
 
     @Parameterized.Parameters
     public static Collection<Object[]> statements() {
@@ -46,59 +45,45 @@ public class SqlParserImplTest {
         employee.setFirstName("First");
         employee.setLastName("Last");
 
-        Parameters pojoParams = Parameters.empty();
-
 
         return Arrays
                 .asList(new Object[][] {
                         {
                                 "SELECT * FROM table WHERE column = :column",
-                                "SELECT * FROM table WHERE column = ?",
-                                pojoParams},
+                                "SELECT * FROM table WHERE column = ?"},
                         {
                                 "SELECT * FROM table WHERE column=:column",
-                                "SELECT * FROM table WHERE column=?",
-                                pojoParams},
+                                "SELECT * FROM table WHERE column=?"},
                         {
                                 "SELECT * FROM table WHERE column = :column ",
-                                "SELECT * FROM table WHERE column = ? ",
-                                pojoParams},
+                                "SELECT * FROM table WHERE column = ? "},
                         {
                                 "SELECT * FROM table WHERE column=:column ",
-                                "SELECT * FROM table WHERE column=? ",
-                                pojoParams},
+                                "SELECT * FROM table WHERE column=? "},
                         {
                                 "SELECT * FROM table WHERE column = :column AND column = :column",
-                                "SELECT * FROM table WHERE column = ? AND column = ?",
-                                pojoParams},
+                                "SELECT * FROM table WHERE column = ? AND column = ?"},
                         {
                                 "SELECT * FROM table WHERE column=:column AND column=:column",
-                                "SELECT * FROM table WHERE column=? AND column=?",
-                                pojoParams},
+                                "SELECT * FROM table WHERE column=? AND column=?"},
                         {
                                 "SELECT * FROM table WHERE column = :column AND column = :column ",
-                                "SELECT * FROM table WHERE column = ? AND column = ? ",
-                                pojoParams},
+                                "SELECT * FROM table WHERE column = ? AND column = ? "},
                         {
                                 "SELECT * FROM table WHERE column=:column AND column=:column ",
-                                "SELECT * FROM table WHERE column=? AND column=? ",
-                                pojoParams},
+                                "SELECT * FROM table WHERE column=? AND column=? "},
                         {
                                 "SELECT * FROM table WHERE column=:column1 AND column=:column2 ",
-                                "SELECT * FROM table WHERE column=? AND column=? ",
-                                pojoParams},
+                                "SELECT * FROM table WHERE column=? AND column=? "},
                         {
                                 "SELECT :column0 FROM table WHERE column=:column1 AND column=:column2 ",
-                                "SELECT ? FROM table WHERE column=? AND column=? ",
-                                pojoParams},
+                                "SELECT ? FROM table WHERE column=? AND column=? "},
                         {
                                 "SELECT * FROM table WHERE column IN(:column1) AND column IN(:column2)",
-                                "SELECT * FROM table WHERE column IN(?) AND column IN(?)",
-                                pojoParams},
+                                "SELECT * FROM table WHERE column IN(?) AND column IN(?)"},
                         {
                                 "SELECT * FROM table WHERE column IN (:column1) AND column IN (:column2)",
-                                "SELECT * FROM table WHERE column IN (?) AND column IN (?)",
-                                pojoParams},
+                                "SELECT * FROM table WHERE column IN (?) AND column IN (?)"},
                 });
     }
 
@@ -106,7 +91,7 @@ public class SqlParserImplTest {
     public void test() {
         StreamingSqlParser parser = new StreamingSqlParser();
 
-        String parsed = parser.parse(original, parameters);
+        String parsed = parser.parse(original, new ArrayList<>());
 
         Assert.assertEquals(expected, parsed);
 
