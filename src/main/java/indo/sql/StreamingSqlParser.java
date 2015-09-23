@@ -45,9 +45,8 @@ public class StreamingSqlParser extends AbstractSqlParser implements SqlParser {
     @Override
     public QueryMetaData parse(String sourceSql, Parameters parameters) {
 
-        QueryMetaData metaData = new QueryMetaData();
-
         StringBuilder targetSql = new StringBuilder(sourceSql.length());
+
 
         for (int nextIndex = 1, c = 0; c < sourceSql.length(); c++) {
 
@@ -61,7 +60,7 @@ public class StreamingSqlParser extends AbstractSqlParser implements SqlParser {
                     String tokenParamName = tokenizeParamName(parameter);
 
                     if (sourceSql.substring(c).startsWith(tokenParamName)) {
-                        // We found match, now we need to determine how to bind it.
+                        // We found a match, now we need to determine how to bind it.
                         for (BindingResolver bindingResolver : getBindingResolvers()) {
                             Optional<String> resolved = bindingResolver.resolve(nextIndex, parameter);
 
@@ -80,12 +79,12 @@ public class StreamingSqlParser extends AbstractSqlParser implements SqlParser {
             }
 
             if (!match) {
-                targetSql.append(c);
+                targetSql.append(sourceSql.charAt(c));
             }
 
         }
 
-        return metaData;
+        return new QueryMetaData(sourceSql, targetSql.toString(), parameters);
     }
 
 

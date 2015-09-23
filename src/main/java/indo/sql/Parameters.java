@@ -80,7 +80,9 @@ public class Parameters implements Iterable<Parameter> {
     }
 
     public Optional<Parameter> get(String name) {
-        return stream().filter(parameter -> Objects.equals(name, parameter.name())).findFirst();
+        return stream()
+                .filter(parameter -> parameter.name().isPresent() && Objects.equals(name, parameter.name().get()))
+                .findFirst();
     }
 
     public Parameters add(Parameter parameter) {

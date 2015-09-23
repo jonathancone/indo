@@ -32,9 +32,10 @@ public class QueryMetaData {
     private String tableNameOverride;
     private Map<String, String> fieldColumnNameOverride;
 
-    public QueryMetaData() {
-        this.parameters = Parameters.empty();
-        this.fieldColumnNameOverride = new HashMap<>();
+    public QueryMetaData(String sourceSql, String parsedSql, Parameters parameters) {
+        this.sourceSql = sourceSql;
+        this.parsedSql = parsedSql;
+        this.parameters = parameters;
     }
 
     public String getSourceSql() {

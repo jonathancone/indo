@@ -72,9 +72,17 @@ public class SqlRunner implements SqlOperations {
                     Optional<Object> value = parameter.value();
 
                     if (type.isPresent()) {
-                        ps.setObject(index, value.get(), type.get());
+                        if (value.isPresent()) {
+                            ps.setObject(index, value.get(), type.get());
+                        } else {
+                            ps.setObject(index, null, type.get());
+                        }
                     } else {
-                        ps.setObject(index, value.get());
+                        if (value.isPresent()) {
+                            ps.setObject(index, value.get());
+                        } else {
+                            ps.setObject(index, null);
+                        }
                     }
                 }
             }

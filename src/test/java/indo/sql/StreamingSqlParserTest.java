@@ -23,12 +23,14 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
-public class SqlParserImplTest {
+public class StreamingSqlParserTest {
 
     @Parameter(0)
     public String original;
@@ -91,9 +93,10 @@ public class SqlParserImplTest {
     public void test() {
         StreamingSqlParser parser = new StreamingSqlParser();
 
-//        String parsed = parser.parse(original, new ArrayList<>());
+        QueryMetaData meta = parser.parse(original, new HashMap<>());
 
-//        Assert.assertEquals(expected, parsed);
+        assertEquals(expected, meta.getParsedSql());
+
 
     }
 

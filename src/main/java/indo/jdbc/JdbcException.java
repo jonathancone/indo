@@ -17,6 +17,7 @@
 package indo.jdbc;
 
 import java.sql.SQLException;
+import java.util.Optional;
 
 /**
  * A {@link RuntimeException} suitable for wrapping {@link
@@ -69,8 +70,8 @@ public class JdbcException extends RuntimeException {
      * @return the {@link SQLException} cause this instance
      * is wrapping.
      */
-    public SQLException getSQLExceptionCause() {
-        return (SQLException) getCause();
+    public Optional<SQLException> getSQLExceptionCause() {
+        return Optional.ofNullable((SQLException) getCause());
     }
 
 }
