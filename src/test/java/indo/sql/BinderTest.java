@@ -28,7 +28,7 @@ import java.util.Collection;
  * Created by jcone on 8/4/15.
  */
 @RunWith(Parameterized.class)
-public class BindingTest {
+public class BinderTest {
     @Parameterized.Parameter(0)
     public int length;
 
@@ -43,6 +43,6 @@ public class BindingTest {
 
     @Test
     public void testRepeatPlaceholder() {
-        Assert.assertEquals(result, Binding.repeatPlaceholders(length));
+        Assert.assertEquals(result, Binder.repeatPlaceholders(length));
     }
 }

@@ -18,6 +18,7 @@ package indo.sql;
 
 
 import java.util.Collection;
+import java.util.Optional;
 
 /**
  * Created by jcone on 8/4/15.
@@ -28,10 +29,16 @@ public class CollectionBindingResolver extends AbstractBindingResolver {
 
         int length = 0;
 
-        if (parameter.getValue() instanceof Collection) {
-            Collection collection = (Collection) parameter.getValue();
-            length = collection.size();
-            parameter.addIndexes(nextIndex, length);
+        Optional<Object> value = parameter.getValue();
+
+        if (value.isPresent()) {
+
+
+            if (value.get() instanceof Collection) {
+                Collection collection = (Collection) value.get();
+                length = collection.size();
+                parameter.addIndexes(nextIndex, length);
+            }
         }
 
         return generateBindingPlaceholders(length);

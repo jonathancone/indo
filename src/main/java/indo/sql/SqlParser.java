@@ -16,6 +16,7 @@
 
 package indo.sql;
 
-public interface SqlParser {
-    String parse(String sourceSql, Parameters parameters);
+public interface SqlParser<T> {
+
+    String parse(String sourceSql, T parameters);
 }
