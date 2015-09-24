@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Created by jcone on 8/1/15.
+ * @author Jonathan Cone
  */
 public class StreamingSqlParser extends AbstractSqlParser implements SqlParser {
 
@@ -34,16 +34,16 @@ public class StreamingSqlParser extends AbstractSqlParser implements SqlParser {
 
     @Override
     public SqlQueryMetaData parse(String sourceSql, List<?> parameters) {
-        return parse(sourceSql, Parameters.fromList(parameters));
+        return parse(sourceSql, SqlParameters.fromList(parameters));
     }
 
     @Override
     public SqlQueryMetaData parse(String sourceSql, Map<String, ?> nameValues) {
-        return parse(sourceSql, Parameters.fromMap(nameValues));
+        return parse(sourceSql, SqlParameters.fromMap(nameValues));
     }
 
     @Override
-    public SqlQueryMetaData parse(String sourceSql, ParameterProvider parameterProvider) {
+    public SqlQueryMetaData parse(String sourceSql, SqlParameterProvider sqlParameterProvider) {
 
         StringBuilder targetSql = new StringBuilder(sourceSql.length());
 
@@ -81,21 +81,21 @@ public class StreamingSqlParser extends AbstractSqlParser implements SqlParser {
                     // We found an identifier, now we need to determine if its actually valid.
                     String identifier = sourceSql.substring(identifierStart, identifierEnd);
 
-                    Optional<Parameter> optionalParameter = parameterProvider.get(identifier);
+                    Optional<SqlParameter> optionalParameter = sqlParameterProvider.get(identifier);
 
                     if (optionalParameter.isPresent()) {
 
                         // We found a good match, now determine how to bind it.
-                        Parameter parameter = optionalParameter.get();
+                        SqlParameter sqlParameter = optionalParameter.get();
 
                         for (BindingResolver bindingResolver : getBindingResolvers()) {
-                            Optional<String> resolved = bindingResolver.resolve(nextIndex, parameter);
+                            Optional<String> resolved = bindingResolver.resolve(nextIndex, sqlParameter);
 
                             // This resolver can handle this parameter.
                             if (resolved.isPresent()) {
 
                                 // The resolver handled creating new indexes, so we need to bump the next index up.
-                                nextIndex = parameter.getMaxIndex() + 1;
+                                nextIndex = sqlParameter.getMaxIndex() + 1;
 
                                 targetSql.append(resolved.get());
 
@@ -114,7 +114,7 @@ public class StreamingSqlParser extends AbstractSqlParser implements SqlParser {
 
         }
 
-        return new SqlQueryMetaData(sourceSql, targetSql.toString(), parameterProvider);
+        return new SqlQueryMetaData(sourceSql, targetSql.toString(), sqlParameterProvider);
     }
 
 

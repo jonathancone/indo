@@ -26,89 +26,89 @@ import java.util.stream.Stream;
 /**
  * Created by jcone on 8/1/15.
  */
-public class Parameters implements ParameterProvider {
+public class SqlParameters implements SqlParameterProvider {
 
-    private static final Parameters EMPTY = new Parameters();
+    private static final SqlParameters EMPTY = new SqlParameters();
 
-    private List<Parameter> parameterList;
+    private List<SqlParameter> sqlParameterList;
 
-    private Parameters() {
+    private SqlParameters() {
         this(0);
     }
 
-    private Parameters(List<Parameter> parameters) {
-        this.parameterList = parameters;
+    private SqlParameters(List<SqlParameter> sqlParameters) {
+        this.sqlParameterList = sqlParameters;
     }
 
-    private Parameters(int capacity) {
-        this.parameterList = new ArrayList<>(capacity);
+    private SqlParameters(int capacity) {
+        this.sqlParameterList = new ArrayList<>(capacity);
     }
 
-    public static Parameters empty() {
+    public static SqlParameters empty() {
         return EMPTY;
     }
 
-    public static Parameters fromMap(Map<String, ?> map) {
+    public static SqlParameters fromMap(Map<String, ?> map) {
         if (Collects.isNotEmpty(map)) {
-            return new Parameters(map.keySet().stream()
-                    .map(key -> new Parameter(key, map.get(key)))
+            return new SqlParameters(map.keySet().stream()
+                    .map(key -> new SqlParameter(key, map.get(key)))
                     .collect(Collectors.toList()));
         } else {
             return empty();
         }
     }
 
-    public static Parameters fromList(List<?> list) {
+    public static SqlParameters fromList(List<?> list) {
         if (Collects.isNotEmpty(list)) {
 
-            Parameters parameters = new Parameters(list.size());
+            SqlParameters sqlParameters = new SqlParameters(list.size());
 
             int size = list.size();
 
             for (int i = 0; i < size; i++) {
-                parameters.parameterList.add(new Parameter(i + 1, list.get(i)));
+                sqlParameters.sqlParameterList.add(new SqlParameter(i + 1, list.get(i)));
             }
 
-            return parameters;
+            return sqlParameters;
         } else {
             return empty();
         }
     }
 
-    public static <T> Parameters fromArray(T[] t) {
+    public static <T> SqlParameters fromArray(T[] t) {
         return fromList(Lists.fromArray(t));
     }
 
     @Override
-    public Optional<Parameter> get(String name) {
+    public Optional<SqlParameter> get(String name) {
         return stream()
                 .filter(parameter -> parameter.name().isPresent() && Objects.equals(name, parameter.name().get()))
                 .findFirst();
     }
 
     @Override
-    public Optional<Parameter> get(Integer index) {
+    public Optional<SqlParameter> get(Integer index) {
         return stream()
                 .filter(parameter -> parameter.hasIndex(index))
                 .findFirst();
     }
 
 
-    public Parameters add(Parameter parameter) {
-        parameterList.add(parameter);
+    public SqlParameters add(SqlParameter sqlParameter) {
+        sqlParameterList.add(sqlParameter);
         return this;
     }
 
     @Override
-    public Iterator<Parameter> iterator() {
-        return parameterList.iterator();
+    public Iterator<SqlParameter> iterator() {
+        return sqlParameterList.iterator();
     }
 
-    public Stream<Parameter> stream() {
-        return parameterList.stream();
+    public Stream<SqlParameter> stream() {
+        return sqlParameterList.stream();
     }
 
     public boolean hasParameters() {
-        return Collects.isNotEmpty(parameterList);
+        return Collects.isNotEmpty(sqlParameterList);
     }
 }

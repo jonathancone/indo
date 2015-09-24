@@ -29,18 +29,18 @@ import java.util.Optional;
  */
 public class CollectionBindingResolver implements BindingResolver {
     @Override
-    public Optional<String> resolve(int nextIndex, Parameter parameter) {
+    public Optional<String> resolve(int nextIndex, SqlParameter sqlParameter) {
 
         // Bind a single parameter by default.
         int length = 1;
 
-        Optional<Object> value = parameter.value();
+        Optional<Object> value = sqlParameter.value();
 
         if (value.isPresent()) {
 
             Object object = value.get();
 
-            if (object instanceof Array) {
+            if (object.getClass().isArray()) {
                 length = Array.getLength(object);
             }
 
@@ -49,7 +49,7 @@ public class CollectionBindingResolver implements BindingResolver {
             }
 
         }
-        parameter.addIndexes(nextIndex, length);
+        sqlParameter.addIndexes(nextIndex, length);
 
         return Optional.ofNullable(Binder.repeatPlaceholders(length));
     }

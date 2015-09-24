@@ -39,37 +39,37 @@ public class SqlRunner implements SqlOperations {
                              String sql,
                              Class<T> type,
                              Object... parameters) {
-        return query(connection, sql, (rs) -> new ReflectionRowProcessor<>(type).map(rs), Parameters.fromArray(parameters));
+        return query(connection, sql, (rs) -> new ReflectionRowProcessor<>(type).map(rs), SqlParameters.fromArray(parameters));
     }
 
     public <T> List<T> query(Connection connection,
                              String sql,
                              RowProcessor<T> rowProcessor,
                              Object... parameters) {
-        return query(connection, sql, rowProcessor, Parameters.fromArray(parameters));
+        return query(connection, sql, rowProcessor, SqlParameters.fromArray(parameters));
     }
 
     public <T> List<T> query(Connection connection,
                              String sql,
                              RowProcessor<T> rowProcessor,
-                             Parameters parameters) {
-        return query(connection, sql, rowProcessor, ArrayList<T>::new, parameters);
+                             SqlParameters sqlParameters) {
+        return query(connection, sql, rowProcessor, ArrayList<T>::new, sqlParameters);
     }
 
     public <T> List<T> query(Connection connection,
                              String sql,
                              RowProcessor<T> rowProcessor,
                              Supplier<List<T>> resultContainer,
-                             Parameters parameters) {
+                             SqlParameters sqlParameters) {
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
 
-            for (Parameter parameter : parameters) {
-                for (Integer index : parameter.getIndexes()) {
+            for (SqlParameter sqlParameter : sqlParameters) {
+                for (Integer index : sqlParameter.getIndexes()) {
 
-                    Optional<Integer> type = parameter.type();
-                    Optional<Object> value = parameter.value();
+                    Optional<Integer> type = sqlParameter.type();
+                    Optional<Object> value = sqlParameter.value();
 
                     if (type.isPresent()) {
                         if (value.isPresent()) {

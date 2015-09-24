@@ -20,6 +20,7 @@ package indo.sql;
 import indo.util.Collects;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 
 /**
@@ -28,7 +29,7 @@ import java.util.*;
  *
  * @author Jonathan Cone
  */
-public class Parameter {
+public class SqlParameter {
 
     private String name;
 
@@ -46,24 +47,24 @@ public class Parameter {
 
     private SortedSet<Integer> indexes;
 
-    public Parameter(String name, Object value) {
+    public SqlParameter(String name, Object value) {
         this.name = name;
         this.value = value;
         this.indexes = new TreeSet<>();
     }
 
-    public Parameter(String name, Object value, Integer type) {
+    public SqlParameter(String name, Object value, Integer type) {
         this(name, value);
         this.type = type;
     }
 
-    public Parameter(Integer index, Object value) {
+    public SqlParameter(Integer index, Object value) {
         this.value = value;
         this.indexes = new TreeSet<>();
         this.indexes.add(index);
     }
 
-    public Parameter(Integer index, Object value, Integer type) {
+    public SqlParameter(Integer index, Object value, Integer type) {
         this(index, value);
         this.type = type;
     }
@@ -93,9 +94,11 @@ public class Parameter {
     }
 
     public void addIndexes(int start, int length) {
-        for (int i = start; i < length; i++) {
-            addIndex(i);
+        if (start < 1) {
+            throw new IllegalArgumentException("The starting index cannot be less than 1.");
         }
+
+        IntStream.range(start, start + length).forEachOrdered(i -> addIndex(i));
     }
 
     public Integer getMaxIndex() {

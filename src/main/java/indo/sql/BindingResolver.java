@@ -27,5 +27,5 @@ import java.util.Optional;
  */
 @FunctionalInterface
 public interface BindingResolver {
-    Optional<String> resolve(int nextIndex, Parameter parameter);
+    Optional<String> resolve(int nextIndex, SqlParameter sqlParameter);
 }

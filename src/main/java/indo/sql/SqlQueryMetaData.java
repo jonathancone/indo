@@ -24,12 +24,12 @@ public class SqlQueryMetaData {
     private String sourceSql;
     private String parsedSql;
 
-    private ParameterProvider parameterProvider;
+    private SqlParameterProvider sqlParameterProvider;
 
-    public SqlQueryMetaData(String sourceSql, String parsedSql, ParameterProvider parameterProvider) {
+    public SqlQueryMetaData(String sourceSql, String parsedSql, SqlParameterProvider sqlParameterProvider) {
         this.sourceSql = sourceSql;
         this.parsedSql = parsedSql;
-        this.parameterProvider = parameterProvider;
+        this.sqlParameterProvider = sqlParameterProvider;
     }
 
     public String getSourceSql() {
@@ -40,7 +40,7 @@ public class SqlQueryMetaData {
         return parsedSql;
     }
 
-    public ParameterProvider getParameterProvider() {
-        return parameterProvider;
+    public SqlParameterProvider getSqlParameterProvider() {
+        return sqlParameterProvider;
     }
 }

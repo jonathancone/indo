@@ -24,5 +24,5 @@ import java.util.List;
  */
 @FunctionalInterface
 public interface ParameterBinder {
-    void bindAll(PreparedStatement ps, List<Parameter> parameters);
+    void bindAll(PreparedStatement ps, List<SqlParameter> sqlParameters);
 }

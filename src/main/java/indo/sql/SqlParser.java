@@ -26,5 +26,5 @@ public interface SqlParser {
 
     SqlQueryMetaData parse(String sourceSql, Map<String, ?> parameters);
 
-    SqlQueryMetaData parse(String sourceSql, ParameterProvider parameters);
+    SqlQueryMetaData parse(String sourceSql, SqlParameterProvider parameters);
 }

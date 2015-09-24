@@ -21,8 +21,8 @@ import java.util.Optional;
 /**
  * Created by jcone on 9/23/15.
  */
-public interface ParameterProvider extends Iterable<Parameter> {
-    Optional<Parameter> get(String name);
+public interface SqlParameterProvider extends Iterable<SqlParameter> {
+    Optional<SqlParameter> get(String name);
 
-    Optional<Parameter> get(Integer index);
+    Optional<SqlParameter> get(Integer index);
 }
