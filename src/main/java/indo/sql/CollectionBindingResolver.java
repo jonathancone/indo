@@ -48,8 +48,9 @@ public class CollectionBindingResolver implements BindingResolver {
                 length = Collects.size((Collection) object);
             }
 
-            parameter.addIndexes(nextIndex, length);
         }
+        parameter.addIndexes(nextIndex, length);
+
         return Optional.ofNullable(Binder.repeatPlaceholders(length));
     }
 }

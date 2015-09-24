@@ -91,10 +91,12 @@ public class StreamingSqlParser extends AbstractSqlParser implements SqlParser {
                         for (BindingResolver bindingResolver : getBindingResolvers()) {
                             Optional<String> resolved = bindingResolver.resolve(nextIndex, parameter);
 
+                            // This resolver can handle this parameter.
                             if (resolved.isPresent()) {
 
-                                // This resolver can handle this parameter.
+                                // The resolver handled creating new indexes, so we need to bump the next index up.
                                 nextIndex = parameter.getMaxIndex() + 1;
+
                                 targetSql.append(resolved.get());
 
                                 // Fast-forward the index past the parameter name.
