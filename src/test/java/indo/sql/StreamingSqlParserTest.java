@@ -16,8 +16,6 @@
 
 package indo.sql;
 
-import indo.sql.test.Employee;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -26,6 +24,7 @@ import org.junit.runners.Parameterized.Parameter;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
@@ -38,54 +37,107 @@ public class StreamingSqlParserTest {
     @Parameter(1)
     public String expected;
 
+    @Parameter(2)
+    public Map<String, ?> mapParameters;
+
 
     @Parameterized.Parameters
     public static Collection<Object[]> statements() {
 
-        Employee employee = new Employee();
-        employee.setEmployeeId(1);
-        employee.setFirstName("First");
-        employee.setLastName("Last");
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("column", "VALUE");
+        map.put("column0", "VALUE");
+        map.put("column1", "VALUE");
+        map.put("column2", "VALUE");
 
 
         return Arrays
-                .asList(new Object[][]{
+                .asList(new Object[][] {
                         {
                                 "SELECT * FROM table WHERE column = :column",
-                                "SELECT * FROM table WHERE column = ?"},
+                                "SELECT * FROM table WHERE column = ?",
+                                map
+                        },
                         {
                                 "SELECT * FROM table WHERE column=:column",
-                                "SELECT * FROM table WHERE column=?"},
+                                "SELECT * FROM table WHERE column=?",
+                                map
+                        },
                         {
                                 "SELECT * FROM table WHERE column = :column ",
-                                "SELECT * FROM table WHERE column = ? "},
+                                "SELECT * FROM table WHERE column = ? ",
+                                map
+                        },
                         {
                                 "SELECT * FROM table WHERE column=:column ",
-                                "SELECT * FROM table WHERE column=? "},
+                                "SELECT * FROM table WHERE column=? ",
+                                map
+                        },
                         {
                                 "SELECT * FROM table WHERE column = :column AND column = :column",
-                                "SELECT * FROM table WHERE column = ? AND column = ?"},
+                                "SELECT * FROM table WHERE column = ? AND column = ?",
+                                map
+                        },
                         {
                                 "SELECT * FROM table WHERE column=:column AND column=:column",
-                                "SELECT * FROM table WHERE column=? AND column=?"},
+                                "SELECT * FROM table WHERE column=? AND column=?",
+                                map
+                        },
                         {
                                 "SELECT * FROM table WHERE column = :column AND column = :column ",
-                                "SELECT * FROM table WHERE column = ? AND column = ? "},
+                                "SELECT * FROM table WHERE column = ? AND column = ? ",
+                                map
+                        },
                         {
                                 "SELECT * FROM table WHERE column=:column AND column=:column ",
-                                "SELECT * FROM table WHERE column=? AND column=? "},
+                                "SELECT * FROM table WHERE column=? AND column=? ",
+                                map
+                        },
                         {
                                 "SELECT * FROM table WHERE column=:column1 AND column=:column2 ",
-                                "SELECT * FROM table WHERE column=? AND column=? "},
+                                "SELECT * FROM table WHERE column=? AND column=? ",
+                                map
+                        },
                         {
                                 "SELECT :column0 FROM table WHERE column=:column1 AND column=:column2 ",
-                                "SELECT ? FROM table WHERE column=? AND column=? "},
+                                "SELECT ? FROM table WHERE column=? AND column=? ",
+                                map
+                        },
                         {
                                 "SELECT * FROM table WHERE column IN(:column1) AND column IN(:column2)",
-                                "SELECT * FROM table WHERE column IN(?) AND column IN(?)"},
+                                "SELECT * FROM table WHERE column IN(?) AND column IN(?)",
+                                map
+                        },
                         {
                                 "SELECT * FROM table WHERE column IN (:column1) AND column IN (:column2)",
-                                "SELECT * FROM table WHERE column IN (?) AND column IN (?)"},
+                                "SELECT * FROM table WHERE column IN (?) AND column IN (?)",
+                                map
+                        },
+                        {
+                                "SELECT :column1 FROM table",
+                                "SELECT ? FROM table",
+                                map
+                        },
+                        {
+                                "SELECT ':column1' FROM table",
+                                "SELECT ':column1' FROM table",
+                                map
+                        },
+                        {
+                                "SELECT \":column1\" FROM table",
+                                "SELECT \":column1\" FROM table",
+                                map
+                        },
+                        {
+                                "SELECT '':column1'' FROM table",
+                                "SELECT '':column1'' FROM table",
+                                map
+                        },
+                        {
+                                "SELECT \"\":column1\"\" FROM table",
+                                "SELECT \"\":column1\"\" FROM table",
+                                map
+                        },
                 });
     }
 
@@ -93,8 +145,11 @@ public class StreamingSqlParserTest {
     public void test() {
         StreamingSqlParser parser = new StreamingSqlParser();
 
-        QueryMetaData meta = parser.parse(original, new HashMap<>());
+        SqlQueryMetaData meta = parser.parse(original, mapParameters);
 
+        System.out.println(meta.getSourceSql());
+        System.out.println(meta.getParsedSql());
+        System.out.println("");
         assertEquals(expected, meta.getParsedSql());
 
 

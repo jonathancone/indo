@@ -28,7 +28,7 @@ import java.util.Map;
 public abstract class AbstractQueryOperations implements QueryOperations {
 
     private DataSource dataSource;
-    private QueryMetaData queryMetaData;
+    private SqlQueryMetaData sqlQueryMetaData;
     private SqlOperations sqlOperations;
     private Operation operation;
 
@@ -90,13 +90,11 @@ public abstract class AbstractQueryOperations implements QueryOperations {
 
     @Override
     public AbstractQueryOperations sql(String sql) {
-        this.queryMetaData.setSourceSql(sql);
         return this;
     }
 
     @Override
     public AbstractQueryOperations in(String table) {
-        queryMetaData.setTableNameOverride(table);
         return this;
     }
 

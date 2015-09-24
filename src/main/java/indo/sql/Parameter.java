@@ -23,8 +23,8 @@ import java.util.*;
 
 
 /**
- * Represents a high-level SQL bind parameter which may be bound to a value in a SQL statement using
- * JDBC syntax or a familiar map key/value syntax.
+ * Represents a high-level SQL bind parameter which may be bound to a value in a
+ * SQL statement using JDBC syntax or a familiar map key/value syntax.
  *
  * @author Jonathan Cone
  */
@@ -49,6 +49,7 @@ public class Parameter {
     public Parameter(String name, Object value) {
         this.name = name;
         this.value = value;
+        this.indexes = new TreeSet<>();
     }
 
     public Parameter(String name, Object value, Integer type) {
@@ -79,12 +80,12 @@ public class Parameter {
         return Optional.ofNullable(type);
     }
 
-    public boolean hasIndexes() {
-        return Collects.isNotEmpty(getIndexes());
+    public boolean hasIndex(Integer index) {
+        return Collects.isNotEmpty(indexes) && indexes.contains(index);
     }
 
     public List<Integer> getIndexes() {
-        return new ArrayList<>(indexes);
+        return Collections.unmodifiableList(new ArrayList<>(indexes));
     }
 
     public void addIndex(Integer index) {
@@ -98,6 +99,6 @@ public class Parameter {
     }
 
     public Integer getMaxIndex() {
-        return indexes.last();
+        return indexes.size() > 0 ? indexes.last() : 0;
     }
 }

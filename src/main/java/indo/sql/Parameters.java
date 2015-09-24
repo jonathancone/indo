@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 /**
  * Created by jcone on 8/1/15.
  */
-public class Parameters implements Iterable<Parameter> {
+public class Parameters implements ParameterProvider {
 
     private static final Parameters EMPTY = new Parameters();
 
@@ -79,11 +79,20 @@ public class Parameters implements Iterable<Parameter> {
         return fromList(Lists.fromArray(t));
     }
 
+    @Override
     public Optional<Parameter> get(String name) {
         return stream()
                 .filter(parameter -> parameter.name().isPresent() && Objects.equals(name, parameter.name().get()))
                 .findFirst();
     }
+
+    @Override
+    public Optional<Parameter> get(Integer index) {
+        return stream()
+                .filter(parameter -> parameter.hasIndex(index))
+                .findFirst();
+    }
+
 
     public Parameters add(Parameter parameter) {
         parameterList.add(parameter);

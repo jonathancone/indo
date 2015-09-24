@@ -28,48 +28,77 @@ import java.util.Optional;
 public class StreamingSqlParser extends AbstractSqlParser implements SqlParser {
 
     @Override
-    public QueryMetaData parse(String sourceSql, Object... parameters) {
+    public SqlQueryMetaData parse(String sourceSql, Object... parameters) {
         return parse(sourceSql, Lists.fromArray(parameters));
     }
 
     @Override
-    public QueryMetaData parse(String sourceSql, List<?> parameters) {
+    public SqlQueryMetaData parse(String sourceSql, List<?> parameters) {
         return parse(sourceSql, Parameters.fromList(parameters));
     }
 
     @Override
-    public QueryMetaData parse(String sourceSql, Map<String, ?> nameValues) {
+    public SqlQueryMetaData parse(String sourceSql, Map<String, ?> nameValues) {
         return parse(sourceSql, Parameters.fromMap(nameValues));
     }
 
     @Override
-    public QueryMetaData parse(String sourceSql, Parameters parameters) {
+    public SqlQueryMetaData parse(String sourceSql, ParameterProvider parameterProvider) {
 
         StringBuilder targetSql = new StringBuilder(sourceSql.length());
 
+        boolean singleQuoteClosed = true;
+        boolean doubleQuoteClosed = true;
 
-        for (int nextIndex = 1, c = 0; c < sourceSql.length(); c++) {
+        // Start by looping through the SQL statement.
+        for (int nextIndex = 1, seekIndex = 0; seekIndex < sourceSql.length(); seekIndex++) {
 
             boolean match = false;
+            char currentChar = sourceSql.charAt(seekIndex);
 
-            // We found what could appear to be a bind variable.
-            if (isPrefixToken(sourceSql.charAt(c))) {
+            if (isSingleQuote(currentChar)) {
+                singleQuoteClosed = !singleQuoteClosed;
+            }
 
-                for (Parameter parameter : parameters) {
+            if (isDoubleQuote(currentChar) && singleQuoteClosed) {
+                doubleQuoteClosed = !doubleQuoteClosed;
+            }
 
-                    String tokenParamName = tokenizeParamName(parameter);
+            if (singleQuoteClosed && doubleQuoteClosed) {
 
-                    if (sourceSql.substring(c).startsWith(tokenParamName)) {
-                        // We found a match, now we need to determine how to bind it.
+                // Perhaps the start of a named bind variable.
+                if (isPrefixToken(currentChar)) {
+
+                    // Scan until we don't find a valid Java identifier.
+                    int identifierStart = seekIndex + 1;
+                    int identifierEnd = identifierStart;
+
+                    while (sourceSql.length() > identifierEnd
+                            && Character.isJavaIdentifierPart(sourceSql.charAt(identifierEnd))) {
+                        identifierEnd++;
+                    }
+
+                    // We found an identifier, now we need to determine if its actually valid.
+                    String identifier = sourceSql.substring(identifierStart, identifierEnd);
+
+                    Optional<Parameter> optionalParameter = parameterProvider.get(identifier);
+
+                    if (optionalParameter.isPresent()) {
+
+                        // We found a good match, now determine how to bind it.
+                        Parameter parameter = optionalParameter.get();
+
                         for (BindingResolver bindingResolver : getBindingResolvers()) {
                             Optional<String> resolved = bindingResolver.resolve(nextIndex, parameter);
 
                             if (resolved.isPresent()) {
+
+                                // This resolver can handle this parameter.
                                 nextIndex = parameter.getMaxIndex() + 1;
                                 targetSql.append(resolved.get());
 
                                 // Fast-forward the index past the parameter name.
-                                c += tokenParamName.length();
+                                seekIndex += identifier.length();
                                 match = true;
                                 break;
                             }
@@ -77,14 +106,13 @@ public class StreamingSqlParser extends AbstractSqlParser implements SqlParser {
                     }
                 }
             }
-
             if (!match) {
-                targetSql.append(sourceSql.charAt(c));
+                targetSql.append(currentChar);
             }
 
         }
 
-        return new QueryMetaData(sourceSql, targetSql.toString(), parameters);
+        return new SqlQueryMetaData(sourceSql, targetSql.toString(), parameterProvider);
     }
 
 

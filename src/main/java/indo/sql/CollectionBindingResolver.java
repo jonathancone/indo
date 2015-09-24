@@ -24,12 +24,15 @@ import java.util.Collection;
 import java.util.Optional;
 
 /**
- * A {@link BindingResolver} implementation that handles collections and arrays.
+ * A {@link BindingResolver} implementation that handles a single objects,
+ * collections and arrays.
  */
 public class CollectionBindingResolver implements BindingResolver {
     @Override
     public Optional<String> resolve(int nextIndex, Parameter parameter) {
-        int length = 0;
+
+        // Bind a single parameter by default.
+        int length = 1;
 
         Optional<Object> value = parameter.value();
 

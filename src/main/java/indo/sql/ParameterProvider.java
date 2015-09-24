@@ -16,15 +16,13 @@
 
 package indo.sql;
 
-import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
-public interface SqlParser {
-    SqlQueryMetaData parse(String sourceSql, Object... parameters);
+/**
+ * Created by jcone on 9/23/15.
+ */
+public interface ParameterProvider extends Iterable<Parameter> {
+    Optional<Parameter> get(String name);
 
-    SqlQueryMetaData parse(String sourceSql, List<?> parameters);
-
-    SqlQueryMetaData parse(String sourceSql, Map<String, ?> parameters);
-
-    SqlQueryMetaData parse(String sourceSql, ParameterProvider parameters);
+    Optional<Parameter> get(Integer index);
 }
