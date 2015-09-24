@@ -19,10 +19,11 @@ package indo.sql;
 import java.sql.ResultSet;
 
 /**
- * This functional interface allows for custom row processing for SQL result
+ * A functional interface which allows for custom row processing for SQL result
  * sets.
  *
  * @author Jonathan Cone
+ * @see ResultSet
  */
 @FunctionalInterface
 public interface RowProcessor<T> {

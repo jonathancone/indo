@@ -40,7 +40,7 @@ public abstract class AbstractSqlParser implements SqlParser {
         this.prefixToken = prefixToken;
         this.escapeToken = escapeToken;
         this.bindToken = bindToken;
-        this.bindingResolvers = Arrays.asList(new CollectionBindingResolver());
+        this.bindingResolvers = Arrays.asList(new StandardBindingResolver());
     }
 
     public List<BindingResolver> getBindingResolvers() {

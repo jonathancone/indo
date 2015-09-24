@@ -27,7 +27,7 @@ import java.util.Optional;
  * A {@link BindingResolver} implementation that handles a single objects,
  * collections and arrays.
  */
-public class CollectionBindingResolver implements BindingResolver {
+public class StandardBindingResolver implements BindingResolver {
     @Override
     public Optional<String> resolve(int nextIndex, SqlParameter sqlParameter) {
 

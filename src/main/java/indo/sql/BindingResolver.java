@@ -23,9 +23,17 @@ import java.util.Optional;
  * How these are generated might vary based on the Java object being bound, so this interface can be used to
  * implement a specific strategy depending on the object.
  *
- * @see CollectionBindingResolver
+ * @author Jonathan Cone
+ * @see StandardBindingResolver
  */
 @FunctionalInterface
 public interface BindingResolver {
+    /**
+     * Method called to resolve binding a parameter to a parameter.
+     *
+     * @param nextIndex    The next index available for binding.
+     * @param sqlParameter The parameter that we're attempting to bind a value to.
+     * @return The {@link Optional} SQL String that resulted from the binding resolution.
+     */
     Optional<String> resolve(int nextIndex, SqlParameter sqlParameter);
 }

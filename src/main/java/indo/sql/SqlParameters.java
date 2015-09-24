@@ -24,7 +24,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Created by jcone on 8/1/15.
+ * A class which serves as a container for {@link SqlParameter} instances.
+ * This class also contains a static API to allow for the creation of immutable instances
+ * from regular POJO parameters.
+ *
+ * @author Jonathan Cone
+ * @see SqlParameter
  */
 public class SqlParameters implements SqlParameterProvider {
 
@@ -32,22 +37,45 @@ public class SqlParameters implements SqlParameterProvider {
 
     private List<SqlParameter> sqlParameterList;
 
+    /**
+     * Create a new empty instance.
+     */
     private SqlParameters() {
         this(0);
     }
 
+    /**
+     * Create a new instance based on an input set of {@link SqlParameter} instances.
+     *
+     * @param sqlParameters The parameters to build this collection from.
+     */
     private SqlParameters(List<SqlParameter> sqlParameters) {
         this.sqlParameterList = sqlParameters;
     }
 
+    /**
+     * Create a new instance with a capacity for a specific number of parameters.
+     *
+     * @param capacity The parameter capacity of this instance.
+     */
     private SqlParameters(int capacity) {
         this.sqlParameterList = new ArrayList<>(capacity);
     }
 
+    /**
+     * @return An empty instance.
+     */
     public static SqlParameters empty() {
         return EMPTY;
     }
 
+    /**
+     * Create a new instance based on a {@link Map}.
+     *
+     * @param map A {@link Map} keyed on parameter name. The value of the map entry
+     *            is the value of the parameter to be bound.
+     * @return The newly created instance.
+     */
     public static SqlParameters fromMap(Map<String, ?> map) {
         if (Collects.isNotEmpty(map)) {
             return new SqlParameters(map.keySet().stream()
@@ -58,6 +86,14 @@ public class SqlParameters implements SqlParameterProvider {
         }
     }
 
+    /**
+     * Create a new instance based on a {@link List}.
+     *
+     * @param list A {@link List} which is ordered based on the parameter
+     *             number. The value of a specific list index is the value
+     *             that should be bound to the parameter for that index.
+     * @return The newly created instance.
+     */
     public static SqlParameters fromList(List<?> list) {
         if (Collects.isNotEmpty(list)) {
 
@@ -75,6 +111,14 @@ public class SqlParameters implements SqlParameterProvider {
         }
     }
 
+    /**
+     * Create a new instance based on an array.
+     *
+     * @param t An array which is ordered based on the parameter
+     *          number. The value of a specific index is the value
+     *          that should be bound to the parameter for that index.
+     * @return The newly created instance.
+     */
     public static <T> SqlParameters fromArray(T[] t) {
         return fromList(Lists.fromArray(t));
     }
@@ -93,22 +137,12 @@ public class SqlParameters implements SqlParameterProvider {
                 .findFirst();
     }
 
-
-    public SqlParameters add(SqlParameter sqlParameter) {
-        sqlParameterList.add(sqlParameter);
-        return this;
-    }
-
     @Override
     public Iterator<SqlParameter> iterator() {
         return sqlParameterList.iterator();
     }
 
-    public Stream<SqlParameter> stream() {
+    private Stream<SqlParameter> stream() {
         return sqlParameterList.stream();
-    }
-
-    public boolean hasParameters() {
-        return Collects.isNotEmpty(sqlParameterList);
     }
 }

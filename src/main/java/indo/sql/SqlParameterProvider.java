@@ -19,10 +19,26 @@ package indo.sql;
 import java.util.Optional;
 
 /**
- * Created by jcone on 9/23/15.
+ * An interface which exposes behavior for providing {@link SqlParameter} instances based on some criteria.
+ *
+ * @author Jonathan Cone
+ * @see SqlParameter
+ * @see SqlParameters
  */
 public interface SqlParameterProvider extends Iterable<SqlParameter> {
+    /**
+     * Retreive the {@link SqlParameter} associated with the supplied name.
+     *
+     * @param name The name of the parameter to retrieve.
+     * @return The {@link Optional} instance to retrieve.
+     */
     Optional<SqlParameter> get(String name);
 
+    /**
+     * Retreive the {@link SqlParameter} associated with the supplied index.
+     *
+     * @param index The index of the parameter to retrieve.
+     * @return The {@link Optional} instance to retrieve.
+     */
     Optional<SqlParameter> get(Integer index);
 }
