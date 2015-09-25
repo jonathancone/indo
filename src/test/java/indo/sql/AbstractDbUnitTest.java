@@ -24,8 +24,6 @@ import org.junit.Rule;
 import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.net.URL;
@@ -34,7 +32,6 @@ import java.util.List;
 
 @RunWith(Parameterized.class)
 public class AbstractDbUnitTest {
-    private static final Logger log = LoggerFactory.getLogger(AbstractDbUnitTest.class);
 
     @Rule
     public TestName testName = new TestName();
@@ -85,9 +82,5 @@ public class AbstractDbUnitTest {
     protected void assertRowValue(String expectedTable, String expectedColumn, int expectedRow, Object actual) {
         Object expected = dbUnitConfigurer.getValue(expectedTable, expectedColumn, expectedRow);
         Assert.assertEquals(expected, actual);
-    }
-
-    protected void log(String message, Object... args) {
-        LoggerFactory.getLogger(getClass()).debug(message, args);
     }
 }

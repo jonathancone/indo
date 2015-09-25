@@ -26,21 +26,19 @@ import org.dbunit.dataset.ReplacementDataSet;
 import org.dbunit.dataset.datatype.DefaultDataTypeFactory;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.io.File;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
+
+import static indo.log.Logs.debug;
+import static indo.log.Logs.info;
 
 /**
  * Created by jcone on 8/16/15.
  */
 public abstract class AbstractDbUnitConfigurer {
-    private static final Logger log = LoggerFactory.getLogger(AbstractDbUnitConfigurer.class);
 
     private DataSource dataSource;
 
@@ -69,7 +67,7 @@ public abstract class AbstractDbUnitConfigurer {
     protected abstract DefaultDataTypeFactory getDataTypeFactory();
 
     protected final DataSource createDataSource() {
-        log.info("Creating {} data source configuration...", getClass().getName());
+        info(this, "Creating %s data source configuration...", getClass().getName());
         try {
             return doCreateDataSource();
         } catch (Exception e) {
@@ -78,7 +76,7 @@ public abstract class AbstractDbUnitConfigurer {
     }
 
     protected final void createSchema() {
-        log.debug("Creating {} schema...", getClass().getName());
+        debug(this, "Creating %s schema...", getClass().getName());
         try {
             doCreateSchema();
         } catch (Exception e) {
@@ -107,7 +105,7 @@ public abstract class AbstractDbUnitConfigurer {
             databaseTester.setDataSet(createDataSet(dataSetName));
             databaseTester.onSetup();
         } catch (MalformedURLException m) {
-            log.debug("Skipping schema population since {} was not found.", dataSetName);
+            debug(this, "Skipping schema population since %s was not found.", dataSetName);
         } catch (Exception e) {
             throw Unchecked.exception(e);
         }
@@ -120,7 +118,7 @@ public abstract class AbstractDbUnitConfigurer {
 
             Assertion.assertEquals(expectedDataSet, actualDataSet);
         } catch (MalformedURLException m) {
-            log.debug("Skipping schema assertion since {} was not found.", dataSetName);
+            debug(this, "Skipping schema assertion since %s was not found.", dataSetName);
         } catch (Exception e) {
             throw Unchecked.exception(e);
         }

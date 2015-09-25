@@ -16,8 +16,6 @@
 
 package indo.sql;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -26,21 +24,18 @@ import java.util.Optional;
 public class StreamingSqlParser extends AbstractSqlParser implements SqlParser {
 
     @Override
-    public SqlQueryMetaData parse(String sourceSql, SqlParameterProvider sqlParameterProvider) {
+    public SqlQueryMetaData parse(String sql, SqlParameterProvider sqlParameterProvider) {
 
-        StringBuilder targetSql = new StringBuilder(sourceSql.length());
-
-        List<SqlParameter> actualParameters = new ArrayList<>();
-
+        StringBuilder targetSql = new StringBuilder(sql.length());
 
         boolean singleQuoteClosed = true;
         boolean doubleQuoteClosed = true;
 
         // Start by looping through the SQL statement.
-        for (int nextIndex = 1, seekIndex = 0; seekIndex < sourceSql.length(); seekIndex++) {
+        for (int nextIndex = 1, seekIndex = 0; seekIndex < sql.length(); seekIndex++) {
 
             boolean match = false;
-            char currentChar = sourceSql.charAt(seekIndex);
+            char currentChar = sql.charAt(seekIndex);
 
             if (isSingleQuote(currentChar)) {
                 singleQuoteClosed = !singleQuoteClosed;
@@ -59,13 +54,13 @@ public class StreamingSqlParser extends AbstractSqlParser implements SqlParser {
                     int identifierStart = seekIndex + 1;
                     int identifierEnd = identifierStart;
 
-                    while (sourceSql.length() > identifierEnd
-                            && Character.isJavaIdentifierPart(sourceSql.charAt(identifierEnd))) {
+                    while (sql.length() > identifierEnd
+                            && Character.isJavaIdentifierPart(sql.charAt(identifierEnd))) {
                         identifierEnd++;
                     }
 
                     // We found an identifier, now we need to determine if its actually valid.
-                    String identifier = sourceSql.substring(identifierStart, identifierEnd);
+                    String identifier = sql.substring(identifierStart, identifierEnd);
 
                     Optional<SqlParameter> optionalParameter = sqlParameterProvider.findParameter(identifier);
 
@@ -100,7 +95,7 @@ public class StreamingSqlParser extends AbstractSqlParser implements SqlParser {
 
         }
 
-        return new SqlQueryMetaData(sourceSql, targetSql.toString(), sqlParameterProvider);
+        return new SqlQueryMetaData(targetSql.toString(), sqlParameterProvider);
     }
 
 

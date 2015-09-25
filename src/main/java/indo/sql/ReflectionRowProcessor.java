@@ -21,14 +21,14 @@ import indo.jdbc.JdbcException;
 import indo.jdbc.ResultSetMetaDatas;
 import indo.jdbc.ResultSets;
 import indo.util.Reflect;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
+
+import static indo.log.Logs.debug;
 
 /**
  * A {@link RowProcessor} implementation that uses reflection to map a row's columns to properties on a POJO
@@ -38,7 +38,7 @@ import java.util.stream.IntStream;
  * @see MappingStrategy
  */
 public class ReflectionRowProcessor<T> implements RowProcessor<T> {
-    private static final Logger log = LoggerFactory.getLogger(ReflectionRowProcessor.class);
+
     private Class<T> targetType;
 
     public ReflectionRowProcessor(Class<T> targetType) {
@@ -97,7 +97,7 @@ public class ReflectionRowProcessor<T> implements RowProcessor<T> {
                         if (isExceptionThrownWhenColumnHasNoMatch()) {
                             throw new JdbcException(message);
                         } else {
-                            log.debug(message);
+                            debug(this, message);
                         }
                     }
                 });

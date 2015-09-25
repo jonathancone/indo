@@ -17,8 +17,6 @@
 package indo.sql;
 
 import indo.util.Unchecked;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,11 +27,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import static indo.log.Logs.debug;
+
 /**
- * Created by jcone on 9/14/15.
+ * @author Jonathan Cone
  */
 public class SqlRunner implements SqlOperations {
-    private static final Logger log = LoggerFactory.getLogger(SqlRunner.class);
     private SqlParser sqlParser;
 
     public SqlRunner(SqlParser sqlParser) {
@@ -70,7 +69,11 @@ public class SqlRunner implements SqlOperations {
 
         SqlQueryMetaData metaData = sqlParser.parse(sql, parameters);
 
-        try (PreparedStatement ps = connection.prepareStatement(metaData.getParsedSql())) {
+        String parsedSql = metaData.getParsedSql();
+
+        debug(this, "Preparing statement - %s", parsedSql);
+
+        try (PreparedStatement ps = connection.prepareStatement(parsedSql)) {
 
             for (SqlParameter sqlParameter : metaData.getSqlParameterProvider()) {
                 for (Integer index : sqlParameter.getIndexes()) {

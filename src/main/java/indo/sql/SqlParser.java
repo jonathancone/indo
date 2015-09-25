@@ -29,21 +29,56 @@ import java.util.Map;
  */
 public interface SqlParser {
 
-    default SqlQueryMetaData parse(String sourceSql, Object... parameters) {
-        return parse(sourceSql, Lists.fromArray(parameters));
+    /**
+     * Construct an instance of {@link SqlQueryMetaData} from an input SQL statement and parameters.
+     *
+     * @param sql        The input SQL statement.
+     * @param parameters An Object array of input parameters.
+     * @return The newly created SqlQueryMetaData instance.
+     */
+    default SqlQueryMetaData parse(String sql, Object[] parameters) {
+        return parse(sql, Lists.fromArray(parameters));
     }
 
-    default SqlQueryMetaData parse(String sourceSql, List<?> parameters) {
-        return parse(sourceSql, SqlParameters.fromList(parameters));
+    /**
+     * Construct an instance of {@link SqlQueryMetaData} from an input SQL statement and parameters.
+     *
+     * @param sql        The input SQL statement.
+     * @param parameters An ordered List of input parameters.
+     * @return The newly created SqlQueryMetaData instance.
+     */
+    default SqlQueryMetaData parse(String sql, List<?> parameters) {
+        return parse(sql, SqlParameters.fromList(parameters));
     }
 
-    default SqlQueryMetaData parse(String sourceSql, Map<String, ?> nameValues) {
-        return parse(sourceSql, SqlParameters.fromMap(nameValues));
+    /**
+     * Construct an instance of {@link SqlQueryMetaData} from an input SQL statement and parameters.
+     *
+     * @param sql        The input SQL statement.
+     * @param nameValues A Map of name-value pair parameters.
+     * @return The newly created SqlQueryMetaData instance.
+     */
+    default SqlQueryMetaData parse(String sql, Map<String, ?> nameValues) {
+        return parse(sql, SqlParameters.fromMap(nameValues));
     }
 
-    default SqlQueryMetaData parse(String sourceSql, Object pojo) {
-        return parse(sourceSql, PojoSqlParameters.fromPojo(pojo));
+    /**
+     * Construct an instance of {@link SqlQueryMetaData} from an input SQL statement and parameters.
+     *
+     * @param sql  The input SQL statement.
+     * @param pojo A POJO whose properties will be used to construct the parameters.
+     * @return The newly created SqlQueryMetaData instance.
+     */
+    default SqlQueryMetaData parse(String sql, Object pojo) {
+        return parse(sql, PojoSqlParameters.fromPojo(pojo));
     }
 
-    SqlQueryMetaData parse(String sourceSql, SqlParameterProvider parameters);
+    /**
+     * Construct an instance of {@link SqlQueryMetaData} from an input SQL statement and parameters.
+     *
+     * @param sql        The input SQL statement.
+     * @param parameters A {@link SqlParameterProvider} instance that will be used to provide the parameters.
+     * @return The newly created SqlQueryMetaData instance.
+     */
+    SqlQueryMetaData parse(String sql, SqlParameterProvider parameters);
 }

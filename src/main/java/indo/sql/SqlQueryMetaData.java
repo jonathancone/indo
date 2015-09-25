@@ -17,29 +17,37 @@
 package indo.sql;
 
 /**
- * Created by jcone on 8/14/15.
+ * This class holds meta-data about a parsed query.  This allows for an input query to be transformed /
+ * parsed into a different form before it is consumed.  This is useful for things like parameter expansion or
+ * parameter replacement.
+ *
+ * @author Jonathan Cone
  */
 public class SqlQueryMetaData {
 
-    private String sourceSql;
+    /**
+     * A SQL statement that has undergone some transformation.
+     */
     private String parsedSql;
 
     private SqlParameterProvider sqlParameterProvider;
 
-    public SqlQueryMetaData(String sourceSql, String parsedSql, SqlParameterProvider sqlParameterProvider) {
-        this.sourceSql = sourceSql;
+
+    public SqlQueryMetaData(String parsedSql, SqlParameterProvider sqlParameterProvider) {
         this.parsedSql = parsedSql;
         this.sqlParameterProvider = sqlParameterProvider;
     }
 
-    public String getSourceSql() {
-        return sourceSql;
-    }
-
+    /**
+     * @return The parsed SQL string.
+     */
     public String getParsedSql() {
         return parsedSql;
     }
 
+    /**
+     * @return An object that is providing the parameters that correspond to the parsed SQL.
+     */
     public SqlParameterProvider getSqlParameterProvider() {
         return sqlParameterProvider;
     }
