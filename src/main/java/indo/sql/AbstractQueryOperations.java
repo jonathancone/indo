@@ -28,7 +28,6 @@ import java.util.Map;
 public abstract class AbstractQueryOperations implements QueryOperations {
 
     private DataSource dataSource;
-    private SqlQueryMetaData sqlQueryMetaData;
     private SqlOperations sqlOperations;
     private Operation operation;
 
@@ -36,7 +35,7 @@ public abstract class AbstractQueryOperations implements QueryOperations {
 
     public AbstractQueryOperations(DataSource dataSource) {
         this.dataSource = dataSource;
-        this.sqlOperations = new SqlRunner();
+        this.sqlOperations = new SqlRunner(new StreamingSqlParser());
         this.operation = Operation.UNKNOWN;
     }
 

@@ -16,10 +16,8 @@
 
 package indo.sql;
 
-import indo.util.Lists;
-
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -28,24 +26,12 @@ import java.util.Optional;
 public class StreamingSqlParser extends AbstractSqlParser implements SqlParser {
 
     @Override
-    public SqlQueryMetaData parse(String sourceSql, Object... parameters) {
-        return parse(sourceSql, Lists.fromArray(parameters));
-    }
-
-    @Override
-    public SqlQueryMetaData parse(String sourceSql, List<?> parameters) {
-        return parse(sourceSql, SqlParameters.fromList(parameters));
-    }
-
-    @Override
-    public SqlQueryMetaData parse(String sourceSql, Map<String, ?> nameValues) {
-        return parse(sourceSql, SqlParameters.fromMap(nameValues));
-    }
-
-    @Override
     public SqlQueryMetaData parse(String sourceSql, SqlParameterProvider sqlParameterProvider) {
 
         StringBuilder targetSql = new StringBuilder(sourceSql.length());
+
+        List<SqlParameter> actualParameters = new ArrayList<>();
+
 
         boolean singleQuoteClosed = true;
         boolean doubleQuoteClosed = true;
@@ -81,7 +67,7 @@ public class StreamingSqlParser extends AbstractSqlParser implements SqlParser {
                     // We found an identifier, now we need to determine if its actually valid.
                     String identifier = sourceSql.substring(identifierStart, identifierEnd);
 
-                    Optional<SqlParameter> optionalParameter = sqlParameterProvider.get(identifier);
+                    Optional<SqlParameter> optionalParameter = sqlParameterProvider.findParameter(identifier);
 
                     if (optionalParameter.isPresent()) {
 

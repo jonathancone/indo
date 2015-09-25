@@ -16,15 +16,34 @@
 
 package indo.sql;
 
+import indo.util.Lists;
+
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Interface that defines parsing operations that may take place on a SQL
+ * statement before its executed.
+ *
+ * @author Jonathan Cone
+ */
 public interface SqlParser {
-    SqlQueryMetaData parse(String sourceSql, Object... parameters);
 
-    SqlQueryMetaData parse(String sourceSql, List<?> parameters);
+    default SqlQueryMetaData parse(String sourceSql, Object... parameters) {
+        return parse(sourceSql, Lists.fromArray(parameters));
+    }
 
-    SqlQueryMetaData parse(String sourceSql, Map<String, ?> parameters);
+    default SqlQueryMetaData parse(String sourceSql, List<?> parameters) {
+        return parse(sourceSql, SqlParameters.fromList(parameters));
+    }
+
+    default SqlQueryMetaData parse(String sourceSql, Map<String, ?> nameValues) {
+        return parse(sourceSql, SqlParameters.fromMap(nameValues));
+    }
+
+    default SqlQueryMetaData parse(String sourceSql, Object pojo) {
+        return parse(sourceSql, PojoSqlParameters.fromPojo(pojo));
+    }
 
     SqlQueryMetaData parse(String sourceSql, SqlParameterProvider parameters);
 }

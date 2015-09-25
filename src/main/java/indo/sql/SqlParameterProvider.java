@@ -32,7 +32,7 @@ public interface SqlParameterProvider extends Iterable<SqlParameter> {
      * @param name The name of the parameter to retrieve.
      * @return The {@link Optional} instance to retrieve.
      */
-    Optional<SqlParameter> get(String name);
+    Optional<SqlParameter> findParameter(String name);
 
     /**
      * Retreive the {@link SqlParameter} associated with the supplied index.
@@ -40,5 +40,5 @@ public interface SqlParameterProvider extends Iterable<SqlParameter> {
      * @param index The index of the parameter to retrieve.
      * @return The {@link Optional} instance to retrieve.
      */
-    Optional<SqlParameter> get(Integer index);
+    Optional<SqlParameter> findParameter(Integer index);
 }

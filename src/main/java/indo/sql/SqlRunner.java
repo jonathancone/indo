@@ -34,6 +34,11 @@ import java.util.function.Supplier;
  */
 public class SqlRunner implements SqlOperations {
     private static final Logger log = LoggerFactory.getLogger(SqlRunner.class);
+    private SqlParser sqlParser;
+
+    public SqlRunner(SqlParser sqlParser) {
+        this.sqlParser = sqlParser;
+    }
 
     public <T> List<T> query(Connection connection,
                              String sql,
@@ -52,20 +57,22 @@ public class SqlRunner implements SqlOperations {
     public <T> List<T> query(Connection connection,
                              String sql,
                              RowProcessor<T> rowProcessor,
-                             SqlParameters sqlParameters) {
-        return query(connection, sql, rowProcessor, ArrayList<T>::new, sqlParameters);
+                             SqlParameterProvider parameters) {
+        return query(connection, sql, rowProcessor, ArrayList<T>::new, parameters);
     }
 
     public <T> List<T> query(Connection connection,
                              String sql,
                              RowProcessor<T> rowProcessor,
                              Supplier<List<T>> resultContainer,
-                             SqlParameters sqlParameters) {
-
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                             SqlParameterProvider parameters) {
 
 
-            for (SqlParameter sqlParameter : sqlParameters) {
+        SqlQueryMetaData metaData = sqlParser.parse(sql, parameters);
+
+        try (PreparedStatement ps = connection.prepareStatement(metaData.getParsedSql())) {
+
+            for (SqlParameter sqlParameter : metaData.getSqlParameterProvider()) {
                 for (Integer index : sqlParameter.getIndexes()) {
 
                     Optional<Integer> type = sqlParameter.type();

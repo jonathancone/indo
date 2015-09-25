@@ -180,7 +180,7 @@ public class StreamingSqlParserTest {
         Set<String> parameterNames = mapParameters.keySet();
 
         for (String parameterName : parameterNames) {
-            Optional<SqlParameter> parameter = sqlParameterProvider.get(parameterName);
+            Optional<SqlParameter> parameter = sqlParameterProvider.findParameter(parameterName);
 
             if (parameter.isPresent()) {
                 SqlParameter sqlParameter = parameter.get();

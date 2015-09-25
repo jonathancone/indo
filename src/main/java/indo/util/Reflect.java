@@ -16,7 +16,10 @@
 
 package indo.util;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Function;
@@ -24,7 +27,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * This class follows the fluent builder pattern to allow working with Java classes via reflection.
+ * This class follows the fluent builder pattern to allow working with Java
+ * classes via reflection.
  *
  * @param <T> The type to reflect upon.
  */
@@ -34,10 +38,9 @@ public class Reflect<T> {
     private static final String SET_PREFIX = "set";
 
     /**
-     * This is a cache of the fields that we're aware of.
-     * WeakHashMap keys have == identity semantics which
-     * allow us to safely key on the class object since it
-     * also has == identity semantics.
+     * This is a cache of the fields that we're aware of. WeakHashMap keys have
+     * == identity semantics which allow us to safely key on the class object
+     * since it also has == identity semantics.
      */
     private static Map<Class<?>, Map<String, Field>> fieldCache =
             Collections.synchronizedMap(new WeakHashMap<>());
@@ -120,7 +123,12 @@ public class Reflect<T> {
     }
 
     public Reflect<T> property(String property, Object value) {
-        return invoke(findSetter(aClass, property, toType(value)[0]), value);
+        Optional<Method> setter = findSetter(aClass, property, toType(value)[0]);
+        if (setter.isPresent()) {
+            return invoke(setter.get(), value);
+        } else {
+            throw new NoSuchMethodError("There is no setter method for property " + property);
+        }
     }
 
     public T getInstance() {
@@ -158,7 +166,12 @@ public class Reflect<T> {
     }
 
     public Reflect<T> get(String property) {
-        return invoke(findGetter(aClass, property));
+        Optional<Method> getter = findGetter(aClass, property);
+        if (getter.isPresent()) {
+            return invoke(getter.get());
+        } else {
+            throw new NoSuchMethodError("There is no getter method for property " + property);
+        }
     }
 
     public Reflect<T> set(String property, Object value) {
@@ -166,7 +179,12 @@ public class Reflect<T> {
     }
 
     public Reflect<T> invoke(String method, Object... values) {
-        return invoke(findMethod(aClass, method, toType(values)), values);
+        Optional<Method> optional = findMethod(aClass, method, toType(values));
+        if (optional.isPresent()) {
+            return invoke(optional.get(), values);
+        } else {
+            throw new NoSuchMethodError("No method " + method + " exists.");
+        }
     }
 
     public Reflect<T> invoke(Method method, Object... values) {
@@ -190,12 +208,12 @@ public class Reflect<T> {
         }
     }
 
-    private Method findMethod(Class<?> searchClass, String targetMethod, Class<?>... targetTypes) {
+    private Optional<Method> findMethod(Class<?> searchClass, String targetMethod, Class<?>... targetTypes) {
 
         Optional<Method> publicMatch = findCompatibleMethod(searchClass.getMethods(), targetMethod, targetTypes);
 
         if (publicMatch.isPresent()) {
-            return publicMatch.get();
+            return publicMatch;
         } else {
             Optional<Method> declaredMatch = findCompatibleMethod(searchClass.getDeclaredMethods(), targetMethod, targetTypes);
 
@@ -203,7 +221,7 @@ public class Reflect<T> {
                 if (!declaredMatch.get().isAccessible()) {
                     declaredMatch.get().setAccessible(true);
                 }
-                return declaredMatch.get();
+                return declaredMatch;
             } else if (Objects.nonNull(targetTypes) && targetTypes.length == 1) {
                 // If we take a single parameter, lets introspect the type and see if
                 // we can coerce it to a primitive.
@@ -241,15 +259,23 @@ public class Reflect<T> {
                 .findFirst();
     }
 
-    private Method findSetter(Class<?> aClass, String property, Class<?> parameter) {
+    public Optional<Method> findSetter(String property, Object value) {
+        return findSetter(aClass, property, toType(value)[0]);
+    }
+
+    private Optional<Method> findSetter(Class<?> aClass, String property, Class<?> parameter) {
         return findMethod(aClass, SET_PREFIX + Strings.wordCase(property), parameter);
     }
 
-    private Method findGetter(Class<?> aClass, String property) {
+    public Optional<Method> findGetter(String property) {
+        return findGetter(aClass, property);
+    }
+
+    private Optional<Method> findGetter(Class<?> aClass, String property) {
         String formatted = Strings.wordCase(property);
 
-        Method method = findMethod(aClass, GET_PREFIX + formatted);
+        Optional<Method> method = findMethod(aClass, GET_PREFIX + formatted);
 
-        return method != null ? method : findMethod(aClass, IS_PREFIX + formatted);
+        return method.isPresent() ? method : findMethod(aClass, IS_PREFIX + formatted);
     }
 }

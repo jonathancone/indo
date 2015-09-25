@@ -47,6 +47,13 @@ public class SqlParameter {
 
     private SortedSet<Integer> indexes;
 
+    public SqlParameter(SqlParameter sqlParameter) {
+        this.name = sqlParameter.name;
+        this.value = sqlParameter.value;
+        this.type = sqlParameter.type;
+        this.indexes = new TreeSet<>(indexes);
+    }
+
     public SqlParameter(String name, Object value) {
         this.name = name;
         this.value = value;
