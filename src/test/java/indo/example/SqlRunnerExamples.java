@@ -93,8 +93,8 @@ public class SqlRunnerExamples {
                                 "lastName", "Johnson"
                         ));
 
-        // List results by binding named parameters from a custom SqlParameterProvider, in
-        // this case a POJO.
+        // List results by binding named parameters from a custom
+        // SqlParameterProvider, in this case a POJO.
         Employee employeeLike = new Employee();
         employeeLike.setLastName("Johnson");
         employeeLike.setSalary(BigDecimal.valueOf(75_000.00));
