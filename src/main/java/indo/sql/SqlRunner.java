@@ -16,8 +16,10 @@
 
 package indo.sql;
 
+import indo.jdbc.DataSources;
 import indo.util.Unchecked;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,18 +29,50 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import static indo.log.Logs.debug;
+import static indo.log.Logger.debug;
 
 /**
  * @author Jonathan Cone
  */
 public class SqlRunner implements SqlOperations {
+    private DataSource dataSource;
     private SqlParser sqlParser;
 
-    public SqlRunner(SqlParser sqlParser) {
+    public SqlRunner(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public SqlRunner(DataSource dataSource, SqlParser sqlParser) {
+        this.dataSource = dataSource;
         this.sqlParser = sqlParser;
     }
 
+    public <T> List<T> query(String sql,
+                             Class<T> type,
+                             Object... parameters) {
+        return query(DataSources.getConnection(dataSource), sql, type, parameters);
+    }
+
+    public <T> List<T> query(String sql,
+                             RowProcessor<T> rowProcessor,
+                             Object... parameters) {
+        return query(DataSources.getConnection(dataSource), sql, rowProcessor, parameters);
+    }
+
+    public <T> List<T> query(String sql,
+                             RowProcessor<T> rowProcessor,
+                             SqlParameterProvider parameters) {
+        return query(DataSources.getConnection(dataSource), sql, rowProcessor, parameters);
+    }
+
+    public <T> List<T> query(String sql,
+                             RowProcessor<T> rowProcessor,
+                             Supplier<List<T>> resultContainer,
+                             SqlParameterProvider parameters) {
+        return query(DataSources.getConnection(dataSource), sql, rowProcessor, resultContainer, parameters);
+    }
+
+    @Override
     public <T> List<T> query(Connection connection,
                              String sql,
                              Class<T> type,
@@ -46,6 +80,7 @@ public class SqlRunner implements SqlOperations {
         return query(connection, sql, (rs) -> new ReflectionRowProcessor<>(type).map(rs), SqlParameters.fromArray(parameters));
     }
 
+    @Override
     public <T> List<T> query(Connection connection,
                              String sql,
                              RowProcessor<T> rowProcessor,
@@ -53,6 +88,7 @@ public class SqlRunner implements SqlOperations {
         return query(connection, sql, rowProcessor, SqlParameters.fromArray(parameters));
     }
 
+    @Override
     public <T> List<T> query(Connection connection,
                              String sql,
                              RowProcessor<T> rowProcessor,
@@ -60,6 +96,7 @@ public class SqlRunner implements SqlOperations {
         return query(connection, sql, rowProcessor, ArrayList<T>::new, parameters);
     }
 
+    @Override
     public <T> List<T> query(Connection connection,
                              String sql,
                              RowProcessor<T> rowProcessor,

@@ -22,6 +22,10 @@ import java.util.Optional;
  * @author Jonathan Cone
  */
 public class StreamingSqlParser extends AbstractSqlParser implements SqlParser {
+    public static final StreamingSqlParser INSTANCE = new StreamingSqlParser();
+
+    private StreamingSqlParser() {
+    }
 
     @Override
     public SqlQueryMetaData parse(String sql, SqlParameterProvider sqlParameterProvider) {

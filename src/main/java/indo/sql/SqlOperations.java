@@ -16,8 +16,64 @@
 
 package indo.sql;
 
+import indo.jdbc.DataSources;
+
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.util.List;
+import java.util.function.Supplier;
+
 /**
- * Created by jcone on 8/20/15.
+ * @author Jonathan Cone
  */
 public interface SqlOperations {
+    <T> List<T> query(Connection connection,
+                      String sql,
+                      Class<T> type,
+                      Object... parameters);
+
+    <T> List<T> query(Connection connection,
+                      String sql,
+                      RowProcessor<T> rowProcessor,
+                      Object... parameters);
+
+    <T> List<T> query(Connection connection,
+                      String sql,
+                      RowProcessor<T> rowProcessor,
+                      SqlParameterProvider parameters);
+
+    <T> List<T> query(Connection connection,
+                      String sql,
+                      RowProcessor<T> rowProcessor,
+                      Supplier<List<T>> resultContainer,
+                      SqlParameterProvider parameters);
+
+    default <T> List<T> query(DataSource dataSource,
+                              String sql,
+                              Class<T> type,
+                              Object... parameters) {
+        return query(DataSources.getConnection(dataSource), sql, type, parameters);
+    }
+
+    default <T> List<T> query(DataSource dataSource,
+                              String sql,
+                              RowProcessor<T> rowProcessor,
+                              Object... parameters) {
+        return query(DataSources.getConnection(dataSource), sql, rowProcessor, parameters);
+    }
+
+    default <T> List<T> query(DataSource dataSource,
+                              String sql,
+                              RowProcessor<T> rowProcessor,
+                              SqlParameterProvider parameters) {
+        return query(DataSources.getConnection(dataSource), sql, rowProcessor, parameters);
+    }
+
+    default <T> List<T> query(DataSource dataSource,
+                              String sql,
+                              RowProcessor<T> rowProcessor,
+                              Supplier<List<T>> resultContainer,
+                              SqlParameterProvider parameters) {
+        return query(DataSources.getConnection(dataSource), sql, rowProcessor, resultContainer, parameters);
+    }
 }

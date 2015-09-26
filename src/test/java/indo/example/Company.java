@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package indo.sql.test;
+package indo.example;
 
 import java.util.List;
 

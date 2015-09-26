@@ -32,8 +32,8 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import static indo.log.Logs.debug;
-import static indo.log.Logs.info;
+import static indo.log.Logger.debug;
+import static indo.log.Logger.info;
 
 /**
  * Created by jcone on 8/16/15.

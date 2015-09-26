@@ -16,7 +16,7 @@
 
 package indo.sql;
 
-import indo.sql.test.Employee;
+import indo.example.Employee;
 import indo.util.Reflect;
 import org.junit.Test;
 import org.junit.runner.RunWith;

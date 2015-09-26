@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package indo.sql.test;
+package indo.example;
 
 import indo.sql.Query;
 
@@ -22,13 +22,11 @@ import javax.sql.DataSource;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Created by jcone on 8/13/15.
  */
-public class Examples {
+public class QueryExamples {
 
     private DataSource dataSource = null;
 

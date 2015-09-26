@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
-import static indo.log.Logs.debug;
+import static indo.log.Logger.debug;
 
 /**
  * A {@link RowProcessor} implementation that uses reflection to map a row's columns to properties on a POJO
