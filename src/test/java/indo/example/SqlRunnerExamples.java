@@ -19,6 +19,8 @@ package indo.example;
 import indo.sql.SqlRunner;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Examples of how to use the {@link SqlRunner} API.
@@ -30,5 +32,19 @@ public class SqlRunnerExamples {
 
     public void queryExamples() {
         SqlRunner runner = new SqlRunner(dataSource);
+
+        List<Employee> employees =
+                runner.query("    SELECT          " +
+                                "   e.employeeId, " +
+                                "   e.firstName,  " +
+                                "   e.lastName    " +
+                                " FROM            " +
+                                "   Employee e    " +
+                                " WHERE           " +
+                                "   e.salary > ?  ",
+                        Employee.class,
+                        BigDecimal.valueOf(75_000.00));
+
+
     }
 }

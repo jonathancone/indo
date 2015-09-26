@@ -22,9 +22,13 @@ import java.util.Optional;
  * @author Jonathan Cone
  */
 public class StreamingSqlParser extends AbstractSqlParser implements SqlParser {
-    public static final StreamingSqlParser INSTANCE = new StreamingSqlParser();
+    private static final StreamingSqlParser INSTANCE = new StreamingSqlParser();
 
     private StreamingSqlParser() {
+    }
+
+    public static StreamingSqlParser instance() {
+        return INSTANCE;
     }
 
     @Override

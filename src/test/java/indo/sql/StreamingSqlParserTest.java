@@ -42,7 +42,7 @@ public class StreamingSqlParserTest {
     @Parameterized.Parameters(name = "{index}: {1}")
     public static Collection<Object[]> statements() {
         return Arrays
-                .asList(new Object[][]{
+                .asList(new Object[][] {
                         {
                                 "SELECT * FROM table WHERE column = :column",
                                 "SELECT * FROM table WHERE column = ?",
@@ -151,17 +151,17 @@ public class StreamingSqlParserTest {
                         {
                                 "SELECT * FROM table WHERE column IN (:column1) AND column IN (:column2)",
                                 "SELECT * FROM table WHERE column IN (?) AND column IN (?,?,?,?)",
-                                Maps.newHashMap("column1", 1, "column2", new int[]{2, 3, 4, 5})
+                                Maps.newHashMap("column1", 1, "column2", new int[] {2, 3, 4, 5})
                         },
                         {
                                 "SELECT * FROM table WHERE column IN (:column1) AND column IN (:column2)",
                                 "SELECT * FROM table WHERE column IN (?,?,?,?,?,?,?) AND column IN (?,?,?,?)",
-                                Maps.newHashMap("column1", new int[]{1, 2, 3, 4, 5, 6, 7}, "column2", new int[]{8, 9, 10, 11})
+                                Maps.newHashMap("column1", new int[] {1, 2, 3, 4, 5, 6, 7}, "column2", new int[] {8, 9, 10, 11})
                         },
                         {
                                 "SELECT * FROM table WHERE column IN (:column1) AND column IN (:column2)",
                                 "SELECT * FROM table WHERE column IN (?,?,?,?,?,?,?) AND column IN (?)",
-                                Maps.newHashMap("column1", new int[]{1, 2, 3, 4, 5, 6, 7}, "column2", new int[]{8})
+                                Maps.newHashMap("column1", new int[] {1, 2, 3, 4, 5, 6, 7}, "column2", new int[] {8})
                         },
 
                 });
@@ -169,7 +169,7 @@ public class StreamingSqlParserTest {
 
     @Test
     public void testParseWithParameterProvider() {
-        StreamingSqlParser parser = new StreamingSqlParser();
+        StreamingSqlParser parser = StreamingSqlParser.instance();
 
         SqlQueryMetaData meta = parser.parse(original, mapParameters);
 
