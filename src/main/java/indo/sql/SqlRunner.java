@@ -26,6 +26,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -47,61 +48,89 @@ public class SqlRunner implements SqlOperations {
         this.sqlParser = sqlParser;
     }
 
-    public <T> List<T> query(String sql,
-                             Class<T> type,
-                             Object... parameters) {
-        return query(DataSources.getConnection(dataSource), sql, type, parameters);
+    public <T> List<T> list(String sql,
+                            Class<T> type,
+                            Object... parameters) {
+        return list(DataSources.getConnection(dataSource), sql, type, parameters);
     }
 
-    public <T> List<T> query(String sql,
-                             RowProcessor<T> rowProcessor,
-                             Object... parameters) {
-        return query(DataSources.getConnection(dataSource), sql, rowProcessor, parameters);
+    public <T> List<T> list(String sql,
+                            Class<T> type,
+                            Map<String, ?> parameters) {
+        return list(DataSources.getConnection(dataSource), sql, type, parameters);
     }
 
-    public <T> List<T> query(String sql,
-                             RowProcessor<T> rowProcessor,
-                             SqlParameterProvider parameters) {
-        return query(DataSources.getConnection(dataSource), sql, rowProcessor, parameters);
+    public <T> List<T> list(String sql,
+                            RowProcessor<T> rowProcessor,
+                            Object... parameters) {
+        return list(DataSources.getConnection(dataSource), sql, rowProcessor, parameters);
     }
 
-    public <T> List<T> query(String sql,
-                             RowProcessor<T> rowProcessor,
-                             Supplier<List<T>> resultContainer,
-                             SqlParameterProvider parameters) {
-        return query(DataSources.getConnection(dataSource), sql, rowProcessor, resultContainer, parameters);
+    public <T> List<T> list(String sql,
+                            RowProcessor<T> rowProcessor,
+                            Map<String, ?> parameters) {
+        return list(DataSources.getConnection(dataSource), sql, rowProcessor, parameters);
     }
 
-    @Override
-    public <T> List<T> query(Connection connection,
-                             String sql,
-                             Class<T> type,
-                             Object... parameters) {
-        return query(connection, sql, (rs) -> new ReflectionRowProcessor<>(type).map(rs), SqlParameters.fromArray(parameters));
+    public <T> List<T> list(String sql,
+                            RowProcessor<T> rowProcessor,
+                            SqlParameterProvider parameters) {
+        return list(DataSources.getConnection(dataSource), sql, rowProcessor, parameters);
     }
 
-    @Override
-    public <T> List<T> query(Connection connection,
-                             String sql,
-                             RowProcessor<T> rowProcessor,
-                             Object... parameters) {
-        return query(connection, sql, rowProcessor, SqlParameters.fromArray(parameters));
+    public <T> List<T> list(String sql,
+                            RowProcessor<T> rowProcessor,
+                            Supplier<List<T>> resultContainer,
+                            SqlParameterProvider parameters) {
+        return list(DataSources.getConnection(dataSource), sql, rowProcessor, resultContainer, parameters);
     }
 
     @Override
-    public <T> List<T> query(Connection connection,
-                             String sql,
-                             RowProcessor<T> rowProcessor,
-                             SqlParameterProvider parameters) {
-        return query(connection, sql, rowProcessor, ArrayList<T>::new, parameters);
+    public <T> List<T> list(Connection connection,
+                            String sql,
+                            Class<T> type,
+                            Object... parameters) {
+        return list(connection, sql, (rs) -> new ReflectionRowProcessor<>(type).map(rs), SqlParameters.fromArray(parameters));
     }
 
     @Override
-    public <T> List<T> query(Connection connection,
-                             String sql,
-                             RowProcessor<T> rowProcessor,
-                             Supplier<List<T>> resultContainer,
-                             SqlParameterProvider parameters) {
+    public <T> List<T> list(Connection connection,
+                            String sql,
+                            Class<T> type,
+                            Map<String, ?> parameters) {
+        return list(connection, sql, (rs) -> new ReflectionRowProcessor<>(type).map(rs), SqlParameters.fromMap(parameters));
+    }
+
+    @Override
+    public <T> List<T> list(Connection connection,
+                            String sql,
+                            RowProcessor<T> rowProcessor,
+                            Object... parameters) {
+        return list(connection, sql, rowProcessor, SqlParameters.fromArray(parameters));
+    }
+
+    @Override
+    public <T> List<T> list(Connection connection,
+                            String sql,
+                            RowProcessor<T> rowProcessor,
+                            Map<String, ?> parameters) {
+        return list(connection, sql, rowProcessor, SqlParameters.fromMap(parameters));
+    }
+
+    @Override
+    public <T> List<T> list(Connection connection,
+                            String sql,
+                            RowProcessor<T> rowProcessor,
+                            SqlParameterProvider parameters) {
+        return list(connection, sql, rowProcessor, ArrayList<T>::new, parameters);
+    }
+
+    @Override
+    public <T> List<T> list(Connection connection,
+                            String sql,
+                            RowProcessor<T> rowProcessor,
+                            Supplier<List<T>> resultContainer,
+                            SqlParameterProvider parameters) {
 
 
         SqlQueryMetaData metaData = sqlParser.parse(sql, parameters);

@@ -35,7 +35,12 @@ public class PojoSqlParameters<T> implements SqlParameterProvider {
     private Map<String, SqlParameter> parameters;
 
 
-    private PojoSqlParameters(T instance) {
+    /**
+     * Package-private constructor.
+     *
+     * @param instance The object instance to retrieve the parameters from using reflection/
+     */
+    PojoSqlParameters(T instance) {
         this.reflect = Reflect.on(instance);
         this.parameters = new HashMap<>();
     }

@@ -126,6 +126,17 @@ public class SqlParameters implements SqlParameterProvider {
     }
 
     /**
+     * Create a new instance of this class backed by the supplied object.
+     *
+     * @param t   The target object used to back the {@link SqlParameterProvider}.
+     * @param <T> The target object type.
+     * @return The newly created instance.
+     */
+    public static <T> PojoSqlParameters<T> from(T t) {
+        return new PojoSqlParameters<>(t);
+    }
+
+    /**
      * Create an intsance from a {@link Collection} of other parameters. The
      * original Collection is not retained.
      *

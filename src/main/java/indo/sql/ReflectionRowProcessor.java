@@ -18,8 +18,6 @@ package indo.sql;
 
 
 import indo.jdbc.JdbcException;
-import indo.jdbc.ResultSetMetaDatas;
-import indo.jdbc.ResultSets;
 import indo.util.Reflect;
 
 import java.sql.ResultSet;
@@ -28,6 +26,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
+import static indo.jdbc.ResultSetMetaDatas.getColumnCount;
+import static indo.jdbc.ResultSetMetaDatas.getColumnName;
+import static indo.jdbc.ResultSets.getMetaData;
+import static indo.jdbc.ResultSets.getObject;
 import static indo.log.Logger.debug;
 
 /**
@@ -71,11 +73,11 @@ public class ReflectionRowProcessor<T> implements RowProcessor<T> {
         // Create a new instance of the target type.
         T targetObject = Reflect.on(targetType).newInstanceIfAbsent().getInstance();
 
-        ResultSetMetaData rsm = ResultSets.getMetaData(rs);
+        ResultSetMetaData rsm = getMetaData(rs);
 
         // Stream through each column to retrieve its name.
-        IntStream.range(0, ResultSetMetaDatas.getColumnCount(rsm))
-                .mapToObj(index -> ResultSetMetaDatas.getColumnName(rsm, index))
+        IntStream.range(0, getColumnCount(rsm))
+                .mapToObj(index -> getColumnName(rsm, index))
                 .forEach(originalColumn -> {
 
                     // Stream through each strategy to attempt to find a matching column based on the
@@ -83,7 +85,7 @@ public class ReflectionRowProcessor<T> implements RowProcessor<T> {
                     // it was mapped to immediately.
                     Optional<String> matchedField =
                             getMappingStrategies().stream()
-                                    .map(s -> s.findMatch(originalColumn, ResultSets.getObject(rs, originalColumn), targetObject))
+                                    .map(s -> s.findMatch(originalColumn, getObject(rs, originalColumn), targetObject))
                                     .filter(Optional::isPresent)
                                     .map(Optional::get)
                                     .findFirst();
