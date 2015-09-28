@@ -76,7 +76,7 @@ public class ReflectionRowProcessor<T> implements RowProcessor<T> {
         ResultSetMetaData rsm = getMetaData(rs);
 
         // Stream through each column to retrieve its name.
-        IntStream.range(0, getColumnCount(rsm))
+        IntStream.range(1, getColumnCount(rsm))
                 .mapToObj(index -> getColumnName(rsm, index))
                 .forEach(originalColumn -> {
 

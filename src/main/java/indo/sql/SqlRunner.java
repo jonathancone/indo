@@ -40,7 +40,7 @@ public class SqlRunner implements SqlOperations {
     private SqlParser sqlParser;
 
     public SqlRunner(DataSource dataSource) {
-        this.dataSource = dataSource;
+        this(dataSource, StreamingSqlParser.instance());
     }
 
     public SqlRunner(DataSource dataSource, SqlParser sqlParser) {

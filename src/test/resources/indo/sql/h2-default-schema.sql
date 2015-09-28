@@ -24,13 +24,13 @@ CREATE TABLE department (
   department_id IDENTITY PRIMARY KEY,
   title         VARCHAR(255),
   description   VARCHAR(255),
-  manager_id    IDENTITY,
+  manager_id    BIGINT,
   FOREIGN KEY (manager_id) REFERENCES employee (employee_id)
 );
 
 CREATE TABLE manager (
-  employee_id   IDENTITY,
-  department_id IDENTITY,
+  employee_id   BIGINT,
+  department_id BIGINT,
   PRIMARY KEY (employee_id, department_id)
 );
 
@@ -43,10 +43,10 @@ CREATE TABLE shift (
 );
 
 CREATE TABLE employee_shift (
-  shift_id    IDENTITY,
-  employee_id IDENTITY,
+  shift_id    BIGINT,
+  employee_id BIGINT,
   FOREIGN KEY (shift_id) REFERENCES shift (shift_id),
-  FOREIGN KEY (employee_id) REFERENCES shift (employee_id),
+  FOREIGN KEY (employee_id) REFERENCES employee (employee_id),
   PRIMARY KEY (shift_id, employee_id)
 );
 
