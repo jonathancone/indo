@@ -16,35 +16,45 @@
 
 package indo.sql;
 
+import indo.example.Employee;
 import org.junit.Test;
 
+import java.util.List;
+
 /**
- * Created by jcone on 9/18/15.
+ * Unit tests for {@link SqlRunner}.
+ *
+ * @author Jonathan Cone
  */
-public class SqlRunnerTest {
+public class SqlRunnerTest extends AbstractDbUnitTest {
 
     @Test
-    public void testQuery() throws Exception {
+    public void testQuery() {
+        SqlRunner runner = new SqlRunner(ds());
+
+        List<Employee> employees = runner.list("SELECT * FROM Employee", Employee.class);
+
+        employees.stream().forEach(e -> assertEqualsRowValue("Employee", "employeeId", 1, e));
 
     }
 
     @Test
-    public void testQuery1() throws Exception {
+    public void testQuery1() {
 
     }
 
     @Test
-    public void testQuery2() throws Exception {
+    public void testQuery2() {
 
     }
 
     @Test
-    public void testQuery3() throws Exception {
+    public void testQuery3() {
 
     }
 
     @Test
-    public void testQuery4() throws Exception {
+    public void testQuery4() {
 
     }
 }

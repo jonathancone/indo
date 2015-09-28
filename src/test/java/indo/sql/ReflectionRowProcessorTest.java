@@ -27,13 +27,17 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by JCone on 9/16/2015.
+ * Unit tests for {@link ReflectionRowProcessor}.
+ *
+ * @author Jonathan Cone
  */
 @RunWith(Parameterized.class)
 public class ReflectionRowProcessorTest {
@@ -61,42 +65,49 @@ public class ReflectionRowProcessorTest {
                         new String[]{"employeeId", "firstName", "lastName", "salary"},
                         new String[]{"employeeId", "firstName", "lastName", "salary"},
                         new Object[]{0, "firstName", "lastName", BigDecimal.valueOf(33.33)},
-                        new MappingStrategy[] {MappingStrategy.EXCLUSIVE}
+                        new MappingStrategy[]{MappingStrategy.EXCLUSIVE}
                 },
                 {
                         Employee.class,
                         new String[]{"employeeId", "firstName", "lastName", "salary"},
                         new String[]{"EmployeeId", "FirstName", "LastName", "Salary"},
                         new Object[]{0, "firstName", "lastName", BigDecimal.valueOf(33.33)},
-                        new MappingStrategy[] {MappingStrategy.CASE_INSENSITIVE}
+                        new MappingStrategy[]{MappingStrategy.CASE_INSENSITIVE}
                 },
                 {
                         Employee.class,
                         new String[]{"employeeId", "firstName", "lastName", "salary"},
                         new String[]{"employeeId", "firstname", "lastname", "salary"},
                         new Object[]{0, "firstName", "lastName", BigDecimal.valueOf(33.33)},
-                        new MappingStrategy[] {MappingStrategy.CASE_INSENSITIVE}
+                        new MappingStrategy[]{MappingStrategy.CASE_INSENSITIVE}
                 },
                 {
                         Employee.class,
                         new String[]{"employeeId", "firstName", "lastName", "salary"},
                         new String[]{"EMPLOYEEID", "FIRSTNAME", "LASTNAME", "SALARY"},
                         new Object[]{0, "firstName", "lastName", BigDecimal.valueOf(33.33)},
-                        new MappingStrategy[] {MappingStrategy.CASE_INSENSITIVE}
+                        new MappingStrategy[]{MappingStrategy.CASE_INSENSITIVE}
                 },
                 {
                         Employee.class,
                         new String[]{"employeeId", "firstName", "lastName", "salary"},
                         new String[]{"employee_id", "first_name", "last_name", "salary"},
                         new Object[]{0, "firstName", "lastName", BigDecimal.valueOf(33.33)},
-                        new MappingStrategy[] {MappingStrategy.INCLUSIVE}
+                        new MappingStrategy[]{MappingStrategy.INCLUSIVE}
                 },
                 {
                         Employee.class,
                         new String[]{"employeeId", "firstName", "lastName", "salary"},
                         new String[]{"EMPLOYEE_ID", "FIRST_NAME", "LAST_NAME", "SALARY"},
                         new Object[]{0, "firstName", "lastName", BigDecimal.valueOf(33.33)},
-                        new MappingStrategy[] {MappingStrategy.INCLUSIVE}
+                        new MappingStrategy[]{MappingStrategy.INCLUSIVE}
+                },
+                {
+                        Employee.class,
+                        new String[]{"employeeId", "firstName", "lastName", "salary"},
+                        new String[]{"EMPLOYEE_ID", "FIRST_NAME", "LAST_NAME", "SALARY"},
+                        new Object[]{null, "firstName", "lastName", BigDecimal.valueOf(33.33)},
+                        new MappingStrategy[]{MappingStrategy.INCLUSIVE}
                 }
         });
     }
@@ -124,9 +135,17 @@ public class ReflectionRowProcessorTest {
         };
 
         Object result = rowProcessor.map(mockResultSet);
+        Reflect<Object> reflect = Reflect.on(result);
 
         for (int i = 0; i < columns.length; i++) {
-            assertEquals(values[i], Reflect.on(result).property(properties[i]).get());
+
+            Optional<Object> property = reflect.property(properties[i]);
+
+            if (property.isPresent()) {
+                assertEquals(values[i], property.get());
+            } else {
+                assertNull(values[i]);
+            }
         }
 
     }

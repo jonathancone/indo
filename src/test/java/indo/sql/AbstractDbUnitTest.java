@@ -42,7 +42,7 @@ public class AbstractDbUnitTest {
     @Parameterized.Parameters
     public static List<Object[]> dataSourceConfigurations() {
         Object[][] configs = new Object[][]{
-                {new H2DbUnitConfigurer("sa", "sa", "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=true", "default-schema.sql", "org.h2.Driver")}
+                {new H2DbUnitConfigurer("sa", "sa", "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=true", "h2-default-schema.sql", "org.h2.Driver")}
         };
 
         return Arrays.asList(configs);
@@ -75,11 +75,15 @@ public class AbstractDbUnitTest {
         return Strings.before(testName.getMethodName(), '[');
     }
 
+    protected DataSource ds() {
+        return getDataSource();
+    }
+
     protected DataSource getDataSource() {
         return dbUnitConfigurer.getDataSource();
     }
 
-    protected void assertRowValue(String expectedTable, String expectedColumn, int expectedRow, Object actual) {
+    protected void assertEqualsRowValue(String expectedTable, String expectedColumn, int expectedRow, Object actual) {
         Object expected = dbUnitConfigurer.getValue(expectedTable, expectedColumn, expectedRow);
         Assert.assertEquals(expected, actual);
     }
