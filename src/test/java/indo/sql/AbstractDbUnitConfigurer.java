@@ -16,11 +16,15 @@
 
 package indo.sql;
 
+import indo.jdbc.DataSources;
 import indo.util.Unchecked;
-import org.dbunit.Assertion;
+import org.dbunit.DefaultDatabaseTester;
+import org.dbunit.DefaultOperationListener;
 import org.dbunit.IDatabaseTester;
-import org.dbunit.JdbcDatabaseTester;
+import org.dbunit.IOperationListener;
 import org.dbunit.database.DatabaseConfig;
+import org.dbunit.database.DatabaseConnection;
+import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ReplacementDataSet;
 import org.dbunit.dataset.datatype.DefaultDataTypeFactory;
@@ -31,17 +35,21 @@ import javax.sql.DataSource;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Connection;
 
 import static indo.log.Logger.debug;
 import static indo.log.Logger.info;
+import static org.dbunit.Assertion.assertEquals;
 
 /**
- * Created by jcone on 8/16/15.
+ * This base class can be used to implement specific database configurations for use with DBUnit
+ * tests.
+ *
+ * @author Jonathan Cone
  */
 public abstract class AbstractDbUnitConfigurer {
 
     private DataSource dataSource;
-
     private IDatabaseTester databaseTester;
 
     private String driver;
@@ -50,14 +58,21 @@ public abstract class AbstractDbUnitConfigurer {
     private String url;
     private String user;
 
-    public AbstractDbUnitConfigurer(String user, String password, String url, String schemaSetupSql, String driver) {
+    private Boolean caseSensitiveTableNames;
+
+    public AbstractDbUnitConfigurer(String user, String password, String url, String schemaSetupSql, String driver, Boolean caseSensitiveTableNames) {
         this.user = user;
         this.password = password;
         this.url = url;
         this.schemaSetupSql = schemaSetupSql;
         this.driver = driver;
         this.dataSource = createDataSource();
+        this.caseSensitiveTableNames = caseSensitiveTableNames;
         createSchema();
+    }
+
+    protected Boolean isCaseSensitiveTableNames() {
+        return caseSensitiveTableNames;
     }
 
     protected abstract DataSource doCreateDataSource() throws Exception;
@@ -93,35 +108,72 @@ public abstract class AbstractDbUnitConfigurer {
         return dataSet;
     }
 
-    protected void populateSchema(String dataSetName) {
-        try {
-            databaseTester = new JdbcDatabaseTester(getDriver(), getUrl(), getUser(), getPassword());
+    protected void populateSchema(String classDataSetName, String methodDataSetName) {
+        // Attempt to populate the schema with a data set specific to this method.
+        boolean populated = populateSchema(methodDataSetName);
 
-            DatabaseConfig config = databaseTester.getConnection().getConfig();
-            config.setProperty(DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, Boolean.TRUE);
+        // Only populate the schema with the class level data set if a method-specific
+        // override didn't exist.
+        if (!populated) {
+            populateSchema(classDataSetName);
+        }
+    }
+
+    protected boolean populateSchema(String dataSetName) {
+        boolean populated = false;
+        try {
+            ReplacementDataSet dataSet = createDataSet(dataSetName);
+
+            IDatabaseConnection connection = new DatabaseConnection(getConnection());
+
+            databaseTester = new DefaultDatabaseTester(connection);
+
+            DatabaseConfig config = connection.getConfig();
+
+            config.setProperty(DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, isCaseSensitiveTableNames());
             config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, getDataTypeFactory());
 
             databaseTester.setSetUpOperation(DatabaseOperation.CLEAN_INSERT);
-            databaseTester.setDataSet(createDataSet(dataSetName));
+            databaseTester.setDataSet(dataSet);
+            databaseTester.setOperationListener(IOperationListener.NO_OP_OPERATION_LISTENER);
             databaseTester.onSetup();
+
+            populated = true;
         } catch (MalformedURLException m) {
             debug(this, "Skipping schema population since %s was not found.", dataSetName);
         } catch (Exception e) {
             throw Unchecked.exception(e);
         }
+        return populated;
     }
 
-    protected void assertSchema(String dataSetName) {
+    protected void assertSchema(String classDataSetName, String methodDataSetName) {
+        boolean populated = assertSchema(methodDataSetName);
+
+        if (!populated) {
+            assertSchema(classDataSetName);
+        }
+    }
+
+    protected boolean assertSchema(String dataSetName) {
+        boolean populated = false;
         try {
             IDataSet expectedDataSet = createDataSet(dataSetName);
             IDataSet actualDataSet = databaseTester.getConnection().createDataSet();
 
-            Assertion.assertEquals(expectedDataSet, actualDataSet);
+            for (String table : expectedDataSet.getTableNames()) {
+                assertEquals(expectedDataSet.getTable(table), actualDataSet.getTable(table));
+            }
+            databaseTester.setTearDownOperation(DatabaseOperation.CLOSE_CONNECTION(DatabaseOperation.NONE));
+            databaseTester.onTearDown();
+
+            populated = true;
         } catch (MalformedURLException m) {
             debug(this, "Skipping schema assertion since %s was not found.", dataSetName);
         } catch (Exception e) {
             throw Unchecked.exception(e);
         }
+        return populated;
     }
 
     public Object getValue(String tableName, String column, int row) {
@@ -144,7 +196,6 @@ public abstract class AbstractDbUnitConfigurer {
         return user;
     }
 
-
     public String getPassword() {
         return password;
     }
@@ -162,6 +213,10 @@ public abstract class AbstractDbUnitConfigurer {
             dataSource = createDataSource();
         }
         return dataSource;
+    }
+
+    public Connection getConnection() {
+        return DataSources.getConnection(getDataSource());
     }
 
     protected String getFullSchemaSetupSqlPath() {

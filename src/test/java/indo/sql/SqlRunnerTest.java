@@ -32,29 +32,31 @@ public class SqlRunnerTest extends AbstractDbUnitTest {
     public void testQuery() {
         SqlRunner runner = new SqlRunner(ds());
 
-        List<Employee> employees = runner.list("SELECT * FROM Employee", Employee.class);
+        List<Employee> employees = runner.list(
+                " SELECT            " +
+                "   employee_id,    " +
+                "   first_name,     " +
+                "   last_name,      " +
+                "   active,         " +
+                "   hire_date,      " +
+                "   departure_date, " +
+                "   payroll_id,     " +
+                "   salary          " +
+                " FROM              " +
+                "   Employee        " +
+                " ORDER BY          " +
+                "   employee_id ASC ",
+                Employee.class);
 
-        employees.stream().forEach(e -> assertEqualsRowValue("Employee", "employee_id", 1, e));
+        assertEqualsRowValue("employee", "employee_id", employees, Employee::getEmployeeId);
+        assertEqualsRowValue("employee", "first_name", employees, Employee::getFirstName);
+        assertEqualsRowValue("employee", "last_name", employees, Employee::getLastName);
+        assertEqualsRowValue("employee", "active", employees, Employee::isActive);
+        assertEqualsRowValue("employee", "hire_date", employees, Employee::getHireDate);
+        assertEqualsRowValue("employee", "departure_date", employees, Employee::getDepartureDate);
+        assertEqualsRowValue("employee", "payroll_id", employees, Employee::getPayrollId);
+        assertEqualsRowValue("employee", "salary", employees, Employee::getSalary);
 
     }
 
-    @Test
-    public void testQuery1() {
-
-    }
-
-    @Test
-    public void testQuery2() {
-
-    }
-
-    @Test
-    public void testQuery3() {
-
-    }
-
-    @Test
-    public void testQuery4() {
-
-    }
 }

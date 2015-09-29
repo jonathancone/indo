@@ -15,10 +15,13 @@
   -->
 
 <dataset>
-    <Employee employee_id="100" firstName="John" lastName="Joyner" hireDate="1997-07-15" departureDate="[null]"
-              active="1" payrollId="1000" salary="129000.00"/>
-    <Employee employee_id="101" firstName="Bill" lastName="Lamphere" hireDate="1999-02-11" departureDate="[null]"
-              active="1" payrollId="1001" salary="121000.00"/>
-    <Employee employee_id="102" firstName="Mary" lastName="Hitchens" hireDate="2007-07-21" departureDate="[null]"
-              active="1" payrollId="1002" salary="138000.00"/>
+    <employee employee_id="100" first_name="John" last_name="Joyner" hire_date="1997-07-15"
+              departure_date="[null]"
+              active="1" payroll_id="1000" salary="129000.00"/>
+    <employee employee_id="101" first_name="Bill" last_name="Lamphere" hire_date="1999-02-11"
+              departure_date="[null]"
+              active="1" payroll_id="1001" salary="121000.00"/>
+    <employee employee_id="102" first_name="Mary" last_name="Hitchens" hire_date="2007-07-21"
+              departure_date="[null]"
+              active="1" payroll_id="1002" salary="138000.00"/>
 </dataset>

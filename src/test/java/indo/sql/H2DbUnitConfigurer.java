@@ -25,13 +25,16 @@ import javax.sql.DataSource;
 import java.nio.charset.Charset;
 
 /**
- * Created by jcone on 8/15/15.
+ * Configuration engine for H2 database-driven unit tests.
+ *
+ * @author Jonathan Cone
  */
 public class H2DbUnitConfigurer extends AbstractDbUnitConfigurer {
 
-    public H2DbUnitConfigurer(String user, String password, String url, String schemaSetupSql, String driver) {
-        super(user, password, url, schemaSetupSql, driver);
+    public H2DbUnitConfigurer(String user, String password, String url, String schemaSetupSql, String driver, Boolean caseSensitiveTableNames) {
+        super(user, password, url, schemaSetupSql, driver, caseSensitiveTableNames);
     }
+
 
     @Override
     protected DataSource doCreateDataSource() {

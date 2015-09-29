@@ -51,24 +51,24 @@ CREATE TABLE employee_shift (
 );
 
 
-INSERT INTO payroll_detail VALUES (1, 11, 11, 11, 11, 11.1, 11.1, 1);
-INSERT INTO payroll_detail VALUES (2, 22, 22, 22, 22, 22.2, 22.2, 1);
-INSERT INTO payroll_detail VALUES (3, 33, 33, 33, 33, 33.3, 33.3, 1);
-INSERT INTO payroll_detail VALUES (4, 44, 44, 44, 44, 44.4, 44.4, 1);
-
-INSERT INTO employee VALUES (1, 'Laserbeak', 'Onslaught', 1, '2010-10-25', NULL, 1, 19700.00);
-INSERT INTO employee VALUES (2, 'Razorclaw', 'Arcana', 2, '2001-01-21', NULL, 1, 22000.00);
-INSERT INTO employee VALUES (3, 'Nightstick', 'Strip', 3, '2007-06-04', '2007-06-05', 1, 42030.00);
-INSERT INTO employee VALUES (4, 'Barrage', 'Sludge', 4, '2012-08-19', '2014-04-18', 1, 66510.00);
-
-INSERT INTO department VALUES (101, 'Mergers', 'The Mergers department.', 1);
-INSERT INTO department VALUES (201, 'Human Resources', 'The Mergers department.', 2);
-
-INSERT INTO manager VALUES (1, 101);
-INSERT INTO manager VALUES (2, 201);
-
-INSERT INTO shift VALUES (500, '2012-04-01', '2012-04-30', '22:30:00', '06:30:00');
-INSERT INTO shift VALUES (600, '2012-05-01', '2012-05-30', '01:00:00', '09:45:00');
-
-INSERT INTO employee_shift VALUES (500, 3);
-INSERT INTO employee_shift VALUES (500, 4);
+-- INSERT INTO payroll_detail VALUES (1, 11, 11, 11, 11, 11.1, 11.1, 1);
+-- INSERT INTO payroll_detail VALUES (2, 22, 22, 22, 22, 22.2, 22.2, 1);
+-- INSERT INTO payroll_detail VALUES (3, 33, 33, 33, 33, 33.3, 33.3, 1);
+-- INSERT INTO payroll_detail VALUES (4, 44, 44, 44, 44, 44.4, 44.4, 1);
+--
+-- INSERT INTO employee VALUES (1, 'Laser', 'Beam', 1, '2010-10-25', NULL, 1, 19700.00);
+-- INSERT INTO employee VALUES (2, 'Razor', 'Claw', 2, '2001-01-21', NULL, 1, 22000.00);
+-- INSERT INTO employee VALUES (3, 'Night', 'Stick', 3, '2007-06-04', '2007-06-05', 1, 42030.00);
+-- INSERT INTO employee VALUES (4, 'Barrage', 'Sludge', 4, '2012-08-19', '2014-04-18', 1, 66510.00);
+--
+-- INSERT INTO department VALUES (101, 'Mergers', 'The Mergers department.', 1);
+-- INSERT INTO department VALUES (201, 'Human Resources', 'The Mergers department.', 2);
+--
+-- INSERT INTO manager VALUES (1, 101);
+-- INSERT INTO manager VALUES (2, 201);
+--
+-- INSERT INTO shift VALUES (500, '2012-04-01', '2012-04-30', '22:30:00', '06:30:00');
+-- INSERT INTO shift VALUES (600, '2012-05-01', '2012-05-30', '01:00:00', '09:45:00');
+--
+-- INSERT INTO employee_shift VALUES (500, 3);
+-- INSERT INTO employee_shift VALUES (500, 4);
