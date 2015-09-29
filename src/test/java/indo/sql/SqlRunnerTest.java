@@ -34,7 +34,7 @@ public class SqlRunnerTest extends AbstractDbUnitTest {
 
         List<Employee> employees = runner.list("SELECT * FROM Employee", Employee.class);
 
-        employees.stream().forEach(e -> assertEqualsRowValue("Employee", "employeeId", 1, e));
+        employees.stream().forEach(e -> assertEqualsRowValue("Employee", "employee_id", 1, e));
 
     }
 

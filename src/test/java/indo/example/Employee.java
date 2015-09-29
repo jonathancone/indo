@@ -30,8 +30,8 @@ public class Employee {
     private Date hireDate;
     private Date departureDate;
 
-    private Integer employeeId;
-    private Integer payrollId;
+    private Long employeeId;
+    private Long payrollId;
 
     private String firstName;
     private String lastName;
@@ -39,7 +39,7 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(Integer employeeId, String firstName, String lastName) {
+    public Employee(Long employeeId, String firstName, String lastName) {
         this.employeeId = employeeId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -50,14 +50,14 @@ public class Employee {
                 getBigDecimal(rs, "salary"),
                 getDate(rs, "hireDate"),
                 getDate(rs, "departureDate"),
-                getInt(rs, "employeeId"),
-                getInt(rs, "payrollId"),
+                getLong(rs, "employeeId"),
+                getLong(rs, "payrollId"),
                 getString(rs, "firstName"),
                 getString(rs, "lastName"));
     }
 
 
-    public Employee(boolean active, BigDecimal salary, Date hireDate, Date departureDate, Integer employeeId, Integer payrollId, String firstName, String lastName) {
+    public Employee(boolean active, BigDecimal salary, Date hireDate, Date departureDate, Long employeeId, Long payrollId, String firstName, String lastName) {
         this.active = active;
         this.salary = salary;
         this.hireDate = hireDate;
@@ -68,19 +68,19 @@ public class Employee {
         this.lastName = lastName;
     }
 
-    public Integer getEmployeeId() {
+    public Long getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(Integer employeeId) {
+    public void setEmployeeId(Long employeeId) {
         this.employeeId = employeeId;
     }
 
-    public Integer getPayrollId() {
+    public Long getPayrollId() {
         return payrollId;
     }
 
-    public void setPayrollId(Integer payrollId) {
+    public void setPayrollId(Long payrollId) {
         this.payrollId = payrollId;
     }
 

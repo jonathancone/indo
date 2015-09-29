@@ -127,7 +127,7 @@ public class Reflect<T> {
         if (setter.isPresent()) {
             return invoke(setter.get(), value);
         } else {
-            throw new NoSuchMethodError("There is no setter method for property " + property);
+            throw new NoSuchMethodError("There is no setter method for property " + property + " that will accept " + (value == null ? null : value.getClass()));
         }
     }
 
@@ -245,7 +245,7 @@ public class Reflect<T> {
                 }
             }
         }
-        return null;
+        return Optional.ofNullable(null);
     }
 
     private Optional<Method> findCompatibleMethod(Method[] searchMethods, String targetMethod, Class<?>... targetTypes) {
@@ -255,7 +255,7 @@ public class Reflect<T> {
                 .filter(m -> IntStream
                         .range(0, targetTypes.length)
                         .allMatch(index -> targetTypes[index] == null ||
-                                m.getParameterTypes()[index].isAssignableFrom(targetTypes[index])))
+                                           m.getParameterTypes()[index].isAssignableFrom(targetTypes[index])))
                 .findFirst();
     }
 

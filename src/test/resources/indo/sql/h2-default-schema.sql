@@ -16,7 +16,7 @@ CREATE TABLE employee (
   active         BOOLEAN,
   hire_date      DATE,
   departure_date DATE,
-  payroll_id     INT,
+  payroll_id     BIGINT,
   salary         DECIMAL(20, 2)
 );
 

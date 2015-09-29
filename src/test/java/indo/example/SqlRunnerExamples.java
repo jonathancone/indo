@@ -24,7 +24,7 @@ import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static indo.jdbc.ResultSets.getInt;
+import static indo.jdbc.ResultSets.getLong;
 import static indo.jdbc.ResultSets.getString;
 
 /**
@@ -68,7 +68,7 @@ public class SqlRunnerExamples {
                             " AND                 " +
                             "   e.lastName LIKE ? ",
                         rs -> new Employee(
-                                getInt(rs, "employeeId"),
+                                getLong(rs, "employeeId"),
                                 getString(rs, "firstName"),
                                 getString(rs, "lastName")
                         ),

@@ -31,9 +31,9 @@ public class QueryExamples {
     private DataSource dataSource = null;
 
     private List<Employee> allEmployees = Arrays.asList(
-            new Employee(1, "Bill", "Gates"),
-            new Employee(2, "Steve", "Jobs"),
-            new Employee(3, "Larry", "Ellison"));
+            new Employee(1L, "Bill", "Gates"),
+            new Employee(2L, "Steve", "Jobs"),
+            new Employee(3L, "Larry", "Ellison"));
 
     private Employee employee = allEmployees.get(0);
 

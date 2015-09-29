@@ -18,8 +18,7 @@ package indo.log;
 
 /**
  * Interface to provide logging capabilities without binding to a specific
- * implementation. The default methods included here can be used to log messages
- * to System.out.
+ * implementation.
  *
  * @author Jonathan Cone
  * @see Logger
