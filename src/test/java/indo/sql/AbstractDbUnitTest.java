@@ -38,7 +38,7 @@ import java.util.function.Function;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
-public class AbstractDbUnitTest {
+public abstract class AbstractDbUnitTest {
 
     @Rule
     public TestName testName = new TestName();

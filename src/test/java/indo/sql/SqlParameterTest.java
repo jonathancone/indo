@@ -27,14 +27,13 @@ import static org.junit.Assert.assertArrayEquals;
  */
 public class SqlParameterTest {
 
-
     @Test
     public void testAddIndexes1() {
         SqlParameter sqlParameter = new SqlParameter("name", "value");
 
         sqlParameter.addIndexes(1, 1);
 
-        assertArrayEquals(new Integer[] {1}, sqlParameter.getIndexes().toArray());
+        assertArrayEquals(new Integer[]{1}, sqlParameter.getIndexes().toArray());
     }
 
     @Test
@@ -43,7 +42,7 @@ public class SqlParameterTest {
 
         sqlParameter.addIndexes(1, 4);
 
-        assertArrayEquals(new Integer[] {1, 2, 3, 4}, sqlParameter.getIndexes().toArray());
+        assertArrayEquals(new Integer[]{1, 2, 3, 4}, sqlParameter.getIndexes().toArray());
     }
 
     @Test
@@ -52,7 +51,7 @@ public class SqlParameterTest {
 
         sqlParameter.addIndexes(3, 1);
 
-        assertArrayEquals(new Integer[] {3}, sqlParameter.getIndexes().toArray());
+        assertArrayEquals(new Integer[]{3}, sqlParameter.getIndexes().toArray());
     }
 
     @Test
@@ -61,7 +60,7 @@ public class SqlParameterTest {
 
         sqlParameter.addIndexes(3, 2);
 
-        assertArrayEquals(new Integer[] {3, 4}, sqlParameter.getIndexes().toArray());
+        assertArrayEquals(new Integer[]{3, 4}, sqlParameter.getIndexes().toArray());
     }
 
     @Test(expected = IllegalArgumentException.class)

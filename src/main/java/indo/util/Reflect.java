@@ -85,8 +85,11 @@ public class Reflect<T> {
         fieldCache.computeIfAbsent(aClass, (input) -> {
             ArrayList<Field> fields = new ArrayList<>();
 
-            fields.addAll(Arrays.asList(input.getFields()));
-            fields.addAll(Arrays.asList(input.getDeclaredFields()));
+            Class<?> current = aClass;
+            do {
+                fields.addAll(Arrays.asList(current.getDeclaredFields()));
+                current = current.getSuperclass();
+            } while (current != null && current != Object.class);
 
             ConcurrentMap<String, Field> result = fields.stream().
                     collect(Collectors.toConcurrentMap(Field::getName, Function.identity()));
@@ -143,6 +146,7 @@ public class Reflect<T> {
     public Reflect<T> newInstance() {
         Constructor<T> constructor = null;
         try {
+
             try {
                 constructor = aClass.getConstructor();
             } catch (NoSuchMethodException nsm) {

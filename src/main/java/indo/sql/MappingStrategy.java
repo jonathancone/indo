@@ -16,6 +16,7 @@
 
 package indo.sql;
 
+import indo.log.Logger;
 import indo.util.Reflect;
 
 import java.util.Arrays;
@@ -69,6 +70,7 @@ public interface MappingStrategy {
 
             if (match.isPresent()) {
                 try {
+                    Logger.debug(this, "Found matching property %s for value %s", match.get(), value);
                     targetHandle.property(match.get(), value);
                 } catch (NoSuchMethodError e) {
                     // We had the field but couldn't match a setter of an assignable type.

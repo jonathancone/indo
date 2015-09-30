@@ -17,6 +17,8 @@
 package indo.sql;
 
 import indo.example.Employee;
+import indo.log.Log;
+import indo.log.Logger;
 import org.junit.Test;
 
 import java.util.List;
@@ -30,6 +32,7 @@ public class SqlRunnerTest extends AbstractDbUnitTest {
 
     @Test
     public void testQuery() {
+
         SqlRunner runner = new SqlRunner(ds());
 
         List<Employee> employees = runner.list(
@@ -47,6 +50,7 @@ public class SqlRunnerTest extends AbstractDbUnitTest {
                 " ORDER BY          " +
                 "   employee_id ASC ",
                 Employee.class);
+
 
         assertEqualsRowValue("employee", "employee_id", employees, Employee::getEmployeeId);
         assertEqualsRowValue("employee", "first_name", employees, Employee::getFirstName);

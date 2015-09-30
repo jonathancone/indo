@@ -44,7 +44,7 @@ public class JdbcExceptionTest {
     public void testGetSQLExceptionCause1() throws Exception {
         SQLException initial = new SQLException();
 
-        assertEquals(initial, new JdbcException(initial).getSQLExceptionCause());
+        assertEquals(initial, new JdbcException(initial).getSQLExceptionCause().get());
     }
 
     @Test(expected = ClassCastException.class)

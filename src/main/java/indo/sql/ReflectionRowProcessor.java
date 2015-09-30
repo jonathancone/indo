@@ -76,7 +76,7 @@ public class ReflectionRowProcessor<T> implements RowProcessor<T> {
         ResultSetMetaData rsm = getMetaData(rs);
 
         // Stream through each column to retrieve its name.
-        IntStream.range(1, getColumnCount(rsm))
+        IntStream.range(1, getColumnCount(rsm) + 1)
                 .mapToObj(index -> getColumnName(rsm, index))
                 .forEach(originalColumn -> {
 
@@ -92,9 +92,10 @@ public class ReflectionRowProcessor<T> implements RowProcessor<T> {
 
                     // Optionally throw an exception if no mapping could be found.
                     if (!matchedField.isPresent()) {
-                        String message = String.format("Could not map column \"%s\" to a property on %s",
+                        String message = String.format("Could not map column \"%s\" to a property on %s using strategies: %s. Likely there is no setter method that takes the expected type.",
                                 originalColumn,
-                                targetObject.getClass());
+                                targetObject.getClass(),
+                                getMappingStrategies());
 
                         if (isExceptionThrownWhenColumnHasNoMatch()) {
                             throw new JdbcException(message);
