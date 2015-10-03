@@ -17,8 +17,6 @@
 package indo.sql;
 
 import indo.example.Employee;
-import indo.log.Log;
-import indo.log.Logger;
 import org.junit.Test;
 
 import java.util.List;
@@ -46,7 +44,7 @@ public class SqlRunnerTest extends AbstractDbUnitTest {
                 "   payroll_id,     " +
                 "   salary          " +
                 " FROM              " +
-                "   Employee        " +
+                "   employee        " +
                 " ORDER BY          " +
                 "   employee_id ASC ",
                 Employee.class);

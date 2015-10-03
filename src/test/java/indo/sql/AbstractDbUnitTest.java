@@ -17,6 +17,7 @@
 package indo.sql;
 
 import indo.jdbc.DataSources;
+import indo.sql.config.TestDatabaseConfig;
 import indo.util.Strings;
 import indo.util.Unchecked;
 import org.dbunit.dataset.datatype.DataType;
@@ -44,29 +45,27 @@ public abstract class AbstractDbUnitTest {
     public TestName testName = new TestName();
 
     @Parameterized.Parameter(0)
-    public String dbName;
+    public String configuration;
 
-    @Parameterized.Parameter(1)
-    public AbstractDbUnitConfigurer dbUnitConfigurer;
+    private TestDatabaseConfig dbConfig;
 
     @Parameterized.Parameters(name = "{0}")
-    public static List<Object[]> dataSourceConfigurations() {
-        Object[][] configs = new Object[][]{
-                {"H2 Database (Case-insensitive)", new H2DbUnitConfigurer("sa", "sa", "jdbc:h2:mem:testcasei;DB_CLOSE_DELAY=-1", "h2-default-schema.sql", "org.h2.Driver", false)},
-                //        {"H2 Database (Case-sensitive)", new H2DbUnitConfigurer("sa", "sa", "jdbc:h2:mem:testcases;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false", "h2-default-schema.sql", "org.h2.Driver", true)}
-        };
-
-        return Arrays.asList(configs);
+    public static List<Object> dataSourceConfigurations() {
+        return Arrays.asList(
+                "h2-case-insensitive",
+                "h2-case-sensitive",
+                "postgres"
+        );
     }
 
     @Before
     public void setupDataSource() {
-        dbUnitConfigurer.populateSchema(classBeforeDataSetName(), methodBeforeDataSetName());
+        getDbConfig().populateSchema(classBeforeDataSetName(), methodBeforeDataSetName());
     }
 
     @After
     public void tearDownDataSource() {
-        dbUnitConfigurer.assertSchema(classAfterDataSetName(), methodAfterDataSetName());
+        getDbConfig().assertSchema(classAfterDataSetName(), methodAfterDataSetName());
     }
 
     protected String classBeforeDataSetName() {
@@ -103,11 +102,11 @@ public abstract class AbstractDbUnitTest {
     }
 
     protected DataSource getDataSource() {
-        return dbUnitConfigurer.getDataSource();
+        return getDbConfig().getDataSource();
     }
 
     protected Connection getConnection() {
-        return DataSources.getConnection(dbUnitConfigurer.getDataSource());
+        return DataSources.getConnection(getDbConfig().getDataSource());
     }
 
     protected <T, R> void assertEqualsRowValue(String expectedTable, String expectedColumn, List<T> results, Function<T, R> getterFunction) {
@@ -122,7 +121,7 @@ public abstract class AbstractDbUnitTest {
     }
 
     protected void assertEqualsRowValue(String expectedTable, String expectedColumn, int expectedRow, Object actual) {
-        Object expected = dbUnitConfigurer.getValue(expectedTable, expectedColumn, expectedRow);
+        Object expected = getDbConfig().getValue(expectedTable, expectedColumn, expectedRow);
 
         DataType dataType = DataType.forObject(actual);
 
@@ -131,5 +130,9 @@ public abstract class AbstractDbUnitTest {
         } catch (TypeCastException e) {
             throw Unchecked.exception(e);
         }
+    }
+
+    protected TestDatabaseConfig getDbConfig() {
+        return dbConfig;
     }
 }

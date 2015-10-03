@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package indo.sql;
+package indo.sql.config;
 
 import org.dbunit.dataset.datatype.DefaultDataTypeFactory;
 import org.dbunit.ext.h2.H2DataTypeFactory;
@@ -29,9 +29,9 @@ import java.nio.charset.Charset;
  *
  * @author Jonathan Cone
  */
-public class H2DbUnitConfigurer extends AbstractDbUnitConfigurer {
+public class H2Config extends TestDatabaseConfig {
 
-    public H2DbUnitConfigurer(String user, String password, String url, String schemaSetupSql, String driver, Boolean caseSensitiveTableNames) {
+    public H2Config(String user, String password, String url, String schemaSetupSql, String driver, Boolean caseSensitiveTableNames) {
         super(user, password, url, schemaSetupSql, driver, caseSensitiveTableNames);
     }
 

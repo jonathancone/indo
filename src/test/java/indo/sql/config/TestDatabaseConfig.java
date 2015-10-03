@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package indo.sql;
+package indo.sql.config;
 
 import indo.jdbc.DataSources;
 import indo.util.Unchecked;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.taskdefs.SQLExec;
 import org.dbunit.DefaultDatabaseTester;
-import org.dbunit.DefaultOperationListener;
 import org.dbunit.IDatabaseTester;
 import org.dbunit.IOperationListener;
 import org.dbunit.database.DatabaseConfig;
@@ -42,12 +43,12 @@ import static indo.log.Logger.info;
 import static org.dbunit.Assertion.assertEquals;
 
 /**
- * This base class can be used to implement specific database configurations for use with DBUnit
- * tests.
+ * This base class can be used to implement specific database configurations for
+ * use with DBUnit tests.
  *
  * @author Jonathan Cone
  */
-public abstract class AbstractDbUnitConfigurer {
+public abstract class TestDatabaseConfig {
 
     private DataSource dataSource;
     private IDatabaseTester databaseTester;
@@ -58,28 +59,26 @@ public abstract class AbstractDbUnitConfigurer {
     private String url;
     private String user;
 
-    private Boolean caseSensitiveTableNames;
+    private Boolean caseSensitive;
 
-    public AbstractDbUnitConfigurer(String user, String password, String url, String schemaSetupSql, String driver, Boolean caseSensitiveTableNames) {
+    public TestDatabaseConfig(String user, String password, String url, String schemaSetupSql, String driver, Boolean caseSensitive) {
         this.user = user;
         this.password = password;
         this.url = url;
         this.schemaSetupSql = schemaSetupSql;
         this.driver = driver;
+        this.caseSensitive = caseSensitive;
         this.dataSource = createDataSource();
-        this.caseSensitiveTableNames = caseSensitiveTableNames;
         createSchema();
     }
 
-    protected Boolean isCaseSensitiveTableNames() {
-        return caseSensitiveTableNames;
+    protected Boolean isCaseSensitive() {
+        return caseSensitive;
     }
 
-    protected abstract DataSource doCreateDataSource() throws Exception;
-
-    protected abstract void doCreateSchema() throws Exception;
-
     protected abstract DefaultDataTypeFactory getDataTypeFactory();
+
+    protected abstract DataSource doCreateDataSource() throws Exception;
 
     protected final DataSource createDataSource() {
         info(this, "Creating %s data source configuration...", getClass().getName());
@@ -88,6 +87,26 @@ public abstract class AbstractDbUnitConfigurer {
         } catch (Exception e) {
             throw Unchecked.exception(e);
         }
+    }
+
+    protected void doCreateSchema() throws Exception {
+
+        SQLExec sqlExec = new SQLExec();
+
+        sqlExec.setTaskType("sql");
+        sqlExec.setTaskName("sql");
+
+        Project project = new Project();
+        project.init();
+        sqlExec.setProject(project);
+
+        sqlExec.setDriver(getDriver());
+        sqlExec.setPassword(getPassword());
+        sqlExec.setSrc(new File(getFullSchemaSetupSqlPath()));
+        sqlExec.setUrl(getUrl());
+        sqlExec.setUserid(getUser());
+
+        sqlExec.execute();
     }
 
     protected final void createSchema() {
@@ -108,7 +127,7 @@ public abstract class AbstractDbUnitConfigurer {
         return dataSet;
     }
 
-    protected void populateSchema(String classDataSetName, String methodDataSetName) {
+    public void populateSchema(String classDataSetName, String methodDataSetName) {
         // Attempt to populate the schema with a data set specific to this method.
         boolean populated = populateSchema(methodDataSetName);
 
@@ -130,7 +149,7 @@ public abstract class AbstractDbUnitConfigurer {
 
             DatabaseConfig config = connection.getConfig();
 
-            config.setProperty(DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, isCaseSensitiveTableNames());
+            config.setProperty(DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, isCaseSensitive());
             config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, getDataTypeFactory());
 
             databaseTester.setSetUpOperation(DatabaseOperation.CLEAN_INSERT);
@@ -147,7 +166,7 @@ public abstract class AbstractDbUnitConfigurer {
         return populated;
     }
 
-    protected void assertSchema(String classDataSetName, String methodDataSetName) {
+    public void assertSchema(String classDataSetName, String methodDataSetName) {
         boolean populated = assertSchema(methodDataSetName);
 
         if (!populated) {

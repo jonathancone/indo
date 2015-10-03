@@ -25,8 +25,9 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * This class provides the capability to create a {@link SqlParameterProvider} from a regular POJO.  This will match
- * parameter names with the names of JavaBean style "getter" methods on the target instance.
+ * This class provides the capability to create a {@link SqlParameterProvider}
+ * from a regular POJO.  This will match parameter names with the names of
+ * JavaBean style "getter" methods on the target instance.
  *
  * @author Jonathan Cone
  */
@@ -38,7 +39,8 @@ public class PojoSqlParameters<T> implements SqlParameterProvider {
     /**
      * Package-private constructor.
      *
-     * @param instance The object instance to retrieve the parameters from using reflection/
+     * @param instance The object instance to retrieve the parameters from using
+     *                 reflection/
      */
     PojoSqlParameters(T instance) {
         this.reflect = Reflect.on(instance);
@@ -57,8 +59,8 @@ public class PojoSqlParameters<T> implements SqlParameterProvider {
     }
 
     /**
-     * Uses reflection to look up a {@link SqlParameter} on the JavaBean that this {@link SqlParameterProvider}
-     * is based off of.  Example:
+     * Uses reflection to look up a {@link SqlParameter} on the JavaBean that
+     * this {@link SqlParameterProvider} is based off of.  Example:
      * <pre>
      * class Employee {
      *     private BigDecimal salary;
@@ -74,7 +76,8 @@ public class PojoSqlParameters<T> implements SqlParameterProvider {
      * Employee employee = new Employee();
      * employee.setSalary(...);
      *
-     * // The following will return a SqlParameter with the value retrieved from employee.getSalary():
+     * // The following will return a SqlParameter with the value retrieved from
+     * employee.getSalary():
      *
      * Optional<SqlParameter> parameter = PojoSqlParameters.fromPojo(employee).findParameter("salary");
      * </pre>
