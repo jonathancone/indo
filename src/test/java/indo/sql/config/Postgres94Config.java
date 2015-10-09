@@ -21,9 +21,12 @@ import org.dbunit.ext.postgresql.PostgresqlDataTypeFactory;
 import org.postgresql.ds.PGPoolingDataSource;
 
 import javax.sql.DataSource;
+import java.util.Random;
 
 /**
- * Created by jcone on 10/2/15.
+ * Configuration for Postgresql 9.4.
+ *
+ * @author Jonathan Cone
  */
 public class Postgres94Config extends TestDatabaseConfig {
 
@@ -33,9 +36,14 @@ public class Postgres94Config extends TestDatabaseConfig {
 
     @Override
     protected DataSource doCreateDataSource() throws Exception {
+
+        Random random = new Random(System.currentTimeMillis());
+
+        String source = "PostgresDataSource" + random.nextLong();
+
         PGPoolingDataSource ds = new PGPoolingDataSource();
-        ds.setDataSourceName("postgres" + System.currentTimeMillis());
-        ds.setDatabaseName("config");
+        ds.setDataSourceName(source);
+        ds.setDatabaseName(source);
         ds.setUser(getUser());
         ds.setPassword(getPassword());
         return ds;

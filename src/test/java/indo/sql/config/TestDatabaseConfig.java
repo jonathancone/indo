@@ -34,9 +34,11 @@ import org.dbunit.operation.DatabaseOperation;
 
 import javax.sql.DataSource;
 import java.io.File;
+import java.io.FileInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Connection;
+import java.util.Properties;
 
 import static indo.log.Logger.debug;
 import static indo.log.Logger.info;
@@ -55,17 +57,29 @@ public abstract class TestDatabaseConfig {
 
     private String driver;
     private String password;
-    private String schemaSetupSql;
+    private String schemaFileName;
     private String url;
     private String user;
 
     private Boolean caseSensitive;
 
-    public TestDatabaseConfig(String user, String password, String url, String schemaSetupSql, String driver, Boolean caseSensitive) {
+    public TestDatabaseConfig(String configFile) throws Exception {
+
+        Properties properties = new Properties();
+        properties.load(new FileInputStream(configFile));
+
+        this.user = properties.getProperty("user");
+        this.password = properties.getProperty("password");
+        this.url = properties.getProperty("url");
+        this.schemaFileName = properties.getProperty("schema.file.name");
+        this.caseSensitive = "true".equalsIgnoreCase(properties.getProperty("case.sensitive"));
+    }
+
+    public TestDatabaseConfig(String user, String password, String url, String schemaFileName, String driver, Boolean caseSensitive) {
         this.user = user;
         this.password = password;
         this.url = url;
-        this.schemaSetupSql = schemaSetupSql;
+        this.schemaFileName = schemaFileName;
         this.driver = driver;
         this.caseSensitive = caseSensitive;
         this.dataSource = createDataSource();
@@ -223,8 +237,8 @@ public abstract class TestDatabaseConfig {
         return url;
     }
 
-    public String getSchemaSetupSql() {
-        return schemaSetupSql;
+    public String getSchemaFileName() {
+        return schemaFileName;
     }
 
     public DataSource getDataSource() {
@@ -239,6 +253,6 @@ public abstract class TestDatabaseConfig {
     }
 
     protected String getFullSchemaSetupSqlPath() {
-        return new File(getClass().getResource(getSchemaSetupSql()).getFile()).getAbsolutePath();
+        return new File(getClass().getResource(getSchemaFileName()).getFile()).getAbsolutePath();
     }
 }
