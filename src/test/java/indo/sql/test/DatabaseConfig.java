@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package indo.sql.config;
+package indo.sql.test;
 
 import indo.jdbc.DataSources;
 import indo.util.Reflect;
@@ -54,6 +54,8 @@ public abstract class DatabaseConfig {
     private DataSource dataSource;
     private IDatabaseTester databaseTester;
 
+    private String className;
+    private String name;
     private String driver;
     private String password;
     private String schemaFileName;
@@ -77,10 +79,6 @@ public abstract class DatabaseConfig {
                 .newInstanceIfAbsent()
                 .set(properties)
                 .getInstance();
-    }
-
-    protected Boolean isCaseSensitive() {
-        return caseSensitive;
     }
 
     protected abstract DefaultDataTypeFactory getDataTypeFactory();
@@ -215,25 +213,6 @@ public abstract class DatabaseConfig {
         }
     }
 
-    public String getDriver() {
-        return driver;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public String getSchemaFileName() {
-        return schemaFileName;
-    }
 
     public DataSource getDataSource() {
         if (dataSource == null) {
@@ -248,5 +227,73 @@ public abstract class DatabaseConfig {
 
     protected String getFullSchemaSetupSqlPath() {
         return new File(getClass().getResource(getSchemaFileName()).getFile()).getAbsolutePath();
+    }
+
+    public String getDriver() {
+        return driver;
+    }
+
+    public void setDriver(String driver) {
+        this.driver = driver;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getSchemaFileName() {
+        return schemaFileName;
+    }
+
+    public void setSchemaFileName(String schemaFileName) {
+        this.schemaFileName = schemaFileName;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public Boolean isCaseSensitive() {
+        return caseSensitive;
+    }
+
+    public void setCaseSensitive(Boolean caseSensitive) {
+        this.caseSensitive = caseSensitive;
+    }
+
+    public void setCaseSensitive(String caseSensitive) {
+        setCaseSensitive("true".equals(caseSensitive));
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

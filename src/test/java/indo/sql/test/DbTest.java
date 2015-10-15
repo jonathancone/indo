@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package indo.sql;
+package indo.sql.test;
 
 import indo.jdbc.DataSources;
-import indo.sql.config.DatabaseConfig;
 import indo.util.Strings;
 import indo.util.Unchecked;
 import org.dbunit.dataset.datatype.DataType;
@@ -30,7 +29,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import javax.sql.DataSource;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -61,28 +59,27 @@ public abstract class DbTest {
         );
     }
 
-    private void x() {
-
-        try {
-
-            Properties properties = new Properties();
-            properties.load(new FileInputStream(configuration));
-
-
-        } catch (IOException e) {
-            throw Unchecked.exception(e);
-        }
-
-    }
-
     @Before
     public void setupDataSource() {
-        getDbConfig().populateSchema(classBeforeDataSetName(), methodBeforeDataSetName());
+        if (dbConfig == null) {
+            try {
+
+                Properties properties = new Properties();
+                properties.load(getClass().getResourceAsStream("test/" + configuration + ".properties"));
+
+                dbConfig = DatabaseConfig.create(properties);
+
+            } catch (IOException e) {
+                throw Unchecked.exception(e);
+            }
+        }
+
+        dbConfig.populateSchema(classBeforeDataSetName(), methodBeforeDataSetName());
     }
 
     @After
     public void tearDownDataSource() {
-        getDbConfig().assertSchema(classAfterDataSetName(), methodAfterDataSetName());
+        dbConfig.assertSchema(classAfterDataSetName(), methodAfterDataSetName());
     }
 
     protected String classBeforeDataSetName() {

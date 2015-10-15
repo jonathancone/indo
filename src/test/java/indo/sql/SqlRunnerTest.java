@@ -17,6 +17,7 @@
 package indo.sql;
 
 import indo.example.Employee;
+import indo.sql.test.DbTest;
 import org.junit.Test;
 
 import java.util.List;
