@@ -17,13 +17,13 @@
 package indo.sql.config;
 
 import indo.jdbc.DataSources;
+import indo.util.Reflect;
 import indo.util.Unchecked;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.SQLExec;
 import org.dbunit.DefaultDatabaseTester;
 import org.dbunit.IDatabaseTester;
 import org.dbunit.IOperationListener;
-import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
@@ -34,7 +34,6 @@ import org.dbunit.operation.DatabaseOperation;
 
 import javax.sql.DataSource;
 import java.io.File;
-import java.io.FileInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Connection;
@@ -46,11 +45,11 @@ import static org.dbunit.Assertion.assertEquals;
 
 /**
  * This base class can be used to implement specific database configurations for
- * use with DBUnit tests.
+ * use with DbUnit tests.
  *
  * @author Jonathan Cone
  */
-public abstract class TestDatabaseConfig {
+public abstract class DatabaseConfig {
 
     private DataSource dataSource;
     private IDatabaseTester databaseTester;
@@ -63,27 +62,21 @@ public abstract class TestDatabaseConfig {
 
     private Boolean caseSensitive;
 
-    public TestDatabaseConfig(String configFile) throws Exception {
+    /**
+     * Static factory method used to create new instances.
+     *
+     * @param properties A properties object containing all the properties of
+     *                   this class.
+     * @return A newly configured instance.
+     */
+    public static DatabaseConfig create(Properties properties) {
+        String className = properties.getProperty("className");
 
-        Properties properties = new Properties();
-        properties.load(new FileInputStream(configFile));
-
-        this.user = properties.getProperty("user");
-        this.password = properties.getProperty("password");
-        this.url = properties.getProperty("url");
-        this.schemaFileName = properties.getProperty("schema.file.name");
-        this.caseSensitive = "true".equalsIgnoreCase(properties.getProperty("case.sensitive"));
-    }
-
-    public TestDatabaseConfig(String user, String password, String url, String schemaFileName, String driver, Boolean caseSensitive) {
-        this.user = user;
-        this.password = password;
-        this.url = url;
-        this.schemaFileName = schemaFileName;
-        this.driver = driver;
-        this.caseSensitive = caseSensitive;
-        this.dataSource = createDataSource();
-        createSchema();
+        return (DatabaseConfig) Reflect
+                .on(className)
+                .newInstanceIfAbsent()
+                .set(properties)
+                .getInstance();
     }
 
     protected Boolean isCaseSensitive() {
@@ -119,6 +112,7 @@ public abstract class TestDatabaseConfig {
         sqlExec.setSrc(new File(getFullSchemaSetupSqlPath()));
         sqlExec.setUrl(getUrl());
         sqlExec.setUserid(getUser());
+        sqlExec.setEncoding("UTF-8");
 
         sqlExec.execute();
     }
@@ -161,10 +155,10 @@ public abstract class TestDatabaseConfig {
 
             databaseTester = new DefaultDatabaseTester(connection);
 
-            DatabaseConfig config = connection.getConfig();
+            org.dbunit.database.DatabaseConfig config = connection.getConfig();
 
-            config.setProperty(DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, isCaseSensitive());
-            config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, getDataTypeFactory());
+            config.setProperty(org.dbunit.database.DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, isCaseSensitive());
+            config.setProperty(org.dbunit.database.DatabaseConfig.PROPERTY_DATATYPE_FACTORY, getDataTypeFactory());
 
             databaseTester.setSetUpOperation(DatabaseOperation.CLEAN_INSERT);
             databaseTester.setDataSet(dataSet);

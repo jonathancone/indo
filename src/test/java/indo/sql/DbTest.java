@@ -17,7 +17,7 @@
 package indo.sql;
 
 import indo.jdbc.DataSources;
-import indo.sql.config.TestDatabaseConfig;
+import indo.sql.config.DatabaseConfig;
 import indo.util.Strings;
 import indo.util.Unchecked;
 import org.dbunit.dataset.datatype.DataType;
@@ -30,16 +30,19 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import javax.sql.DataSource;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 import java.util.function.Function;
 
 import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
-public abstract class AbstractDbUnitTest {
+public abstract class DbTest {
 
     @Rule
     public TestName testName = new TestName();
@@ -47,7 +50,7 @@ public abstract class AbstractDbUnitTest {
     @Parameterized.Parameter(0)
     public String configuration;
 
-    private TestDatabaseConfig dbConfig;
+    private DatabaseConfig dbConfig;
 
     @Parameterized.Parameters(name = "{0}")
     public static List<Object> dataSourceConfigurations() {
@@ -56,6 +59,20 @@ public abstract class AbstractDbUnitTest {
                 "h2-case-sensitive",
                 "postgres"
         );
+    }
+
+    private void x() {
+
+        try {
+
+            Properties properties = new Properties();
+            properties.load(new FileInputStream(configuration));
+
+
+        } catch (IOException e) {
+            throw Unchecked.exception(e);
+        }
+
     }
 
     @Before
@@ -132,7 +149,7 @@ public abstract class AbstractDbUnitTest {
         }
     }
 
-    protected TestDatabaseConfig getDbConfig() {
+    protected DatabaseConfig getDbConfig() {
         return dbConfig;
     }
 }

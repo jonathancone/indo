@@ -28,18 +28,14 @@ import java.util.Random;
  *
  * @author Jonathan Cone
  */
-public class Postgres94Config extends TestDatabaseConfig {
-
-    public Postgres94Config(String user, String password, String url, String schemaSetupSql, String driver, Boolean caseSensitiveTableNames) {
-        super(user, password, url, schemaSetupSql, driver, caseSensitiveTableNames);
-    }
+public class Postgres94Config extends DatabaseConfig {
 
     @Override
     protected DataSource doCreateDataSource() throws Exception {
 
         Random random = new Random(System.currentTimeMillis());
 
-        String source = "PostgresDataSource" + random.nextLong();
+        String source = Postgres94Config.class.getSimpleName() + random.nextLong();
 
         PGPoolingDataSource ds = new PGPoolingDataSource();
         ds.setDataSourceName(source);

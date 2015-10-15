@@ -69,6 +69,14 @@ public class Reflect<T> {
         return new Reflect<>(instance);
     }
 
+    public static <T> Reflect<T> on(String className) {
+        try {
+            return on((Class<T>) Class.forName(className));
+        } catch (Exception e) {
+            throw Unchecked.exception(e);
+        }
+    }
+
     protected static Class<?>[] toType(Object... values) {
         return Arrays.stream(values)
                 .map(value -> value != null ? value.getClass() : null)
@@ -180,6 +188,12 @@ public class Reflect<T> {
 
     public Reflect<T> set(String property, Object value) {
         return property(property, value);
+    }
+
+    public Reflect<T> set(Properties properties) {
+        properties.entrySet().stream().forEach(e -> set(e.getKey().toString(), e.getValue()));
+
+        return this;
     }
 
     public Reflect<T> invoke(String method, Object... values) {

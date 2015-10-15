@@ -29,12 +29,7 @@ import java.nio.charset.Charset;
  *
  * @author Jonathan Cone
  */
-public class H2Config extends TestDatabaseConfig {
-
-    public H2Config(String user, String password, String url, String schemaSetupSql, String driver, Boolean caseSensitiveTableNames) {
-        super(user, password, url, schemaSetupSql, driver, caseSensitiveTableNames);
-    }
-
+public class H2Config extends DatabaseConfig {
 
     @Override
     protected DataSource doCreateDataSource() {

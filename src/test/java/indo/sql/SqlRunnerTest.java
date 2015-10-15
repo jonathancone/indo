@@ -26,7 +26,7 @@ import java.util.List;
  *
  * @author Jonathan Cone
  */
-public class SqlRunnerTest extends AbstractDbUnitTest {
+public class SqlRunnerTest extends DbTest {
 
     @Test
     public void testQuery() {
