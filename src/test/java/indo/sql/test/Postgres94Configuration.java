@@ -17,33 +17,36 @@
 package indo.sql.test;
 
 import org.dbunit.dataset.datatype.DefaultDataTypeFactory;
-import org.dbunit.ext.h2.H2DataTypeFactory;
-import org.h2.jdbcx.JdbcConnectionPool;
-import org.h2.tools.RunScript;
+import org.dbunit.ext.postgresql.PostgresqlDataTypeFactory;
+import org.postgresql.ds.PGPoolingDataSource;
 
 import javax.sql.DataSource;
-import java.nio.charset.Charset;
+import java.util.Random;
 
 /**
- * Configuration engine for H2 database-driven unit tests.
+ * Configuration for Postgresql 9.4.
  *
  * @author Jonathan Cone
  */
-public class H2Config extends DatabaseConfig {
+public class Postgres94Configuration extends DatabaseConfiguration {
 
     @Override
-    protected DataSource doCreateDataSource() {
-        return JdbcConnectionPool.create(getUrl(), getUser(), getPassword());
-    }
+    protected DataSource doCreateDataSource() throws Exception {
 
-    @Override
-    protected void doCreateSchema() throws Exception {
-        RunScript.execute(getUrl(), getUser(), getPassword(), getFullSchemaSetupSqlPath(), Charset.forName("UTF-8"), false);
+        Random random = new Random(System.currentTimeMillis());
+
+        String source = Postgres94Configuration.class.getSimpleName() + random.nextLong();
+
+        PGPoolingDataSource ds = new PGPoolingDataSource();
+        ds.setDataSourceName(source);
+        ds.setDatabaseName(getName());
+        ds.setUser(getUser());
+        ds.setPassword(getPassword());
+        return ds;
     }
 
     @Override
     protected DefaultDataTypeFactory getDataTypeFactory() {
-        return new H2DataTypeFactory();
+        return new PostgresqlDataTypeFactory();
     }
-
 }

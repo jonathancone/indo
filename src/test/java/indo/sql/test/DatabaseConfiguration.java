@@ -24,6 +24,7 @@ import org.apache.tools.ant.taskdefs.SQLExec;
 import org.dbunit.DefaultDatabaseTester;
 import org.dbunit.IDatabaseTester;
 import org.dbunit.IOperationListener;
+import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
@@ -49,7 +50,7 @@ import static org.dbunit.Assertion.assertEquals;
  *
  * @author Jonathan Cone
  */
-public abstract class DatabaseConfig {
+public abstract class DatabaseConfiguration {
 
     private DataSource dataSource;
     private IDatabaseTester databaseTester;
@@ -71,10 +72,10 @@ public abstract class DatabaseConfig {
      *                   this class.
      * @return A newly configured instance.
      */
-    public static DatabaseConfig create(Properties properties) {
+    public static DatabaseConfiguration create(Properties properties) {
         String className = properties.getProperty("className");
 
-        return (DatabaseConfig) Reflect
+        return (DatabaseConfiguration) Reflect
                 .on(className)
                 .newInstanceIfAbsent()
                 .set(properties)
@@ -153,15 +154,17 @@ public abstract class DatabaseConfig {
 
             databaseTester = new DefaultDatabaseTester(connection);
 
-            org.dbunit.database.DatabaseConfig config = connection.getConfig();
+            DatabaseConfig config = connection.getConfig();
 
-            config.setProperty(org.dbunit.database.DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, isCaseSensitive());
-            config.setProperty(org.dbunit.database.DatabaseConfig.PROPERTY_DATATYPE_FACTORY, getDataTypeFactory());
+            config.setProperty(DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, isCaseSensitive());
+            config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, getDataTypeFactory());
 
             databaseTester.setSetUpOperation(DatabaseOperation.CLEAN_INSERT);
             databaseTester.setDataSet(dataSet);
             databaseTester.setOperationListener(IOperationListener.NO_OP_OPERATION_LISTENER);
             databaseTester.onSetup();
+
+            debug(this, "Found %s, populating schema...", dataSetName);
 
             populated = true;
         } catch (MalformedURLException m) {
@@ -226,7 +229,13 @@ public abstract class DatabaseConfig {
     }
 
     protected String getFullSchemaSetupSqlPath() {
-        return new File(getClass().getResource(getSchemaFileName()).getFile()).getAbsolutePath();
+        URL resource = getClass().getResource(getSchemaFileName());
+
+        if (resource == null) {
+            throw new NullPointerException("Could not locate the schema setup script: " + getSchemaFileName());
+        }
+
+        return new File(resource.getFile()).getAbsolutePath();
     }
 
     public String getDriver() {

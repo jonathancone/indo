@@ -48,7 +48,7 @@ public abstract class DbTest {
     @Parameterized.Parameter(0)
     public String configuration;
 
-    private DatabaseConfig dbConfig;
+    private DatabaseConfiguration dbConfig;
 
     @Parameterized.Parameters(name = "{0}")
     public static List<Object> dataSourceConfigurations() {
@@ -67,7 +67,9 @@ public abstract class DbTest {
                 Properties properties = new Properties();
                 properties.load(getClass().getResourceAsStream("test/" + configuration + ".properties"));
 
-                dbConfig = DatabaseConfig.create(properties);
+                dbConfig = DatabaseConfiguration.create(properties);
+                dbConfig.createDataSource();
+                dbConfig.createSchema();
 
             } catch (IOException e) {
                 throw Unchecked.exception(e);
@@ -146,7 +148,7 @@ public abstract class DbTest {
         }
     }
 
-    protected DatabaseConfig getDbConfig() {
+    protected DatabaseConfiguration getDbConfig() {
         return dbConfig;
     }
 }
