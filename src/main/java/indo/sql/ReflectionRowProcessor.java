@@ -23,6 +23,7 @@ import indo.util.Reflect;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
@@ -33,8 +34,8 @@ import static indo.jdbc.ResultSets.getObject;
 import static indo.log.Logger.debug;
 
 /**
- * A {@link RowProcessor} implementation that uses reflection to map a row's columns to properties on a POJO
- * that adheres to JavaBeans conventions.
+ * A {@link RowProcessor} implementation that uses reflection to map a row's
+ * columns to properties on a POJO that adheres to JavaBeans conventions.
  *
  * @author Jonathan Cone
  * @see MappingStrategy
@@ -48,18 +49,21 @@ public class ReflectionRowProcessor<T> implements RowProcessor<T> {
     }
 
     /**
-     * Subclasses may override this method to provide custom {@link MappingStrategy} instances.  The
-     * {@link MappingStrategy}s will be matched against in the order they are present in the list.
+     * Subclasses may override this method to provide custom {@link
+     * MappingStrategy} instances.  The {@link MappingStrategy}s will be matched
+     * against in the order they are present in the list.
      *
-     * @return A {@link List} of {@link MappingStrategy} instances to attempt during column mapping.
+     * @return A {@link List} of {@link MappingStrategy} instances to attempt
+     * during column mapping.
      */
     protected List<MappingStrategy> getMappingStrategies() {
         return MappingStrategy.DEFAULTS;
     }
 
     /**
-     * Subclasses may override this method to suppress exceptions from being thrown when no column to property match
-     * is found in any of the configured {@link MappingStrategy} instances.
+     * Subclasses may override this method to suppress exceptions from being
+     * thrown when no column to property match is found in any of the configured
+     * {@link MappingStrategy} instances.
      *
      * @return this method returns true by default.
      */
@@ -80,20 +84,24 @@ public class ReflectionRowProcessor<T> implements RowProcessor<T> {
                 .mapToObj(index -> getColumnName(rsm, index))
                 .forEach(originalColumn -> {
 
+                    Object object = getObject(rs, originalColumn);
+
                     // Stream through each strategy to attempt to find a matching column based on the
                     // strategy. If a match is found, map the value and return the property name
                     // it was mapped to immediately.
                     Optional<String> matchedField =
                             getMappingStrategies().stream()
-                                    .map(s -> s.findMatch(originalColumn, getObject(rs, originalColumn), targetObject))
+                                    .map(s -> s.findMatch(originalColumn, object, targetObject))
                                     .filter(Optional::isPresent)
                                     .map(Optional::get)
                                     .findFirst();
 
                     // Optionally throw an exception if no mapping could be found.
                     if (!matchedField.isPresent()) {
-                        String message = String.format("Could not map column \"%s\" to a property on %s using strategies: %s. Likely there is no setter method that takes the expected type.",
+                        String message = String.format("Could not map [column: %s, type: %s, value: %s] to a property on %s using strategies: %s. Likely there is no setter method that takes the expected type.",
                                 originalColumn,
+                                Objects.isNull(object) ? "null" : object.getClass().getName(),
+                                Objects.toString(object),
                                 targetObject.getClass(),
                                 getMappingStrategies());
 
