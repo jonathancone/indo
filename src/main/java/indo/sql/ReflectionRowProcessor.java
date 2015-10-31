@@ -48,6 +48,11 @@ public class ReflectionRowProcessor<T> implements RowProcessor<T> {
         this.targetType = targetType;
     }
 
+
+    public static <T> T map(Class<T> type, ResultSet rs) {
+        return new ReflectionRowProcessor<>(type).map(rs);
+    }
+
     /**
      * Subclasses may override this method to provide custom {@link
      * MappingStrategy} instances.  The {@link MappingStrategy}s will be matched

@@ -90,7 +90,7 @@ public class SqlRunner implements SqlOperations {
                             String sql,
                             Class<T> type,
                             Object... parameters) {
-        return list(connection, sql, (rs) -> new ReflectionRowProcessor<>(type).map(rs), SqlParameters.fromArray(parameters));
+        return list(connection, sql, (rs) -> ReflectionRowProcessor.map(type, rs), SqlParameters.fromArray(parameters));
     }
 
     @Override
@@ -98,7 +98,7 @@ public class SqlRunner implements SqlOperations {
                             String sql,
                             Class<T> type,
                             Map<String, ?> parameters) {
-        return list(connection, sql, (rs) -> new ReflectionRowProcessor<>(type).map(rs), SqlParameters.fromMap(parameters));
+        return list(connection, sql, (rs) -> ReflectionRowProcessor.map(type, rs), SqlParameters.fromMap(parameters));
     }
 
     @Override
