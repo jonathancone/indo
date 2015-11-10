@@ -19,6 +19,7 @@ package indo.util;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.time.LocalTime;
 import java.util.Map;
 import java.util.Set;
@@ -56,9 +57,9 @@ public class ReflectTest {
 
         Item item = new Item();
 
-        on(item).property("objArrayTest", new String[]{"this", "is", "a", "test"});
+        on(item).property("objArrayTest", new String[] {"this", "is", "a", "test"});
 
-        assertArrayEquals(new String[]{"this", "is", "a", "test"}, item.getObjArrayTest());
+        assertArrayEquals(new String[] {"this", "is", "a", "test"}, item.getObjArrayTest());
     }
 
     @Test
@@ -76,9 +77,9 @@ public class ReflectTest {
 
         Item item = new Item();
 
-        on(item).property("booleanArrayTest", new boolean[]{true, true, true});
+        on(item).property("booleanArrayTest", new boolean[] {true, true, true});
 
-        assertArrayEquals(new boolean[]{true, true, true}, item.getBooleanArrayTest());
+        assertArrayEquals(new boolean[] {true, true, true}, item.getBooleanArrayTest());
     }
 
     @Test
@@ -96,9 +97,9 @@ public class ReflectTest {
 
         Item item = new Item();
 
-        on(item).property("charArrayTest", new char[]{'D', 'E', 'F'});
+        on(item).property("charArrayTest", new char[] {'D', 'E', 'F'});
 
-        assertArrayEquals(new char[]{'D', 'E', 'F'}, item.getCharArrayTest());
+        assertArrayEquals(new char[] {'D', 'E', 'F'}, item.getCharArrayTest());
     }
 
     @Test
@@ -116,9 +117,9 @@ public class ReflectTest {
 
         Item item = new Item();
 
-        on(item).property("byteArrayTest", new byte[]{02, 03, 05});
+        on(item).property("byteArrayTest", new byte[] {02, 03, 05});
 
-        assertArrayEquals(new byte[]{02, 03, 05}, item.getByteArrayTest());
+        assertArrayEquals(new byte[] {02, 03, 05}, item.getByteArrayTest());
     }
 
     @Test
@@ -136,9 +137,9 @@ public class ReflectTest {
 
         Item item = new Item();
 
-        on(item).property("shortArrayTest", new short[]{16, 32, 48});
+        on(item).property("shortArrayTest", new short[] {16, 32, 48});
 
-        assertArrayEquals(new short[]{16, 32, 48}, item.getShortArrayTest());
+        assertArrayEquals(new short[] {16, 32, 48}, item.getShortArrayTest());
     }
 
     @Test
@@ -156,9 +157,9 @@ public class ReflectTest {
 
         Item item = new Item();
 
-        on(item).property("intArrayTest", new int[]{16, 32, 48});
+        on(item).property("intArrayTest", new int[] {16, 32, 48});
 
-        assertArrayEquals(new int[]{16, 32, 48}, item.getIntArrayTest());
+        assertArrayEquals(new int[] {16, 32, 48}, item.getIntArrayTest());
     }
 
     @Test
@@ -176,9 +177,9 @@ public class ReflectTest {
 
         Item item = new Item();
 
-        on(item).property("longArrayTest", new long[]{16, 32, 48});
+        on(item).property("longArrayTest", new long[] {16, 32, 48});
 
-        assertArrayEquals(new long[]{16, 32, 48}, item.getLongArrayTest());
+        assertArrayEquals(new long[] {16, 32, 48}, item.getLongArrayTest());
     }
 
     @Test
@@ -196,9 +197,9 @@ public class ReflectTest {
 
         Item item = new Item();
 
-        on(item).property("floatArrayTest", new float[]{16, 32, 48});
+        on(item).property("floatArrayTest", new float[] {16, 32, 48});
 
-        assertArrayEquals(new float[]{16, 32, 48}, item.getFloatArrayTest(), (float) .001);
+        assertArrayEquals(new float[] {16, 32, 48}, item.getFloatArrayTest(), (float) .001);
     }
 
     @Test
@@ -216,9 +217,9 @@ public class ReflectTest {
 
         Item item = new Item();
 
-        on(item).property("doubleArrayTest", new double[]{16, 32, 48});
+        on(item).property("doubleArrayTest", new double[] {16, 32, 48});
 
-        assertArrayEquals(new double[]{16, 32, 48}, item.getDoubleArrayTest(), .001);
+        assertArrayEquals(new double[] {16, 32, 48}, item.getDoubleArrayTest(), .001);
     }
 
     @Test
@@ -266,19 +267,19 @@ public class ReflectTest {
 
     @Test
     public void testToType1() throws Exception {
-        assertArrayEquals(new Class<?>[]{String.class, Integer.class, Double.class},
+        assertArrayEquals(new Class<?>[] {String.class, Integer.class, Double.class},
                 Reflect.toType("String", 100, 4.5));
     }
 
     @Test
     public void testToType2() throws Exception {
-        assertArrayEquals(new Class<?>[]{String.class},
+        assertArrayEquals(new Class<?>[] {String.class},
                 Reflect.toType("String"));
     }
 
     @Test
     public void testToType3() throws Exception {
-        assertArrayEquals(new Class<?>[]{}, Reflect.toType());
+        assertArrayEquals(new Class<?>[] {}, Reflect.toType());
     }
 
     @Test
@@ -371,6 +372,23 @@ public class ReflectTest {
         Item item = on(Item.class).newInstanceNow();
 
         assertNotNull(item);
+    }
+
+    @Test
+    public void testName() throws Exception {
+        Item item = new Item();
+
+        Method setIntTest1 = Item.class.getMethod("setIntTest", int.class);
+        //  Method setIntTest2 = Item.class.getMethod("setIntTest", Integer.class);
+
+        setIntTest1.invoke(item, 3);
+        setIntTest1.invoke(item, Integer.valueOf(3));
+
+        //setIntTest2.invoke(item, 3);
+        //setIntTest2.invoke(item, Integer.valueOf(3));
+
+        System.out.println("Test");
+
     }
 
     protected static class Item {

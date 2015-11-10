@@ -22,9 +22,7 @@ import indo.util.Reflect;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.IntStream;
 
 import static indo.jdbc.ResultSetMetaDatas.getColumnCount;
@@ -43,14 +41,16 @@ import static indo.log.Logger.debug;
 public class ReflectionRowProcessor<T> implements RowProcessor<T> {
 
     private Class<T> targetType;
+    private Map<String, Integer> types;
 
-    public ReflectionRowProcessor(Class<T> targetType) {
+    public ReflectionRowProcessor(Class<T> targetType, Map<String, Integer> types) {
         this.targetType = targetType;
+        this.types = types;
     }
 
-
-    public static <T> T map(Class<T> type, ResultSet rs) {
-        return new ReflectionRowProcessor<>(type).map(rs);
+    public ReflectionRowProcessor(Class<T> targetType) {
+        this(targetType, new HashMap<>());
+        this.targetType = targetType;
     }
 
     /**

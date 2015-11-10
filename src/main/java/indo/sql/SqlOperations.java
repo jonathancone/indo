@@ -36,6 +36,18 @@ public interface SqlOperations {
     <T> List<T> list(Connection connection,
                      String sql,
                      Class<T> type,
+                     Map<String, Integer> typeMap,
+                     Object... parameters);
+
+    <T> List<T> list(Connection connection,
+                     String sql,
+                     Class<T> type,
+                     Map<String, ?> parameters);
+
+    <T> List<T> list(Connection connection,
+                     String sql,
+                     Class<T> type,
+                     Map<String, Integer> typeMap,
                      Map<String, ?> parameters);
 
     <T> List<T> list(Connection connection,
@@ -59,6 +71,7 @@ public interface SqlOperations {
                      Supplier<List<T>> resultContainer,
                      SqlParameterProvider parameters);
 
+
     default <T> List<T> list(DataSource dataSource,
                              String sql,
                              Class<T> type,
@@ -68,8 +81,38 @@ public interface SqlOperations {
 
     default <T> List<T> list(DataSource dataSource,
                              String sql,
+                             Class<T> type,
+                             Map<String, Integer> typeMap,
+                             Object... parameters) {
+        return list(DataSources.getConnection(dataSource), sql, type, typeMap, parameters);
+    }
+
+    default <T> List<T> list(DataSource dataSource,
+                             String sql,
+                             Class<T> type,
+                             Map<String, ?> parameters) {
+        return list(DataSources.getConnection(dataSource), sql, type, parameters);
+    }
+
+    default <T> List<T> list(DataSource dataSource,
+                             String sql,
+                             Class<T> type,
+                             Map<String, Integer> typeMap,
+                             Map<String, ?> parameters) {
+        return list(DataSources.getConnection(dataSource), sql, type, typeMap, parameters);
+    }
+
+    default <T> List<T> list(DataSource dataSource,
+                             String sql,
                              RowProcessor<T> rowProcessor,
                              Object... parameters) {
+        return list(DataSources.getConnection(dataSource), sql, rowProcessor, parameters);
+    }
+
+    default <T> List<T> list(DataSource dataSource,
+                             String sql,
+                             RowProcessor<T> rowProcessor,
+                             Map<String, ?> parameters) {
         return list(DataSources.getConnection(dataSource), sql, rowProcessor, parameters);
     }
 
@@ -87,4 +130,5 @@ public interface SqlOperations {
                              SqlParameterProvider parameters) {
         return list(DataSources.getConnection(dataSource), sql, rowProcessor, resultContainer, parameters);
     }
+
 }

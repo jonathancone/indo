@@ -56,8 +56,22 @@ public class SqlRunner implements SqlOperations {
 
     public <T> List<T> list(String sql,
                             Class<T> type,
+                            Map<String, Integer> typeMap,
+                            Object... parameters) {
+        return list(DataSources.getConnection(dataSource), sql, type, typeMap, parameters);
+    }
+
+    public <T> List<T> list(String sql,
+                            Class<T> type,
                             Map<String, ?> parameters) {
         return list(DataSources.getConnection(dataSource), sql, type, parameters);
+    }
+
+    public <T> List<T> list(String sql,
+                            Class<T> type,
+                            Map<String, Integer> typeMap,
+                            Map<String, ?> parameters) {
+        return list(DataSources.getConnection(dataSource), sql, type, typeMap, parameters);
     }
 
     public <T> List<T> list(String sql,
@@ -90,7 +104,16 @@ public class SqlRunner implements SqlOperations {
                             String sql,
                             Class<T> type,
                             Object... parameters) {
-        return list(connection, sql, (rs) -> ReflectionRowProcessor.map(type, rs), SqlParameters.fromArray(parameters));
+        return list(connection, sql, (rs) -> RowProcessor.using(type).map(rs), SqlParameters.fromArray(parameters));
+    }
+
+    @Override
+    public <T> List<T> list(Connection connection,
+                            String sql,
+                            Class<T> type,
+                            Map<String, Integer> typeMap,
+                            Object... parameters) {
+        return list(connection, sql, (rs) -> RowProcessor.using(type, typeMap).map(rs), SqlParameters.fromArray(parameters));
     }
 
     @Override
@@ -98,8 +121,18 @@ public class SqlRunner implements SqlOperations {
                             String sql,
                             Class<T> type,
                             Map<String, ?> parameters) {
-        return list(connection, sql, (rs) -> ReflectionRowProcessor.map(type, rs), SqlParameters.fromMap(parameters));
+        return list(connection, sql, (rs) -> RowProcessor.using(type).map(rs), SqlParameters.fromMap(parameters));
     }
+
+    @Override
+    public <T> List<T> list(Connection connection,
+                            String sql,
+                            Class<T> type,
+                            Map<String, Integer> typeMap,
+                            Map<String, ?> parameters) {
+        return list(connection, sql, (rs) -> RowProcessor.using(type, typeMap).map(rs), SqlParameters.fromMap(parameters));
+    }
+
 
     @Override
     public <T> List<T> list(Connection connection,

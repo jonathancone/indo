@@ -17,6 +17,7 @@
 package indo.sql;
 
 import java.sql.ResultSet;
+import java.util.Map;
 
 /**
  * A functional interface which allows for custom row processing for SQL result
@@ -27,6 +28,15 @@ import java.sql.ResultSet;
  */
 @FunctionalInterface
 public interface RowProcessor<T> {
+
+    static <S> RowProcessor<S> using(Class<S> type, Map<String, Integer> types) {
+        return new ReflectionRowProcessor<>(type, types);
+    }
+
+    static <S> RowProcessor<S> using(Class<S> type) {
+        return new ReflectionRowProcessor<>(type);
+    }
+
     /**
      * Maps a {@link ResultSet} to an object with the assumption that the
      * ResultSet cursor is correctly pointing to the row that should be
