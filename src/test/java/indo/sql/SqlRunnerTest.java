@@ -48,7 +48,8 @@ public class SqlRunnerTest extends DbTest {
                 "   employee        " +
                 " ORDER BY          " +
                 "   employee_id ASC ",
-                Employee.class);
+                Employee.class,
+                ColumnTypes.withType("employee_id", Type.LONG));
 
 
         assertEqualsRowValue("employee", "employee_id", employees, Employee::getEmployeeId);

@@ -56,9 +56,9 @@ public class SqlRunner implements SqlOperations {
 
     public <T> List<T> list(String sql,
                             Class<T> type,
-                            Map<String, Integer> typeMap,
+                            ColumnTypes columnTypes,
                             Object... parameters) {
-        return list(DataSources.getConnection(dataSource), sql, type, typeMap, parameters);
+        return list(DataSources.getConnection(dataSource), sql, type, columnTypes, parameters);
     }
 
     public <T> List<T> list(String sql,
@@ -69,9 +69,9 @@ public class SqlRunner implements SqlOperations {
 
     public <T> List<T> list(String sql,
                             Class<T> type,
-                            Map<String, Integer> typeMap,
+                            ColumnTypes columnTypes,
                             Map<String, ?> parameters) {
-        return list(DataSources.getConnection(dataSource), sql, type, typeMap, parameters);
+        return list(DataSources.getConnection(dataSource), sql, type, columnTypes, parameters);
     }
 
     public <T> List<T> list(String sql,
@@ -111,9 +111,9 @@ public class SqlRunner implements SqlOperations {
     public <T> List<T> list(Connection connection,
                             String sql,
                             Class<T> type,
-                            Map<String, Integer> typeMap,
+                            ColumnTypes columnTypes,
                             Object... parameters) {
-        return list(connection, sql, (rs) -> RowProcessor.using(type, typeMap).map(rs), SqlParameters.fromArray(parameters));
+        return list(connection, sql, (rs) -> RowProcessor.using(type, columnTypes).map(rs), SqlParameters.fromArray(parameters));
     }
 
     @Override
@@ -128,9 +128,9 @@ public class SqlRunner implements SqlOperations {
     public <T> List<T> list(Connection connection,
                             String sql,
                             Class<T> type,
-                            Map<String, Integer> typeMap,
+                            ColumnTypes columnTypes,
                             Map<String, ?> parameters) {
-        return list(connection, sql, (rs) -> RowProcessor.using(type, typeMap).map(rs), SqlParameters.fromMap(parameters));
+        return list(connection, sql, (rs) -> RowProcessor.using(type, columnTypes).map(rs), SqlParameters.fromMap(parameters));
     }
 
 

@@ -22,13 +22,14 @@ import indo.util.Reflect;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 import static indo.jdbc.ResultSetMetaDatas.getColumnCount;
 import static indo.jdbc.ResultSetMetaDatas.getColumnName;
 import static indo.jdbc.ResultSets.getMetaData;
-import static indo.jdbc.ResultSets.getObject;
 import static indo.log.Logger.debug;
 
 /**
@@ -41,15 +42,15 @@ import static indo.log.Logger.debug;
 public class ReflectionRowProcessor<T> implements RowProcessor<T> {
 
     private Class<T> targetType;
-    private Map<String, Integer> types;
+    private ColumnTypes columnTypes;
 
-    public ReflectionRowProcessor(Class<T> targetType, Map<String, Integer> types) {
+    public ReflectionRowProcessor(Class<T> targetType, ColumnTypes columnTypes) {
         this.targetType = targetType;
-        this.types = types;
+        this.columnTypes = columnTypes;
     }
 
     public ReflectionRowProcessor(Class<T> targetType) {
-        this(targetType, new HashMap<>());
+        this(targetType, ColumnTypes.empty());
         this.targetType = targetType;
     }
 
@@ -89,7 +90,11 @@ public class ReflectionRowProcessor<T> implements RowProcessor<T> {
                 .mapToObj(index -> getColumnName(rsm, index))
                 .forEach(originalColumn -> {
 
-                    Object object = getObject(rs, originalColumn);
+                    // Resolve the column as a specific Java type, if one was
+                    // specified, otherwise just map it as an object.
+                    Type type = columnTypes.get(originalColumn).orElse(Type.OBJECT);
+
+                    Object object = type.asType(rs, originalColumn);
 
                     // Stream through each strategy to attempt to find a matching column based on the
                     // strategy. If a match is found, map the value and return the property name

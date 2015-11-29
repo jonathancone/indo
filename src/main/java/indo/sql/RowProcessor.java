@@ -17,7 +17,6 @@
 package indo.sql;
 
 import java.sql.ResultSet;
-import java.util.Map;
 
 /**
  * A functional interface which allows for custom row processing for SQL result
@@ -29,8 +28,8 @@ import java.util.Map;
 @FunctionalInterface
 public interface RowProcessor<T> {
 
-    static <S> RowProcessor<S> using(Class<S> type, Map<String, Integer> types) {
-        return new ReflectionRowProcessor<>(type, types);
+    static <S> RowProcessor<S> using(Class<S> type, ColumnTypes columnTypes) {
+        return new ReflectionRowProcessor<>(type, columnTypes);
     }
 
     static <S> RowProcessor<S> using(Class<S> type) {

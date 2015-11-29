@@ -36,7 +36,7 @@ public interface SqlOperations {
     <T> List<T> list(Connection connection,
                      String sql,
                      Class<T> type,
-                     Map<String, Integer> typeMap,
+                     ColumnTypes columnTypes,
                      Object... parameters);
 
     <T> List<T> list(Connection connection,
@@ -47,7 +47,7 @@ public interface SqlOperations {
     <T> List<T> list(Connection connection,
                      String sql,
                      Class<T> type,
-                     Map<String, Integer> typeMap,
+                     ColumnTypes columnTypes,
                      Map<String, ?> parameters);
 
     <T> List<T> list(Connection connection,
@@ -82,9 +82,9 @@ public interface SqlOperations {
     default <T> List<T> list(DataSource dataSource,
                              String sql,
                              Class<T> type,
-                             Map<String, Integer> typeMap,
+                             ColumnTypes columnTypes,
                              Object... parameters) {
-        return list(DataSources.getConnection(dataSource), sql, type, typeMap, parameters);
+        return list(DataSources.getConnection(dataSource), sql, type, columnTypes, parameters);
     }
 
     default <T> List<T> list(DataSource dataSource,
@@ -97,9 +97,9 @@ public interface SqlOperations {
     default <T> List<T> list(DataSource dataSource,
                              String sql,
                              Class<T> type,
-                             Map<String, Integer> typeMap,
+                             ColumnTypes columnTypes,
                              Map<String, ?> parameters) {
-        return list(DataSources.getConnection(dataSource), sql, type, typeMap, parameters);
+        return list(DataSources.getConnection(dataSource), sql, type, columnTypes, parameters);
     }
 
     default <T> List<T> list(DataSource dataSource,
