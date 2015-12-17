@@ -28,6 +28,8 @@ import java.util.stream.IntStream;
  * SQL statement using JDBC syntax or a familiar map key/value syntax.
  *
  * @author Jonathan Cone
+ * @see SqlParameters
+ * @see SqlParameterProvider
  */
 public class SqlParameter {
 
@@ -105,7 +107,7 @@ public class SqlParameter {
             throw new IllegalArgumentException("The starting index cannot be less than 1.");
         }
 
-        IntStream.range(start, start + length).forEachOrdered(i -> addIndex(i));
+        IntStream.range(start, start + length).forEachOrdered(this::addIndex);
     }
 
     public Integer getMaxIndex() {
