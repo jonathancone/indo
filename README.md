@@ -1,6 +1,5 @@
 # Indo
 ##### An elegant interface between Java and SQL
-What if there were an API that eliminated all the confusing parts of reading and writing data to a relational database?
 
 List results by passing in a result object type and bind parameters as variable arguments.
 ```java
