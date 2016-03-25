@@ -22,7 +22,7 @@ List<Employee> employees1 =
                 "Johnson");
 ```
 
-List results and map them directly from the ResultSet using the `indo.jdbc.ResultSets` static helper.
+List results and map them directly from the ResultSet using the `ResultSets` static helper.
 ```java
 SqlRunner runner = new SqlRunner(dataSource);
 
