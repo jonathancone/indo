@@ -52,7 +52,7 @@ List<Employee> employees3 =
                     " AND   e.lastName LIKE :lastName ",
                 Employee.class,
                 Maps.newHashMap(
-                        "salary", BigDecimal.valueOf(75_000.00),
+                        "salary", BigDecimal.valueOf(75000.00),
                         "lastName", "Lancaster"
                 ));
 ```
@@ -64,7 +64,7 @@ SqlRunner runner = new SqlRunner(dataSource);
 
 Employee employeeLike = new Employee();
 employeeLike.setLastName("Lancaster");
-employeeLike.setSalary(BigDecimal.valueOf(75_000.00));
+employeeLike.setSalary(BigDecimal.valueOf(75000.00));
 
 List<Employee> employees4 =
         runner.list(" SELECT                          " +
