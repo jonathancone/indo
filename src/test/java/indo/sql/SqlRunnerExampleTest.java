@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Indo Contributors
+ * Copyright 2017 Indo Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import indo.example.Employee;
 import indo.sql.test.DbTest;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -27,10 +28,31 @@ import java.util.List;
  *
  * @author Jonathan Cone
  */
-public class SqlRunnerTest extends DbTest {
+public class SqlRunnerExampleTest extends DbTest {
+
 
     @Test
-    public void testQuery() {
+    public void testListEmployeesWithLargeSalaries() {
+        SqlRunner runner = new SqlRunner(ds());
+
+        List<Employee> employees =
+                runner.list(" SELECT                   " +
+                            "   e.employee_id,         " +
+                            "   e.first_name,          " +
+                            "   e.last_name            " +
+                            " FROM  employee e         " +
+                            " WHERE e.salary > ?       " +
+                            " AND   e.last_name LIKE ? ",
+                        Employee.class,
+                        BigDecimal.valueOf(75000.00),
+                        "Lancaster");
+
+        assertEmployees(employees);
+
+    }
+
+    @Test
+    public void testListWithLongIdNoAlias() {
 
         SqlRunner runner = new SqlRunner(ds());
 
@@ -51,7 +73,12 @@ public class SqlRunnerTest extends DbTest {
                 Employee.class,
                 ColumnTypes.withType("employee_id", Type.LONG));
 
+        assertEmployees(employees);
 
+
+    }
+
+    private void assertEmployees(List<Employee> employees) {
         assertEqualsRowValue("employee", "employee_id", employees, Employee::getEmployeeId);
         assertEqualsRowValue("employee", "first_name", employees, Employee::getFirstName);
         assertEqualsRowValue("employee", "last_name", employees, Employee::getLastName);
@@ -62,5 +89,4 @@ public class SqlRunnerTest extends DbTest {
         assertEqualsRowValue("employee", "salary", employees, Employee::getSalary);
 
     }
-
 }
