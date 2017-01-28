@@ -1,3 +1,12 @@
+DROP TABLE IF EXISTS employee_shift;
+DROP TABLE IF EXISTS shift;
+DROP TABLE IF EXISTS manager;
+DROP TABLE IF EXISTS department;
+DROP TABLE IF EXISTS employee;
+DROP TABLE IF EXISTS payroll_detail;
+DROP TABLE IF EXISTS employee;
+DROP TABLE IF EXISTS payroll_detail;
+
 CREATE TABLE payroll_detail (
   payroll_id IDENTITY PRIMARY KEY,
   election_1 TINYINT,
