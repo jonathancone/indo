@@ -25,6 +25,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static indo.jdbc.ResultSets.*;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Unit tests for {@link SqlRunner}.
@@ -158,6 +159,9 @@ public class SqlRunnerTest extends DbTest {
 
 
     private void assertEmployees(List<Employee> employees) {
+
+        assertTrue(employees.size() > 0);
+
         assertEqualsRowValue("employee", "employee_id", employees, Employee::getEmployeeId);
         assertEqualsRowValue("employee", "first_name", employees, Employee::getFirstName);
         assertEqualsRowValue("employee", "last_name", employees, Employee::getLastName);
