@@ -45,6 +45,12 @@ public class Employee implements RowIdentity {
         this.lastName = lastName;
     }
 
+    public Employee(String firstName, String lastName, Double salary) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.salary = BigDecimal.valueOf(salary);
+    }
+
     public Employee(ResultSet rs) {
         this(getBoolean(rs, "active"),
                 getBigDecimal(rs, "salary"),

@@ -21,7 +21,6 @@ import indo.sql.test.DbTest;
 import indo.util.Maps;
 import org.junit.Test;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import static indo.jdbc.ResultSets.*;
@@ -34,27 +33,45 @@ import static org.junit.Assert.assertTrue;
  */
 public class SqlRunnerTest extends DbTest {
 
+    private static final String SELECT_EMPLOYEE_ORDINAL_PARAMS =
+            " SELECT                   " +
+            "   e.employee_id,         " +
+            "   e.first_name,          " +
+            "   e.last_name,           " +
+            "   e.active,              " +
+            "   e.hire_date,           " +
+            "   e.departure_date,      " +
+            "   e.payroll_id,          " +
+            "   e.salary               " +
+            " FROM  employee e         " +
+            " WHERE e.salary > ?       " +
+            " AND   e.last_name LIKE ? ";
+
+    private static final String SELECT_EMPLOYEE_NAMED_PARAMS =
+            " SELECT                           " +
+            "   e.employee_id,                 " +
+            "   e.first_name,                  " +
+            "   e.last_name,                   " +
+            "   e.active,                      " +
+            "   e.hire_date,                   " +
+            "   e.departure_date,              " +
+            "   e.payroll_id,                  " +
+            "   e.salary                       " +
+            " FROM  employee e                 " +
+            " WHERE e.salary > :salary         " +
+            " AND   e.last_name LIKE :lastName ";
+
 
     @Test
     public void testListEmployeesWithLargeSalaries1() {
         SqlRunner runner = new SqlRunner(dataSource());
 
-        // List results by specifying a result object type and bind parameters as variable arguments.
+        // List results by specifying a result object type and bind
+        // parameters as variable arguments.
         List<Employee> employees =
-                runner.list(" SELECT                   " +
-                            "   e.employee_id,         " +
-                            "   e.first_name,          " +
-                            "   e.last_name,           " +
-                            "   e.active,              " +
-                            "   e.hire_date,           " +
-                            "   e.departure_date,      " +
-                            "   e.payroll_id,          " +
-                            "   e.salary               " +
-                            " FROM  employee e         " +
-                            " WHERE e.salary > ?       " +
-                            " AND   e.last_name LIKE ? ",
+                runner.list(SELECT_EMPLOYEE_ORDINAL_PARAMS,
                         Employee.class,
-                        BigDecimal.valueOf(75000.00),
+                        75000.00,
                         "Lancaster");
 
         assertEmployees(employees);
@@ -65,25 +82,12 @@ public class SqlRunnerTest extends DbTest {
     public void testListEmployeesWithLargeSalaries2() {
         SqlRunner runner = new SqlRunner(dataSource());
 
-        // List results by specifying a result object type and named bind parameters as a map.
+        // List results by binding named parameters from a custom
+        // SqlParameterProvider, in this case a POJO.
         List<Employee> employees =
-                runner.list(" SELECT                           " +
-                            "   e.employee_id,                 " +
-                            "   e.first_name,                  " +
-                            "   e.last_name,                   " +
-                            "   e.active,                      " +
-                            "   e.hire_date,                   " +
-                            "   e.departure_date,              " +
-                            "   e.payroll_id,                  " +
-                            "   e.salary                       " +
-                            " FROM  employee e                 " +
-                            " WHERE e.salary > :salary         " +
-                            " AND   e.last_name LIKE :lastName ",
+                runner.list(SELECT_EMPLOYEE_NAMED_PARAMS,
                         Employee.class,
-                        Maps.newHashMap(
-                                "lastName", "Lancaster",
-                                "salary", BigDecimal.valueOf(75000.00)
-                        ));
+                        SqlParameters.from(new Employee("Jill", "Lancaster", 75000.00)));
 
         assertEmployees(employees);
 
@@ -93,21 +97,28 @@ public class SqlRunnerTest extends DbTest {
     public void testListEmployeesWithLargeSalaries3() {
         SqlRunner runner = new SqlRunner(dataSource());
 
+        // List results by specifying a result object type and
+        // named bind parameters as a map.
+        List<Employee> employees =
+                runner.list(SELECT_EMPLOYEE_NAMED_PARAMS,
+                        Employee.class,
+                        Maps.newHashMap(
+                                "lastName", "Lancaster",
+                                "salary", 75000.00
+                        ));
+
+        assertEmployees(employees);
+
+    }
+
+    @Test
+    public void testListEmployeesWithLargeSalaries4() {
+        SqlRunner runner = new SqlRunner(dataSource());
+
         // List results and map them directly from the ResultSet using
         // the indo.jdbc.ResultSets static helper.
         List<Employee> employees =
-                runner.list(" SELECT                           " +
-                            "   e.employee_id,                 " +
-                            "   e.first_name,                  " +
-                            "   e.last_name,                   " +
-                            "   e.active,                      " +
-                            "   e.hire_date,                   " +
-                            "   e.departure_date,              " +
-                            "   e.payroll_id,                  " +
-                            "   e.salary                       " +
-                            " FROM  employee e                 " +
-                            " WHERE e.salary > :salary         " +
-                            " AND   e.last_name LIKE :lastName ",
+                runner.list(SELECT_EMPLOYEE_NAMED_PARAMS,
                         rs -> new Employee(
                                 getBoolean(rs, "active"),
                                 getBigDecimal(rs, "salary"),
@@ -120,7 +131,7 @@ public class SqlRunnerTest extends DbTest {
                         ),
                         Maps.newHashMap(
                                 "lastName", "Lancaster",
-                                "salary", BigDecimal.valueOf(75000.00)
+                                "salary", 75000.00
                         ));
 
         assertEmployees(employees);
@@ -128,35 +139,23 @@ public class SqlRunnerTest extends DbTest {
     }
 
     @Test
-    public void testListEmployeesWithLargeSalaries4() {
+    public void testListEmployeesWithLargeSalaries5() {
         SqlRunner runner = new SqlRunner(dataSource());
 
-        // List results by binding named parameters from a custom
-        // SqlParameterProvider, in this case a POJO.
-        Employee example = new Employee();
-        example.setLastName("Lancaster");
-        example.setSalary(BigDecimal.valueOf(75000.00));
-
+        // List results by specifying a result object type and bind
+        // parameters as variable arguments.
         List<Employee> employees =
-                runner.list(" SELECT                           " +
-                            "   e.employee_id,                 " +
-                            "   e.first_name,                  " +
-                            "   e.last_name,                   " +
-                            "   e.active,                      " +
-                            "   e.hire_date,                   " +
-                            "   e.departure_date,              " +
-                            "   e.payroll_id,                  " +
-                            "   e.salary                       " +
-                            " FROM  employee e                 " +
-                            " WHERE e.salary > :salary         " +
-                            " AND   e.last_name LIKE :lastName ",
+                runner.list(SELECT_EMPLOYEE_ORDINAL_PARAMS,
                         Employee.class,
-                        SqlParameters.from(example));
+                        ColumnTypes
+                                .type("hire_date", Type.DATE)
+                                .andType("active", Type.BOOLEAN),
+                        75000.00,
+                        "Lancaster");
 
         assertEmployees(employees);
 
     }
-
 
     private void assertEmployees(List<Employee> employees) {
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Indo Contributors
+ * Copyright 2017 Indo Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ public class ColumnTypesTest {
     @Test
     public void testCreateMapping() {
         ColumnTypes columnTypes =
-                ColumnTypes.withType("name1", Type.STRING)
+                ColumnTypes.type("name1", Type.STRING)
                         .andType("name2", Type.INTEGER)
                         .andType("name3", Type.LONG);
 
@@ -48,11 +48,11 @@ public class ColumnTypesTest {
 
     @Test
     public void testGet1() {
-        assertEquals(Type.INTEGER, ColumnTypes.withType("name1", Type.INTEGER).get("name1").get());
+        assertEquals(Type.INTEGER, ColumnTypes.type("name1", Type.INTEGER).get("name1").get());
     }
 
     @Test
     public void testGet2() {
-        assertFalse(ColumnTypes.withType("name1", Type.INTEGER).get("name0").isPresent());
+        assertFalse(ColumnTypes.type("name1", Type.INTEGER).get("name0").isPresent());
     }
 }

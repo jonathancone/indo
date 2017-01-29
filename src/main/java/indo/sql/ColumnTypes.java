@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Indo Contributors
+ * Copyright 2017 Indo Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import java.util.Optional;
  * <pre>
  *   // Create an instance with multiple columns and their types.
  * {@code
- * ColumnTypes.withType("employee_id", Type.INTEGER)
+ * ColumnTypes.type("employee_id", Type.INTEGER)
  *            .andType("start_date", Type.DATE)
  *            .andType("salary", Type.BIG_DECIMAL);
  * }
@@ -69,7 +69,7 @@ public class ColumnTypes {
      * @param type       The type that the column should be mapped to.
      * @return A newly constructed mutable instance.
      */
-    public static ColumnTypes withType(String columnName, Type type) {
+    public static ColumnTypes type(String columnName, Type type) {
         Objects.requireNonNull(columnName);
         Objects.requireNonNull(type);
 
