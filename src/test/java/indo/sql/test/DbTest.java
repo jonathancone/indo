@@ -111,7 +111,7 @@ public abstract class DbTest {
         return Strings.before(testName.getMethodName(), '[');
     }
 
-    protected DataSource ds() {
+    protected DataSource dataSource() {
         return getDataSource();
     }
 

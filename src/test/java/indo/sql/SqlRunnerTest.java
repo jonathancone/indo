@@ -36,7 +36,7 @@ public class SqlRunnerTest extends DbTest {
 
     @Test
     public void testListEmployeesWithLargeSalaries1() {
-        SqlRunner runner = new SqlRunner(ds());
+        SqlRunner runner = new SqlRunner(dataSource());
 
         // List results by specifying a result object type and bind parameters as variable arguments.
         List<Employee> employees =
@@ -62,7 +62,7 @@ public class SqlRunnerTest extends DbTest {
 
     @Test
     public void testListEmployeesWithLargeSalaries2() {
-        SqlRunner runner = new SqlRunner(ds());
+        SqlRunner runner = new SqlRunner(dataSource());
 
         // List results by specifying a result object type and named bind parameters as a map.
         List<Employee> employees =
@@ -90,7 +90,7 @@ public class SqlRunnerTest extends DbTest {
 
     @Test
     public void testListEmployeesWithLargeSalaries3() {
-        SqlRunner runner = new SqlRunner(ds());
+        SqlRunner runner = new SqlRunner(dataSource());
 
         // List results and map them directly from the ResultSet using
         // the indo.jdbc.ResultSets static helper.
@@ -128,7 +128,7 @@ public class SqlRunnerTest extends DbTest {
 
     @Test
     public void testListEmployeesWithLargeSalaries4() {
-        SqlRunner runner = new SqlRunner(ds());
+        SqlRunner runner = new SqlRunner(dataSource());
 
         // List results by binding named parameters from a custom
         // SqlParameterProvider, in this case a POJO.
