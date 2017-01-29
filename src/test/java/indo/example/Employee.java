@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Indo Contributors
+ * Copyright 2017 Indo Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import java.util.Date;
 
 import static indo.jdbc.ResultSets.*;
 
-public class Employee {
+public class Employee implements RowIdentity {
     private boolean active;
 
     private BigDecimal salary;
@@ -30,7 +30,7 @@ public class Employee {
     private Date hireDate;
     private Date departureDate;
 
-    private Long employeeId;
+    private Integer employeeId;
     private Long payrollId;
 
     private String firstName;
@@ -39,7 +39,7 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(Long employeeId, String firstName, String lastName) {
+    public Employee(Integer employeeId, String firstName, String lastName) {
         this.employeeId = employeeId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -50,14 +50,14 @@ public class Employee {
                 getBigDecimal(rs, "salary"),
                 getDate(rs, "hireDate"),
                 getDate(rs, "departureDate"),
-                getLong(rs, "employeeId"),
+                getInt(rs, "employeeId"),
                 getLong(rs, "payrollId"),
                 getString(rs, "firstName"),
                 getString(rs, "lastName"));
     }
 
 
-    public Employee(boolean active, BigDecimal salary, Date hireDate, Date departureDate, Long employeeId, Long payrollId, String firstName, String lastName) {
+    public Employee(boolean active, BigDecimal salary, Date hireDate, Date departureDate, Integer employeeId, Long payrollId, String firstName, String lastName) {
         this.active = active;
         this.salary = salary;
         this.hireDate = hireDate;
@@ -68,11 +68,12 @@ public class Employee {
         this.lastName = lastName;
     }
 
-    public Long getEmployeeId() {
+
+    public Integer getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(Long employeeId) {
+    public void setEmployeeId(Integer employeeId) {
         this.employeeId = employeeId;
     }
 
@@ -135,5 +136,10 @@ public class Employee {
     @Override
     public String toString() {
         return String.format("%s %s (%d)", getFirstName(), getLastName(), getEmployeeId());
+    }
+
+    @Override
+    public Integer getRowId() {
+        return getEmployeeId() - 100;
     }
 }

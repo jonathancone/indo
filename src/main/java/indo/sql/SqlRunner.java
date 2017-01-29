@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Indo Contributors
+ * Copyright 2017 Indo Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,8 +56,21 @@ public class SqlRunner implements SqlOperations {
 
     public <T> List<T> list(String sql,
                             Class<T> type,
+                            SqlParameterProvider parameters) {
+        return list(DataSources.getConnection(dataSource), sql, type, parameters);
+    }
+
+    public <T> List<T> list(String sql,
+                            Class<T> type,
                             ColumnTypes columnTypes,
                             Object... parameters) {
+        return list(DataSources.getConnection(dataSource), sql, type, columnTypes, parameters);
+    }
+
+    public <T> List<T> list(String sql,
+                            Class<T> type,
+                            ColumnTypes columnTypes,
+                            SqlParameterProvider parameters) {
         return list(DataSources.getConnection(dataSource), sql, type, columnTypes, parameters);
     }
 
@@ -111,9 +124,26 @@ public class SqlRunner implements SqlOperations {
     public <T> List<T> list(Connection connection,
                             String sql,
                             Class<T> type,
+                            SqlParameterProvider parameters) {
+        return list(connection, sql, (rs) -> RowProcessor.using(type).map(rs), parameters);
+    }
+
+    @Override
+    public <T> List<T> list(Connection connection,
+                            String sql,
+                            Class<T> type,
                             ColumnTypes columnTypes,
                             Object... parameters) {
         return list(connection, sql, (rs) -> RowProcessor.using(type, columnTypes).map(rs), SqlParameters.fromArray(parameters));
+    }
+
+    @Override
+    public <T> List<T> list(Connection connection,
+                            String sql,
+                            Class<T> type,
+                            ColumnTypes columnTypes,
+                            SqlParameterProvider parameters) {
+        return list(connection, sql, (rs) -> RowProcessor.using(type, columnTypes).map(rs), parameters);
     }
 
     @Override

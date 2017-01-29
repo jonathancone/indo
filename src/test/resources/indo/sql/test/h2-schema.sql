@@ -19,7 +19,7 @@ CREATE TABLE payroll_detail (
 );
 
 CREATE TABLE employee (
-  employee_id    IDENTITY PRIMARY KEY,
+  employee_id    INTEGER PRIMARY KEY,
   first_name     VARCHAR(255) NOT NULL,
   last_name      VARCHAR(255) NOT NULL,
   active         BOOLEAN,

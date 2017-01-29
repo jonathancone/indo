@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Indo Contributors
+ * Copyright 2017 Indo Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,8 +36,19 @@ public interface SqlOperations {
     <T> List<T> list(Connection connection,
                      String sql,
                      Class<T> type,
+                     SqlParameterProvider parameters);
+
+    <T> List<T> list(Connection connection,
+                     String sql,
+                     Class<T> type,
                      ColumnTypes columnTypes,
                      Object... parameters);
+
+    <T> List<T> list(Connection connection,
+                     String sql,
+                     Class<T> type,
+                     ColumnTypes columnTypes,
+                     SqlParameterProvider parameters);
 
     <T> List<T> list(Connection connection,
                      String sql,

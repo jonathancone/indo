@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Indo Contributors
+ * Copyright 2017 Indo Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ import java.util.Optional;
  */
 public class PojoSqlParameters<T> implements SqlParameterProvider {
     private Reflect<T> reflect;
-    private Map<String, SqlParameter> parameters;
+    private Map<String, SqlParameter> lazyParameters;
 
 
     /**
@@ -44,7 +44,7 @@ public class PojoSqlParameters<T> implements SqlParameterProvider {
      */
     PojoSqlParameters(T instance) {
         this.reflect = Reflect.on(instance);
-        this.parameters = new HashMap<>();
+        this.lazyParameters = new HashMap<>();
     }
 
     /**
@@ -76,7 +76,8 @@ public class PojoSqlParameters<T> implements SqlParameterProvider {
      * Employee employee = new Employee();
      * employee.setSalary(...);
      *
-     * // The following will return a SqlParameter with the value retrieved from
+     * // The following will return a SqlParameter with the value retrieved
+     * from
      * employee.getSalary():
      *
      * Optional<SqlParameter> parameter = PojoSqlParameters.fromPojo(employee).findParameter("salary");
@@ -89,9 +90,9 @@ public class PojoSqlParameters<T> implements SqlParameterProvider {
     public Optional<SqlParameter> findParameter(String name) {
         SqlParameter parameter = null;
 
-        if (parameters.containsKey(name)) {
+        if (lazyParameters.containsKey(name)) {
             // We already handled this one, so we've cached it.
-            parameter = parameters.get(name);
+            parameter = lazyParameters.get(name);
         } else {
             Optional<Method> getter = reflect.findGetter(name);
 
@@ -101,6 +102,7 @@ public class PojoSqlParameters<T> implements SqlParameterProvider {
 
                 if (property.isPresent()) {
                     parameter = new SqlParameter(name, property.get());
+                    lazyParameters.put(name, parameter);
                 }
             }
         }
@@ -118,6 +120,6 @@ public class PojoSqlParameters<T> implements SqlParameterProvider {
 
     @Override
     public Iterator<SqlParameter> iterator() {
-        return parameters.values().iterator();
+        return lazyParameters.values().iterator();
     }
 }

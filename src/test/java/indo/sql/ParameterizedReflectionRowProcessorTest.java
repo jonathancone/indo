@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Indo Contributors
+ * Copyright 2017 Indo Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,97 +60,97 @@ public class ParameterizedReflectionRowProcessorTest {
 
     @Parameterized.Parameters
     public static List<Object[]> parameters() {
-        return Arrays.asList(new Object[][]{
+        return Arrays.asList(new Object[][] {
                 {
                         Employee.class,
-                        new String[]{"employeeId", "firstName", "lastName", "salary"},
-                        new String[]{"employeeId", "firstName", "lastName", "salary"},
-                        new Object[]{0L, "firstName", "lastName", BigDecimal.valueOf(33.33)},
-                        new MappingStrategy[]{MappingStrategy.EXCLUSIVE}
+                        new String[] {"employeeId", "firstName", "lastName", "salary"},
+                        new String[] {"employeeId", "firstName", "lastName", "salary"},
+                        new Object[] {0L, "firstName", "lastName", BigDecimal.valueOf(33.33)},
+                        new MappingStrategy[] {MappingStrategy.EXCLUSIVE}
                 },
                 {
                         Employee.class,
-                        new String[]{"employeeId", "firstName", "lastName", "salary"},
-                        new String[]{"employeeId", "firstName", "lastName", "salary"},
-                        new Object[]{null, null, null, null},
-                        new MappingStrategy[]{MappingStrategy.EXCLUSIVE}
+                        new String[] {"employeeId", "firstName", "lastName", "salary"},
+                        new String[] {"employeeId", "firstName", "lastName", "salary"},
+                        new Object[] {null, null, null, null},
+                        new MappingStrategy[] {MappingStrategy.EXCLUSIVE}
                 },
                 {
                         InitializedEmployee.class,
-                        new String[]{"employeeId", "firstName", "lastName", "salary"},
-                        new String[]{"employeeId", "firstName", "lastName", "salary"},
-                        new Object[]{null, null, null, null},
-                        new MappingStrategy[]{MappingStrategy.EXCLUSIVE}
+                        new String[] {"employeeId", "firstName", "lastName", "salary"},
+                        new String[] {"employeeId", "firstName", "lastName", "salary"},
+                        new Object[] {null, null, null, null},
+                        new MappingStrategy[] {MappingStrategy.EXCLUSIVE}
                 },
                 {
                         Employee.class,
-                        new String[]{"employeeId", "firstName", "lastName", "salary"},
-                        new String[]{"EmployeeId", "FirstName", "LastName", "Salary"},
-                        new Object[]{0L, "firstName", "lastName", BigDecimal.valueOf(33.33)},
-                        new MappingStrategy[]{MappingStrategy.CASE_INSENSITIVE}
+                        new String[] {"employeeId", "firstName", "lastName", "salary"},
+                        new String[] {"EmployeeId", "FirstName", "LastName", "Salary"},
+                        new Object[] {0L, "firstName", "lastName", BigDecimal.valueOf(33.33)},
+                        new MappingStrategy[] {MappingStrategy.CASE_INSENSITIVE}
                 },
                 {
                         Employee.class,
-                        new String[]{"employeeId", "firstName", "lastName", "salary"},
-                        new String[]{"employeeId", "firstname", "lastname", "salary"},
-                        new Object[]{0L, "firstName", "lastName", BigDecimal.valueOf(33.33)},
-                        new MappingStrategy[]{MappingStrategy.CASE_INSENSITIVE}
+                        new String[] {"employeeId", "firstName", "lastName", "salary"},
+                        new String[] {"employeeId", "firstname", "lastname", "salary"},
+                        new Object[] {0L, "firstName", "lastName", BigDecimal.valueOf(33.33)},
+                        new MappingStrategy[] {MappingStrategy.CASE_INSENSITIVE}
                 },
                 {
                         Employee.class,
-                        new String[]{"employeeId", "firstName", "lastName", "salary"},
-                        new String[]{"EMPLOYEEID", "FIRSTNAME", "LASTNAME", "SALARY"},
-                        new Object[]{0L, "firstName", "lastName", BigDecimal.valueOf(33.33)},
-                        new MappingStrategy[]{MappingStrategy.CASE_INSENSITIVE}
+                        new String[] {"employeeId", "firstName", "lastName", "salary"},
+                        new String[] {"EMPLOYEEID", "FIRSTNAME", "LASTNAME", "SALARY"},
+                        new Object[] {0L, "firstName", "lastName", BigDecimal.valueOf(33.33)},
+                        new MappingStrategy[] {MappingStrategy.CASE_INSENSITIVE}
                 },
                 {
                         Employee.class,
-                        new String[]{"employeeId", "firstName", "lastName", "salary"},
-                        new String[]{"EMPLOYEEID", "FIRSTNAME", "LASTNAME", "SALARY"},
-                        new Object[]{null, null, null, null},
-                        new MappingStrategy[]{MappingStrategy.CASE_INSENSITIVE}
+                        new String[] {"employeeId", "firstName", "lastName", "salary"},
+                        new String[] {"EMPLOYEEID", "FIRSTNAME", "LASTNAME", "SALARY"},
+                        new Object[] {null, null, null, null},
+                        new MappingStrategy[] {MappingStrategy.CASE_INSENSITIVE}
                 },
                 {
                         InitializedEmployee.class,
-                        new String[]{"employeeId", "firstName", "lastName", "salary"},
-                        new String[]{"EMPLOYEEID", "FIRSTNAME", "LASTNAME", "SALARY"},
-                        new Object[]{null, null, null, null},
-                        new MappingStrategy[]{MappingStrategy.CASE_INSENSITIVE}
+                        new String[] {"employeeId", "firstName", "lastName", "salary"},
+                        new String[] {"EMPLOYEEID", "FIRSTNAME", "LASTNAME", "SALARY"},
+                        new Object[] {null, null, null, null},
+                        new MappingStrategy[] {MappingStrategy.CASE_INSENSITIVE}
                 },
                 {
                         Employee.class,
-                        new String[]{"employeeId", "firstName", "lastName", "salary"},
-                        new String[]{"employee_id", "first_name", "last_name", "salary"},
-                        new Object[]{0L, "firstName", "lastName", BigDecimal.valueOf(33.33)},
-                        new MappingStrategy[]{MappingStrategy.INCLUSIVE}
+                        new String[] {"employeeId", "firstName", "lastName", "salary"},
+                        new String[] {"employee_id", "first_name", "last_name", "salary"},
+                        new Object[] {0L, "firstName", "lastName", BigDecimal.valueOf(33.33)},
+                        new MappingStrategy[] {MappingStrategy.INCLUSIVE}
                 },
                 {
                         Employee.class,
-                        new String[]{"employeeId", "firstName", "lastName", "salary"},
-                        new String[]{"EMPLOYEE_ID", "FIRST_NAME", "LAST_NAME", "SALARY"},
-                        new Object[]{0L, "firstName", "lastName", BigDecimal.valueOf(33.33)},
-                        new MappingStrategy[]{MappingStrategy.INCLUSIVE}
+                        new String[] {"employeeId", "firstName", "lastName", "salary"},
+                        new String[] {"EMPLOYEE_ID", "FIRST_NAME", "LAST_NAME", "SALARY"},
+                        new Object[] {0L, "firstName", "lastName", BigDecimal.valueOf(33.33)},
+                        new MappingStrategy[] {MappingStrategy.INCLUSIVE}
                 },
                 {
                         Employee.class,
-                        new String[]{"employeeId", "firstName", "lastName", "salary"},
-                        new String[]{"EMPLOYEE_ID", "FIRST_NAME", "LAST_NAME", "SALARY"},
-                        new Object[]{null, "firstName", "lastName", BigDecimal.valueOf(33.33)},
-                        new MappingStrategy[]{MappingStrategy.INCLUSIVE}
+                        new String[] {"employeeId", "firstName", "lastName", "salary"},
+                        new String[] {"EMPLOYEE_ID", "FIRST_NAME", "LAST_NAME", "SALARY"},
+                        new Object[] {null, "firstName", "lastName", BigDecimal.valueOf(33.33)},
+                        new MappingStrategy[] {MappingStrategy.INCLUSIVE}
                 },
                 {
                         Employee.class,
-                        new String[]{"employeeId", "firstName", "lastName", "salary"},
-                        new String[]{"EMPLOYEE_ID", "FIRST_NAME", "LAST_NAME", "SALARY"},
-                        new Object[]{null, null, null, null},
-                        new MappingStrategy[]{MappingStrategy.INCLUSIVE}
+                        new String[] {"employeeId", "firstName", "lastName", "salary"},
+                        new String[] {"EMPLOYEE_ID", "FIRST_NAME", "LAST_NAME", "SALARY"},
+                        new Object[] {null, null, null, null},
+                        new MappingStrategy[] {MappingStrategy.INCLUSIVE}
                 },
                 {
                         InitializedEmployee.class,
-                        new String[]{"employeeId", "firstName", "lastName", "salary"},
-                        new String[]{"EMPLOYEE_ID", "FIRST_NAME", "LAST_NAME", "SALARY"},
-                        new Object[]{null, null, null, null},
-                        new MappingStrategy[]{MappingStrategy.INCLUSIVE}
+                        new String[] {"employeeId", "firstName", "lastName", "salary"},
+                        new String[] {"EMPLOYEE_ID", "FIRST_NAME", "LAST_NAME", "SALARY"},
+                        new Object[] {null, null, null, null},
+                        new MappingStrategy[] {MappingStrategy.INCLUSIVE}
                 },
 
         });
@@ -200,7 +200,7 @@ public class ParameterizedReflectionRowProcessorTest {
      */
     public static class InitializedEmployee extends Employee {
         public InitializedEmployee() {
-            super(true, BigDecimal.valueOf(200.00), new Date(), new Date(), 500L, 500L, "First", "Last");
+            super(true, BigDecimal.valueOf(200.00), new Date(), new Date(), 500, 500L, "First", "Last");
         }
     }
 

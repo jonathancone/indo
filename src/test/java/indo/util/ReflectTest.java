@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Indo Contributors
+ * Copyright 2017 Indo Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -379,16 +379,9 @@ public class ReflectTest {
         Item item = new Item();
 
         Method setIntTest1 = Item.class.getMethod("setIntTest", int.class);
-        //  Method setIntTest2 = Item.class.getMethod("setIntTest", Integer.class);
 
         setIntTest1.invoke(item, 3);
         setIntTest1.invoke(item, Integer.valueOf(3));
-
-        //setIntTest2.invoke(item, 3);
-        //setIntTest2.invoke(item, Integer.valueOf(3));
-
-        System.out.println("Test");
-
     }
 
     protected static class Item {

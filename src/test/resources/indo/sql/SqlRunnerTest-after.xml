@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2015 Indo Contributors
+  ~ Copyright 2017 Indo Contributors
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -15,13 +15,12 @@
   -->
 
 <dataset>
-    <employee employee_id="100" first_name="John" last_name="Joyner" hire_date="1997-07-15"
-              departure_date="[null]"
+    <employee employee_id="100" first_name="John" last_name="Joyner" hire_date="1997-07-15" departure_date="[null]"
               active="1" payroll_id="1000" salary="129000.00"/>
-    <employee employee_id="101" first_name="Bill" last_name="Lamphere" hire_date="1999-02-11"
-              departure_date="[null]"
+    <employee employee_id="101" first_name="Bill" last_name="Lamphere" hire_date="1999-02-11" departure_date="[null]"
               active="1" payroll_id="1001" salary="121000.00"/>
-    <employee employee_id="102" first_name="Mary" last_name="Hitchens" hire_date="2007-07-21"
-              departure_date="[null]"
+    <employee employee_id="102" first_name="Mary" last_name="Hitchens" hire_date="2007-07-21" departure_date="[null]"
               active="1" payroll_id="1002" salary="138000.00"/>
+    <employee employee_id="103" first_name="Jill" last_name="Lancaster" hire_date="2017-01-08" departure_date="[null]"
+              active="1" payroll_id="1003" salary="104000.00"/>
 </dataset>

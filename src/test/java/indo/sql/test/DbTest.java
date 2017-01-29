@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Indo Contributors
+ * Copyright 2017 Indo Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,9 @@
 
 package indo.sql.test;
 
+import indo.example.RowIdentity;
 import indo.jdbc.DataSources;
+import indo.log.Logger;
 import indo.util.Strings;
 import indo.util.Unchecked;
 import org.dbunit.dataset.datatype.DataType;
@@ -125,24 +127,28 @@ public abstract class DbTest {
         return DataSources.getConnection(getDbConfig().getDataSource());
     }
 
-    protected <T, R> void assertEqualsRowValue(String expectedTable, String expectedColumn, List<T> results, Function<T, R> getterFunction) {
-
+    protected <T, R> void assertEqualsRowValue(String expectedTable, String expectedColumn, List<? extends RowIdentity> results, Function<T, R> getterFunction) {
         for (int i = 0; i < results.size(); i++) {
-            assertEqualsRowValue(expectedTable, expectedColumn, i, results, getterFunction);
+            assertEqualsRowValue(expectedTable, expectedColumn, i, results.get(i).getRowId(), results, getterFunction);
         }
     }
 
-    protected <T, R> void assertEqualsRowValue(String expectedTable, String expectedColumn, int expectedRow, List<T> results, Function<T, R> getterFunction) {
-        assertEqualsRowValue(expectedTable, expectedColumn, expectedRow, getterFunction.apply(results.get(expectedRow)));
+    protected <T, R> void assertEqualsRowValue(String expectedTable, String expectedColumn, int offset, int expectedRow, List<? extends RowIdentity> results, Function<T, R> getterFunction) {
+        assertEqualsRowValue(expectedTable, expectedColumn, expectedRow, getterFunction.apply((T) results.get(offset)));
     }
 
     protected void assertEqualsRowValue(String expectedTable, String expectedColumn, int expectedRow, Object actual) {
         Object expected = getDbConfig().getValue(expectedTable, expectedColumn, expectedRow);
 
         DataType dataType = DataType.forObject(actual);
-
         try {
-            assertEquals("The expected column value didn't match the actual value.", dataType.typeCast(expected), actual);
+            Object o = dataType.typeCast(expected);
+
+            assertEquals(
+                    String.format("The expected column value (%s.%s) didn't match the actual value.", expectedTable, expectedColumn),
+                    o, actual);
+
+            Logger.debug(this, "Expected %s, returned %s", o, actual);
         } catch (TypeCastException e) {
             throw Unchecked.exception(e);
         }

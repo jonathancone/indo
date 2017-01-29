@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Indo Contributors
+ * Copyright 2017 Indo Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static indo.jdbc.ResultSets.getLong;
+import static indo.jdbc.ResultSets.getInt;
 import static indo.jdbc.ResultSets.getString;
 
 /**
@@ -68,7 +68,7 @@ public class SqlRunnerExamples {
                             " AND                 " +
                             "   e.lastName LIKE ? ",
                         rs -> new Employee(
-                                getLong(rs, "employeeId"),
+                                getInt(rs, "employeeId"),
                                 getString(rs, "firstName"),
                                 getString(rs, "lastName")
                         ),
