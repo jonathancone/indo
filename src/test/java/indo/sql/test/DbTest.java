@@ -129,7 +129,7 @@ public abstract class DbTest {
 
     protected <T, R> void assertEqualsRowValue(String expectedTable, String expectedColumn, List<? extends RowIdentity> results, Function<T, R> getterFunction) {
         for (int i = 0; i < results.size(); i++) {
-            assertEqualsRowValue(expectedTable, expectedColumn, i, results.get(i).getRowId(), results, getterFunction);
+            assertEqualsRowValue(expectedTable, expectedColumn, i, results.get(i).getRowId().intValue(), results, getterFunction);
         }
     }
 

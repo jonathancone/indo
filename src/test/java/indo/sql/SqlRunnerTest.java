@@ -40,8 +40,6 @@ public class SqlRunnerTest extends DbTest {
             "   e.last_name,           " +
             "   e.active,              " +
             "   e.hire_date,           " +
-            "   e.departure_date,      " +
-            "   e.payroll_id,          " +
             "   e.salary               " +
             " FROM  employee e         " +
             " WHERE e.salary > ?       " +
@@ -54,8 +52,6 @@ public class SqlRunnerTest extends DbTest {
             "   e.last_name,                   " +
             "   e.active,                      " +
             "   e.hire_date,                   " +
-            "   e.departure_date,              " +
-            "   e.payroll_id,                  " +
             "   e.salary                       " +
             " FROM  employee e                 " +
             " WHERE e.salary > :salary         " +
@@ -120,15 +116,12 @@ public class SqlRunnerTest extends DbTest {
         List<Employee> employees =
                 runner.list(SELECT_EMPLOYEE_NAMED_PARAMS,
                         rs -> new Employee(
-                                getBoolean(rs, "active"),
-                                getBigDecimal(rs, "salary"),
-                                getDate(rs, "hire_date"),
-                                getDate(rs, "departure_date"),
-                                getInt(rs, "employee_id"),
-                                getLong(rs, "payroll_id"),
+                                getLong(rs, "employee_id"),
                                 getString(rs, "first_name"),
-                                getString(rs, "last_name")
-                        ),
+                                getString(rs, "last_name"),
+                                getDate(rs, "hire_date"),
+                                getBigDecimal(rs, "salary"),
+                                getBoolean(rs, "active")),
                         Maps.newHashMap(
                                 "lastName", "Lancaster",
                                 "salary", 75000.00
@@ -166,8 +159,6 @@ public class SqlRunnerTest extends DbTest {
         assertEqualsRowValue("employee", "last_name", employees, Employee::getLastName);
         assertEqualsRowValue("employee", "active", employees, Employee::isActive);
         assertEqualsRowValue("employee", "hire_date", employees, Employee::getHireDate);
-        assertEqualsRowValue("employee", "departure_date", employees, Employee::getDepartureDate);
-        assertEqualsRowValue("employee", "payroll_id", employees, Employee::getPayrollId);
         assertEqualsRowValue("employee", "salary", employees, Employee::getSalary);
 
     }

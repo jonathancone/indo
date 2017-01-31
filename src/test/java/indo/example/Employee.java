@@ -17,10 +17,8 @@
 package indo.example;
 
 import java.math.BigDecimal;
-import java.sql.ResultSet;
 import java.util.Date;
-
-import static indo.jdbc.ResultSets.*;
+import java.util.List;
 
 public class Employee implements RowIdentity {
     private boolean active;
@@ -28,18 +26,19 @@ public class Employee implements RowIdentity {
     private BigDecimal salary;
 
     private Date hireDate;
-    private Date departureDate;
 
-    private Integer employeeId;
-    private Long payrollId;
+    private Long employeeId;
 
     private String firstName;
     private String lastName;
 
+    private Department department;
+    private List<Shift> shifts;
+
     public Employee() {
     }
 
-    public Employee(Integer employeeId, String firstName, String lastName) {
+    public Employee(Long employeeId, String firstName, String lastName) {
         this.employeeId = employeeId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -51,44 +50,22 @@ public class Employee implements RowIdentity {
         this.salary = BigDecimal.valueOf(salary);
     }
 
-    public Employee(ResultSet rs) {
-        this(getBoolean(rs, "active"),
-                getBigDecimal(rs, "salary"),
-                getDate(rs, "hireDate"),
-                getDate(rs, "departureDate"),
-                getInt(rs, "employeeId"),
-                getLong(rs, "payrollId"),
-                getString(rs, "firstName"),
-                getString(rs, "lastName"));
-    }
 
-
-    public Employee(boolean active, BigDecimal salary, Date hireDate, Date departureDate, Integer employeeId, Long payrollId, String firstName, String lastName) {
-        this.active = active;
-        this.salary = salary;
-        this.hireDate = hireDate;
-        this.departureDate = departureDate;
+    public Employee(Long employeeId, String firstName, String lastName, Date hireDate, BigDecimal salary, boolean active) {
         this.employeeId = employeeId;
-        this.payrollId = payrollId;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.hireDate = hireDate;
+        this.salary = salary;
+        this.active = active;
     }
 
-
-    public Integer getEmployeeId() {
+    public Long getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(Integer employeeId) {
+    public void setEmployeeId(Long employeeId) {
         this.employeeId = employeeId;
-    }
-
-    public Long getPayrollId() {
-        return payrollId;
-    }
-
-    public void setPayrollId(Long payrollId) {
-        this.payrollId = payrollId;
     }
 
     public Date getHireDate() {
@@ -115,14 +92,6 @@ public class Employee implements RowIdentity {
         this.lastName = lastName;
     }
 
-    public Date getDepartureDate() {
-        return departureDate;
-    }
-
-    public void setDepartureDate(Date departureDate) {
-        this.departureDate = departureDate;
-    }
-
     public boolean isActive() {
         return active;
     }
@@ -145,7 +114,7 @@ public class Employee implements RowIdentity {
     }
 
     @Override
-    public Integer getRowId() {
+    public Long getRowId() {
         return getEmployeeId() - 100;
     }
 }

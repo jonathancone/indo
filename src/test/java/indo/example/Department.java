@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Indo Contributors
+ * Copyright 2017 Indo Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +23,20 @@ import java.util.List;
  */
 public class Department {
 
-    private int departmentId;
+    private Integer departmentId;
     private String name;
+    private Employee manager;
     private List<Employee> employees;
 
+    public Department() {
+    }
+
+    public Department(Integer departmentId, String name, Employee manager, List<Employee> employees) {
+        this.departmentId = departmentId;
+        this.name = name;
+        this.manager = manager;
+        this.employees = employees;
+    }
 
     public int getDepartmentId() {
         return departmentId;
@@ -42,6 +52,14 @@ public class Department {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Employee getManager() {
+        return manager;
+    }
+
+    public void setManager(Employee manager) {
+        this.manager = manager;
     }
 
     public List<Employee> getEmployees() {

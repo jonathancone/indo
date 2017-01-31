@@ -20,5 +20,5 @@ package indo.example;
  * @author Jonathan Cone
  */
 public interface RowIdentity {
-    Integer getRowId();
+    Long getRowId();
 }

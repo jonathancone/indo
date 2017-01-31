@@ -200,7 +200,7 @@ public class ParameterizedReflectionRowProcessorTest {
      */
     public static class InitializedEmployee extends Employee {
         public InitializedEmployee() {
-            super(true, BigDecimal.valueOf(200.00), new Date(), new Date(), 500, 500L, "First", "Last");
+            super(500L, "First", "Last", new Date(), BigDecimal.valueOf(200.00), true);
         }
     }
 
