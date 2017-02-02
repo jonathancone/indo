@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Indo Contributors
+ * Copyright 2017 Indo Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,10 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 
 /**
@@ -55,6 +59,10 @@ public interface Type<T> {
     Type<Time> TIME = ResultSets::getTime;
     Type<Timestamp> TIMESTAMP = ResultSets::getTimestamp;
     Type<java.net.URL> URL = ResultSets::getURL;
+    Type<LocalDate> LOCAL_DATE = DateType::getLocalDate;
+    Type<LocalDateTime> LOCAL_DATE_TIME = DateType::getLocalDateTime;
+    Type<LocalTime> LOCAL_TIME = DateType::getLocalTime;
+    Type<Instant> INSTANT = DateType::getInstant;
 
 
     /**
