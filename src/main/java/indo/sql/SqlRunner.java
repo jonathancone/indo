@@ -160,7 +160,7 @@ public class SqlRunner implements SqlOperations {
 
         try (PreparedStatement ps = connection.prepareStatement(parsedSql)) {
 
-            for (SqlParameter sqlParameter : metaData.getSqlParameterProvider()) {
+            for (SqlParameter sqlParameter : parameters) {
                 for (Integer index : sqlParameter.getIndexes()) {
 
                     Optional<Integer> type = sqlParameter.type();
