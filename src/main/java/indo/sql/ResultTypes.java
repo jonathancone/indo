@@ -25,15 +25,15 @@ import java.util.Optional;
 /**
  * This class can be used when the JDBC driver supports returning an object as a
  * different data type that the default type the driver supports.  By using an
- * instance of {@link ResultType}, you can specify a specific column and the type you
- * would like the driver to return it as.
+ * instance of {@link ResultType}, you can specify a specific column and the
+ * type you would like the driver to return it as.
  * <p>
  * <pre>
  *   // Create an instance with multiple columns and their types.
  * {@code
- * ResultTypes.type("employee_id", ResultType.INTEGER)
- *            .andType("start_date", ResultType.DATE)
- *            .andType("salary", ResultType.BIG_DECIMAL);
+ * ResultTypes.forColumn("employee_id", ResultType.INTEGER)
+ *            .andColumn("start_date", ResultType.DATE)
+ *            .andColumn("salary", ResultType.BIG_DECIMAL);
  * }
  * </pre>
  *
@@ -66,7 +66,7 @@ public class ResultTypes {
      * Create a new instance with the first specified resultType mapping.
      *
      * @param columnName The name of the column to map.
-     * @param resultType       The resultType that the column should be mapped to.
+     * @param resultType The resultType that the column should be mapped to.
      * @return A newly constructed mutable instance.
      */
     public static ResultTypes forColumn(String columnName, ResultType resultType) {
@@ -82,7 +82,7 @@ public class ResultTypes {
      * Add another resultType mapping to this instance.
      *
      * @param columnName The name of the column to map.
-     * @param resultType       The resultType that the column should be mapped to.
+     * @param resultType The resultType that the column should be mapped to.
      * @return The {@code this} instance for chaining.
      */
     public ResultTypes andColumn(String columnName, ResultType resultType) {
