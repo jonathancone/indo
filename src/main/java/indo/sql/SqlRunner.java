@@ -60,16 +60,16 @@ public class SqlRunner implements SqlOperations {
         return list(DataSources.getConnection(dataSource), sql, type, parameters);
     }
 
-    public <T> List<T> list(String sql, Class<T> type, ColumnTypes columnTypes, Object... parameters) {
-        return list(DataSources.getConnection(dataSource), sql, type, columnTypes, parameters);
+    public <T> List<T> list(String sql, Class<T> type, ResultTypes resultTypes, Object... parameters) {
+        return list(DataSources.getConnection(dataSource), sql, type, resultTypes, parameters);
     }
 
-    public <T> List<T> list(String sql, Class<T> type, ColumnTypes columnTypes, SqlParameterProvider parameters) {
-        return list(DataSources.getConnection(dataSource), sql, type, columnTypes, parameters);
+    public <T> List<T> list(String sql, Class<T> type, ResultTypes resultTypes, SqlParameterProvider parameters) {
+        return list(DataSources.getConnection(dataSource), sql, type, resultTypes, parameters);
     }
 
-    public <T> List<T> list(String sql, Class<T> type, ColumnTypes columnTypes, Map<String, ?> parameters) {
-        return list(DataSources.getConnection(dataSource), sql, type, columnTypes, parameters);
+    public <T> List<T> list(String sql, Class<T> type, ResultTypes resultTypes, Map<String, ?> parameters) {
+        return list(DataSources.getConnection(dataSource), sql, type, resultTypes, parameters);
     }
 
     public <T> List<T> list(String sql, RowProcessor<T> rowProcessor, Object... parameters) {
@@ -104,18 +104,18 @@ public class SqlRunner implements SqlOperations {
     }
 
     @Override
-    public <T> List<T> list(Connection connection, String sql, Class<T> type, ColumnTypes columnTypes, Object... parameters) {
-        return list(connection, sql, (rs) -> RowProcessor.using(type, columnTypes).map(rs), SqlParameters.fromArray(parameters));
+    public <T> List<T> list(Connection connection, String sql, Class<T> type, ResultTypes resultTypes, Object... parameters) {
+        return list(connection, sql, (rs) -> RowProcessor.using(type, resultTypes).map(rs), SqlParameters.fromArray(parameters));
     }
 
     @Override
-    public <T> List<T> list(Connection connection, String sql, Class<T> type, ColumnTypes columnTypes, SqlParameterProvider parameters) {
-        return list(connection, sql, (rs) -> RowProcessor.using(type, columnTypes).map(rs), parameters);
+    public <T> List<T> list(Connection connection, String sql, Class<T> type, ResultTypes resultTypes, SqlParameterProvider parameters) {
+        return list(connection, sql, (rs) -> RowProcessor.using(type, resultTypes).map(rs), parameters);
     }
 
     @Override
-    public <T> List<T> list(Connection connection, String sql, Class<T> type, ColumnTypes columnTypes, Map<String, ?> parameters) {
-        return list(connection, sql, (rs) -> RowProcessor.using(type, columnTypes).map(rs), SqlParameters.fromMap(parameters));
+    public <T> List<T> list(Connection connection, String sql, Class<T> type, ResultTypes resultTypes, Map<String, ?> parameters) {
+        return list(connection, sql, (rs) -> RowProcessor.using(type, resultTypes).map(rs), SqlParameters.fromMap(parameters));
     }
 
 

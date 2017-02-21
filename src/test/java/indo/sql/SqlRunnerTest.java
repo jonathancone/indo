@@ -140,9 +140,9 @@ public class SqlRunnerTest extends DbTest {
         List<Employee> employees =
                 runner.list(SELECT_EMPLOYEE_ORDINAL_PARAMS,
                         Employee.class,
-                        ColumnTypes
-                                .type("hire_date", Type.DATE)
-                                .andType("active", Type.BOOLEAN),
+                        ResultTypes
+                                .type("hire_date", ResultType.DATE)
+                                .andType("active", ResultType.BOOLEAN),
                         75000.00,
                         "Lancaster");
 

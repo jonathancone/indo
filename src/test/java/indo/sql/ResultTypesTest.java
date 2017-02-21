@@ -22,37 +22,37 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 /**
- * Unit tests for {@link ColumnTypes}.
+ * Unit tests for {@link ResultTypes}.
  *
  * @author Jonathan Cone
- * @see ColumnTypes
+ * @see ResultTypes
  */
-public class ColumnTypesTest {
+public class ResultTypesTest {
 
     @Test(expected = IllegalStateException.class)
     public void testEmpty() {
-        ColumnTypes.empty().andType("name", Type.BIG_DECIMAL);
+        ResultTypes.empty().andType("name", ResultType.BIG_DECIMAL);
     }
 
     @Test
     public void testCreateMapping() {
-        ColumnTypes columnTypes =
-                ColumnTypes.type("name1", Type.STRING)
-                        .andType("name2", Type.INTEGER)
-                        .andType("name3", Type.LONG);
+        ResultTypes resultTypes =
+                ResultTypes.type("name1", ResultType.STRING)
+                        .andType("name2", ResultType.INTEGER)
+                        .andType("name3", ResultType.LONG);
 
-        assertEquals(Type.STRING, columnTypes.get("name1").get());
-        assertEquals(Type.INTEGER, columnTypes.get("name2").get());
-        assertEquals(Type.LONG, columnTypes.get("name3").get());
+        assertEquals(ResultType.STRING, resultTypes.get("name1").get());
+        assertEquals(ResultType.INTEGER, resultTypes.get("name2").get());
+        assertEquals(ResultType.LONG, resultTypes.get("name3").get());
     }
 
     @Test
     public void testGet1() {
-        assertEquals(Type.INTEGER, ColumnTypes.type("name1", Type.INTEGER).get("name1").get());
+        assertEquals(ResultType.INTEGER, ResultTypes.type("name1", ResultType.INTEGER).get("name1").get());
     }
 
     @Test
     public void testGet2() {
-        assertFalse(ColumnTypes.type("name1", Type.INTEGER).get("name0").isPresent());
+        assertFalse(ResultTypes.type("name1", ResultType.INTEGER).get("name0").isPresent());
     }
 }

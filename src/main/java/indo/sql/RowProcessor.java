@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Indo Contributors
+ * Copyright 2017 Indo Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,8 +28,8 @@ import java.sql.ResultSet;
 @FunctionalInterface
 public interface RowProcessor<T> {
 
-    static <S> RowProcessor<S> using(Class<S> type, ColumnTypes columnTypes) {
-        return new ReflectionRowProcessor<>(type, columnTypes);
+    static <S> RowProcessor<S> using(Class<S> type, ResultTypes resultTypes) {
+        return new ReflectionRowProcessor<>(type, resultTypes);
     }
 
     static <S> RowProcessor<S> using(Class<S> type) {

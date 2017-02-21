@@ -37,32 +37,32 @@ import java.util.Date;
  * needed on-the-fly via method reference or lambda expression.
  *
  * @author Jonathan Cone
- * @see ColumnTypes
+ * @see ResultTypes
  * @see ResultSet
  */
 @FunctionalInterface
-public interface Type<T> {
+public interface ResultType<T> {
 
-    Type<BigDecimal> BIG_DECIMAL = ResultSets::getBigDecimal;
-    Type<Boolean> BOOLEAN = ResultSets::getBoolean;
-    Type<Byte> BYTE = ResultSets::getByte;
-    Type<byte[]> BYTES = ResultSets::getBytes;
-    Type<Date> DATE = ResultSets::getDate;
-    Type<Double> DOUBLE = ResultSets::getDouble;
-    Type<Float> FLOAT = ResultSets::getFloat;
-    Type<Integer> INTEGER = ResultSets::getInt;
-    Type<Long> LONG = ResultSets::getLong;
-    Type<String> NSTRING = ResultSets::getNString;
-    Type<Object> OBJECT = ResultSets::getObject;
-    Type<Short> SHORT = ResultSets::getShort;
-    Type<String> STRING = ResultSets::getString;
-    Type<Time> TIME = ResultSets::getTime;
-    Type<Timestamp> TIMESTAMP = ResultSets::getTimestamp;
-    Type<java.net.URL> URL = ResultSets::getURL;
-    Type<LocalDate> LOCAL_DATE = DateType::getLocalDate;
-    Type<LocalDateTime> LOCAL_DATE_TIME = DateType::getLocalDateTime;
-    Type<LocalTime> LOCAL_TIME = DateType::getLocalTime;
-    Type<Instant> INSTANT = DateType::getInstant;
+    ResultType<BigDecimal> BIG_DECIMAL = ResultSets::getBigDecimal;
+    ResultType<Boolean> BOOLEAN = ResultSets::getBoolean;
+    ResultType<Byte> BYTE = ResultSets::getByte;
+    ResultType<byte[]> BYTES = ResultSets::getBytes;
+    ResultType<Date> DATE = ResultSets::getDate;
+    ResultType<Double> DOUBLE = ResultSets::getDouble;
+    ResultType<Float> FLOAT = ResultSets::getFloat;
+    ResultType<Integer> INTEGER = ResultSets::getInt;
+    ResultType<Long> LONG = ResultSets::getLong;
+    ResultType<String> NSTRING = ResultSets::getNString;
+    ResultType<Object> OBJECT = ResultSets::getObject;
+    ResultType<Short> SHORT = ResultSets::getShort;
+    ResultType<String> STRING = ResultSets::getString;
+    ResultType<Time> TIME = ResultSets::getTime;
+    ResultType<Timestamp> TIMESTAMP = ResultSets::getTimestamp;
+    ResultType<java.net.URL> URL = ResultSets::getURL;
+    ResultType<LocalDate> LOCAL_DATE = DateType::getLocalDate;
+    ResultType<LocalDateTime> LOCAL_DATE_TIME = DateType::getLocalDateTime;
+    ResultType<LocalTime> LOCAL_TIME = DateType::getLocalTime;
+    ResultType<Instant> INSTANT = DateType::getInstant;
 
 
     /**

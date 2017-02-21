@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Indo Contributors
+ * Copyright 2017 Indo Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,15 +42,15 @@ import static indo.log.Logger.debug;
 public class ReflectionRowProcessor<T> implements RowProcessor<T> {
 
     private Class<T> targetType;
-    private ColumnTypes columnTypes;
+    private ResultTypes resultTypes;
 
-    public ReflectionRowProcessor(Class<T> targetType, ColumnTypes columnTypes) {
+    public ReflectionRowProcessor(Class<T> targetType, ResultTypes resultTypes) {
         this.targetType = targetType;
-        this.columnTypes = columnTypes;
+        this.resultTypes = resultTypes;
     }
 
     public ReflectionRowProcessor(Class<T> targetType) {
-        this(targetType, ColumnTypes.empty());
+        this(targetType, ResultTypes.empty());
         this.targetType = targetType;
     }
 
@@ -92,9 +92,9 @@ public class ReflectionRowProcessor<T> implements RowProcessor<T> {
 
                     // Resolve the column as a specific Java type, if one was
                     // specified, otherwise just map it as an object.
-                    Type type = columnTypes.get(originalColumn).orElse(Type.OBJECT);
+                    ResultType resultType = resultTypes.get(originalColumn).orElse(ResultType.OBJECT);
 
-                    Object object = type.asType(rs, originalColumn);
+                    Object object = resultType.asType(rs, originalColumn);
 
                     // Stream through each strategy to attempt to find a matching column based on the
                     // strategy. If a match is found, map the value and return the property name
@@ -108,7 +108,7 @@ public class ReflectionRowProcessor<T> implements RowProcessor<T> {
 
                     // Optionally throw an exception if no mapping could be found.
                     if (!matchedField.isPresent()) {
-                        String message = String.format("Could not map [column: %s, type: %s, value: %s] to a property on %s using strategies: %s. Likely there is no setter method that takes the expected type.",
+                        String message = String.format("Could not map [column: %s, type: %s, value: %s] to a property on %s using strategies: %s. Likely there is no setter method that takes the expected resultType.",
                                 originalColumn,
                                 Objects.isNull(object) ? "null" : object.getClass().getName(),
                                 Objects.toString(object),

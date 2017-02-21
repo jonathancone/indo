@@ -25,74 +25,74 @@ import java.util.Optional;
 /**
  * This class can be used when the JDBC driver supports returning an object as a
  * different data type that the default type the driver supports.  By using an
- * instance of {@link Type}, you can specify a specific column and the type you
+ * instance of {@link ResultType}, you can specify a specific column and the type you
  * would like the driver to return it as.
  * <p>
  * <pre>
  *   // Create an instance with multiple columns and their types.
  * {@code
- * ColumnTypes.type("employee_id", Type.INTEGER)
- *            .andType("start_date", Type.DATE)
- *            .andType("salary", Type.BIG_DECIMAL);
+ * ResultTypes.type("employee_id", ResultType.INTEGER)
+ *            .andType("start_date", ResultType.DATE)
+ *            .andType("salary", ResultType.BIG_DECIMAL);
  * }
  * </pre>
  *
  * @author Jonathan Cone
- * @see Type
+ * @see ResultType
  */
-public class ColumnTypes {
+public class ResultTypes {
 
     // The immutable empty instance.
-    private static final ColumnTypes EMPTY = new ColumnTypes() {
+    private static final ResultTypes EMPTY = new ResultTypes() {
         @Override
-        public ColumnTypes andType(String columnName, Type type) {
+        public ResultTypes andType(String columnName, ResultType resultType) {
             throw new IllegalStateException("You cannot override column types on the EMPTY instance.");
         }
     };
 
-    private Map<String, Type> types;
+    private Map<String, ResultType> types;
 
-    private ColumnTypes() {
+    private ResultTypes() {
     }
 
     /**
      * @return An empty instance which cannot contain any type mappings.
      */
-    public static ColumnTypes empty() {
+    public static ResultTypes empty() {
         return EMPTY;
     }
 
     /**
-     * Create a new instance with the first specified type mapping.
+     * Create a new instance with the first specified resultType mapping.
      *
      * @param columnName The name of the column to map.
-     * @param type       The type that the column should be mapped to.
+     * @param resultType       The resultType that the column should be mapped to.
      * @return A newly constructed mutable instance.
      */
-    public static ColumnTypes type(String columnName, Type type) {
+    public static ResultTypes type(String columnName, ResultType resultType) {
         Objects.requireNonNull(columnName);
-        Objects.requireNonNull(type);
+        Objects.requireNonNull(resultType);
 
-        ColumnTypes columnTypes = new ColumnTypes();
-        columnTypes.andType(columnName, type);
-        return columnTypes;
+        ResultTypes resultTypes = new ResultTypes();
+        resultTypes.andType(columnName, resultType);
+        return resultTypes;
     }
 
     /**
-     * Add another type mapping to this instance.
+     * Add another resultType mapping to this instance.
      *
      * @param columnName The name of the column to map.
-     * @param type       The type that the column should be mapped to.
+     * @param resultType       The resultType that the column should be mapped to.
      * @return The {@code this} instance for chaining.
      */
-    public ColumnTypes andType(String columnName, Type type) {
+    public ResultTypes andType(String columnName, ResultType resultType) {
         Objects.requireNonNull(columnName);
-        Objects.requireNonNull(type);
+        Objects.requireNonNull(resultType);
 
         if (types == null) {
             types = Maps.newHashMap();
         }
-        types.put(columnName, type);
+        types.put(columnName, resultType);
 
         return this;
     }
@@ -103,7 +103,7 @@ public class ColumnTypes {
      * @param columnName The name of the column.
      * @return The {@link Optional} instance.
      */
-    public Optional<Type> get(String columnName) {
+    public Optional<ResultType> get(String columnName) {
         // Short circuit to prevent heap allocation of a new map when no
         // types have been supplied.
         return types == null || columnName == null ? Optional.empty() : Optional.ofNullable(types.get(columnName));
