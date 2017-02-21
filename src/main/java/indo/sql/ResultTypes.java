@@ -45,7 +45,7 @@ public class ResultTypes {
     // The immutable empty instance.
     private static final ResultTypes EMPTY = new ResultTypes() {
         @Override
-        public ResultTypes andType(String columnName, ResultType resultType) {
+        public ResultTypes andColumn(String columnName, ResultType resultType) {
             throw new IllegalStateException("You cannot override column types on the EMPTY instance.");
         }
     };
@@ -69,12 +69,12 @@ public class ResultTypes {
      * @param resultType       The resultType that the column should be mapped to.
      * @return A newly constructed mutable instance.
      */
-    public static ResultTypes type(String columnName, ResultType resultType) {
+    public static ResultTypes forColumn(String columnName, ResultType resultType) {
         Objects.requireNonNull(columnName);
         Objects.requireNonNull(resultType);
 
         ResultTypes resultTypes = new ResultTypes();
-        resultTypes.andType(columnName, resultType);
+        resultTypes.andColumn(columnName, resultType);
         return resultTypes;
     }
 
@@ -85,7 +85,7 @@ public class ResultTypes {
      * @param resultType       The resultType that the column should be mapped to.
      * @return The {@code this} instance for chaining.
      */
-    public ResultTypes andType(String columnName, ResultType resultType) {
+    public ResultTypes andColumn(String columnName, ResultType resultType) {
         Objects.requireNonNull(columnName);
         Objects.requireNonNull(resultType);
 

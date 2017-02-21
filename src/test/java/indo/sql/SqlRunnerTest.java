@@ -141,8 +141,8 @@ public class SqlRunnerTest extends DbTest {
                 runner.list(SELECT_EMPLOYEE_ORDINAL_PARAMS,
                         Employee.class,
                         ResultTypes
-                                .type("hire_date", ResultType.DATE)
-                                .andType("active", ResultType.BOOLEAN),
+                                .forColumn("hire_date", ResultType.DATE)
+                                .andColumn("active", ResultType.BOOLEAN),
                         75000.00,
                         "Lancaster");
 

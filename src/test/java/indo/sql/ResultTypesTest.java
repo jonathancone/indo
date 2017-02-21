@@ -31,15 +31,15 @@ public class ResultTypesTest {
 
     @Test(expected = IllegalStateException.class)
     public void testEmpty() {
-        ResultTypes.empty().andType("name", ResultType.BIG_DECIMAL);
+        ResultTypes.empty().andColumn("name", ResultType.BIG_DECIMAL);
     }
 
     @Test
     public void testCreateMapping() {
         ResultTypes resultTypes =
-                ResultTypes.type("name1", ResultType.STRING)
-                        .andType("name2", ResultType.INTEGER)
-                        .andType("name3", ResultType.LONG);
+                ResultTypes.forColumn("name1", ResultType.STRING)
+                        .andColumn("name2", ResultType.INTEGER)
+                        .andColumn("name3", ResultType.LONG);
 
         assertEquals(ResultType.STRING, resultTypes.get("name1").get());
         assertEquals(ResultType.INTEGER, resultTypes.get("name2").get());
@@ -48,11 +48,11 @@ public class ResultTypesTest {
 
     @Test
     public void testGet1() {
-        assertEquals(ResultType.INTEGER, ResultTypes.type("name1", ResultType.INTEGER).get("name1").get());
+        assertEquals(ResultType.INTEGER, ResultTypes.forColumn("name1", ResultType.INTEGER).get("name1").get());
     }
 
     @Test
     public void testGet2() {
-        assertFalse(ResultTypes.type("name1", ResultType.INTEGER).get("name0").isPresent());
+        assertFalse(ResultTypes.forColumn("name1", ResultType.INTEGER).get("name0").isPresent());
     }
 }
