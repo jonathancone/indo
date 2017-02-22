@@ -27,4 +27,12 @@
     <employee employee_id="103" first_name="Jill" last_name="Lancaster" hire_date="2017-01-08" department_id="101"
               active="1" salary="104000.00"/>
 
+    <timecard timecard_id="600" employee_id="100" week_of_year="1" actual_hours="40"/>
+    <timecard timecard_id="601" employee_id="100" week_of_year="2" actual_hours="40"/>
+    <timecard timecard_id="602" employee_id="100" week_of_year="3" actual_hours="32"/>
+
+    <timecard timecard_id="700" employee_id="100" week_of_year="1" actual_hours="40"/>
+    <timecard timecard_id="701" employee_id="101" week_of_year="2" actual_hours="0"/>
+    <timecard timecard_id="702" employee_id="101" week_of_year="3" actual_hours="40"/>
+
 </dataset>
