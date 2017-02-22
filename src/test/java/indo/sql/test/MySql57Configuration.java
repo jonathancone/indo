@@ -23,7 +23,7 @@ import org.dbunit.ext.mysql.MySqlDataTypeFactory;
 import javax.sql.DataSource;
 
 /**
- * Configuration for Postgresql 9.4.
+ * Configuration for MySQL 5.7.
  *
  * @author Jonathan Cone
  */
