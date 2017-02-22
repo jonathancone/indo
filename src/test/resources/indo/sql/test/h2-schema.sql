@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS timecard;
 DROP TABLE IF EXISTS employee_shift;
 DROP TABLE IF EXISTS shift;
 DROP TABLE IF EXISTS employee;
@@ -34,5 +35,13 @@ CREATE TABLE employee_shift (
   FOREIGN KEY (shift_id) REFERENCES shift (shift_id),
   FOREIGN KEY (employee_id) REFERENCES employee (employee_id),
   PRIMARY KEY (shift_id, employee_id)
+);
+
+CREATE TABLE timecard (
+  timecard_id  IDENTITY PRIMARY KEY,
+  employee_id  BIGINT,
+  week_of_year INT,
+  actual_hours INT,
+  FOREIGN KEY (employee_id) REFERENCES employee (employee_id)
 );
 

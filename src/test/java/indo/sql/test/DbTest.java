@@ -57,7 +57,8 @@ public abstract class DbTest {
         return Arrays.asList(
                 "h2-case-insensitive",
                 "h2-case-sensitive",
-                "postgres"
+                "postgres",
+                "mysql"
         );
     }
 

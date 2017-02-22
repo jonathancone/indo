@@ -1,28 +1,28 @@
-DROP TABLE IF EXISTS timecard CASCADE;
-DROP TABLE IF EXISTS employee_shift CASCADE;
-DROP TABLE IF EXISTS shift CASCADE;
-DROP TABLE IF EXISTS employee CASCADE;
-DROP TABLE IF EXISTS department CASCADE;
+DROP TABLE IF EXISTS timecard;
+DROP TABLE IF EXISTS employee_shift;
+DROP TABLE IF EXISTS shift;
+DROP TABLE IF EXISTS employee;
+DROP TABLE IF EXISTS department;
 
 CREATE TABLE department (
-  department_id BIGSERIAL PRIMARY KEY,
+  department_id INT PRIMARY KEY AUTO_INCREMENT,
   name          VARCHAR(255),
   manager_id    BIGINT
 );
 
 CREATE TABLE employee (
-  employee_id    BIGSERIAL PRIMARY KEY,
+  employee_id    BIGINT PRIMARY KEY AUTO_INCREMENT,
   first_name     VARCHAR(255) NOT NULL,
   last_name      VARCHAR(255) NOT NULL,
   active         BOOLEAN,
   hire_date      DATE,
   salary         DECIMAL(20, 2),
-  department_id  BIGINT,
+  department_id  INT,
   FOREIGN KEY (department_id) REFERENCES department (department_id)
 );
 
 CREATE TABLE shift (
-  shift_id   BIGSERIAL PRIMARY KEY,
+  shift_id   BIGINT PRIMARY KEY AUTO_INCREMENT,
   start_date DATE,
   end_date   DATE,
   start_time TIME,
@@ -38,9 +38,10 @@ CREATE TABLE employee_shift (
 );
 
 CREATE TABLE timecard (
-  timecard_id  BIGSERIAL PRIMARY KEY,
+  timecard_id  BIGINT PRIMARY KEY AUTO_INCREMENT,
   employee_id  BIGINT,
   week_of_year INT,
   actual_hours INT,
   FOREIGN KEY (employee_id) REFERENCES employee (employee_id)
 );
+

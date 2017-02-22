@@ -33,6 +33,7 @@ public class Employee implements RowIdentity {
     private String lastName;
 
     private Department department;
+
     private List<Shift> shifts;
 
     public Employee() {
