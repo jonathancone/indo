@@ -34,6 +34,7 @@ public class Employee implements RowIdentity {
 
     private Department department;
 
+    private List<Timecard> timecards;
     private List<Shift> shifts;
 
     public Employee() {
@@ -59,6 +60,30 @@ public class Employee implements RowIdentity {
         this.hireDate = hireDate;
         this.salary = salary;
         this.active = active;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
+    public List<Timecard> getTimecards() {
+        return timecards;
+    }
+
+    public void setTimecards(List<Timecard> timecards) {
+        this.timecards = timecards;
+    }
+
+    public List<Shift> getShifts() {
+        return shifts;
+    }
+
+    public void setShifts(List<Shift> shifts) {
+        this.shifts = shifts;
     }
 
     public Long getEmployeeId() {

@@ -18,11 +18,12 @@ package indo.sql;
 
 
 import indo.jdbc.JdbcException;
+import indo.sql.mapping.ColumnMappingStrategy;
+import indo.sql.mapping.InclusiveColumnMappingStrategy;
 import indo.util.Reflect;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.IntStream;
@@ -37,39 +38,43 @@ import static indo.log.Logger.debug;
  * columns to properties on a POJO that adheres to JavaBeans conventions.
  *
  * @author Jonathan Cone
- * @see MappingStrategy
+ * @see ColumnMappingStrategy
  */
 public class ReflectionRowProcessor<T> implements RowProcessor<T> {
 
     private Class<T> targetType;
     private ResultTypes resultTypes;
+    private ColumnMappingStrategy columnMappingStrategy;
 
-    public ReflectionRowProcessor(Class<T> targetType, ResultTypes resultTypes) {
+    public ReflectionRowProcessor(Class<T> targetType, ResultTypes resultTypes, ColumnMappingStrategy columnMappingStrategy) {
         this.targetType = targetType;
         this.resultTypes = resultTypes;
+        this.columnMappingStrategy = columnMappingStrategy;
+    }
+
+    public ReflectionRowProcessor(Class<T> targetType, ResultTypes resultTypes) {
+        this(targetType, resultTypes, new InclusiveColumnMappingStrategy());
     }
 
     public ReflectionRowProcessor(Class<T> targetType) {
         this(targetType, ResultTypes.empty());
-        this.targetType = targetType;
     }
 
     /**
-     * Subclasses may override this method to provide custom {@link
-     * MappingStrategy} instances.  The {@link MappingStrategy}s will be matched
-     * against in the order they are present in the list.
+     * Subclasses may override this method to provide a custom {@link
+     * ColumnMappingStrategy} instance.
      *
-     * @return A {@link List} of {@link MappingStrategy} instances to attempt
-     * during column mapping.
+     * @return The {@link ColumnMappingStrategy} instance to use during column
+     * mapping.
      */
-    protected List<MappingStrategy> getMappingStrategies() {
-        return MappingStrategy.DEFAULTS;
+    protected ColumnMappingStrategy getColumnMappingStrategy() {
+        return columnMappingStrategy;
     }
 
     /**
      * Subclasses may override this method to suppress exceptions from being
      * thrown when no column to property match is found in any of the configured
-     * {@link MappingStrategy} instances.
+     * {@link ColumnMappingStrategy} instances.
      *
      * @return this method returns true by default.
      */
@@ -96,24 +101,19 @@ public class ReflectionRowProcessor<T> implements RowProcessor<T> {
 
                     Object object = resultType.asType(rs, originalColumn);
 
-                    // Stream through each strategy to attempt to find a matching column based on the
-                    // strategy. If a match is found, map the value and return the property name
+                    // If a match is found, map the value and return the property name
                     // it was mapped to immediately.
                     Optional<String> matchedField =
-                            getMappingStrategies().stream()
-                                    .map(s -> s.findMatch(originalColumn, object, targetObject))
-                                    .filter(Optional::isPresent)
-                                    .map(Optional::get)
-                                    .findFirst();
+                            columnMappingStrategy.findMatch(originalColumn, object, targetObject);
 
                     // Optionally throw an exception if no mapping could be found.
                     if (!matchedField.isPresent()) {
-                        String message = String.format("Could not map [column: %s, type: %s, value: %s] to a property on %s using strategies: %s. Likely there is no setter method that takes the expected resultType.",
+                        String message = String.format("Could not map [column: %s, type: %s, value: %s] to a property on %s using strategy: %s. Likely there is no setter method that takes the expected resultType.",
                                 originalColumn,
                                 Objects.isNull(object) ? "null" : object.getClass().getName(),
                                 Objects.toString(object),
                                 targetObject.getClass(),
-                                getMappingStrategies());
+                                columnMappingStrategy);
 
                         if (isExceptionThrownWhenColumnHasNoMatch()) {
                             throw new JdbcException(message);

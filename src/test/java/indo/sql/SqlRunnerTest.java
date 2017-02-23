@@ -57,7 +57,7 @@ public class SqlRunnerTest extends DbTest {
             " WHERE e.salary > :salary         " +
             " AND   e.last_name LIKE :lastName ";
 
-    private static final String SELECT_EMPLOYEE_AND_SHIFTS_NAMED_PARAMS =
+    private static final String SELECT_EMPLOYEE_AND_DEPARTMENT_UNDERSCORE_TO_ONE =
             " SELECT                                     " +
             "   e.employee_id,                           " +
             "   e.first_name,                            " +
@@ -65,10 +65,28 @@ public class SqlRunnerTest extends DbTest {
             "   e.active,                                " +
             "   e.hire_date,                             " +
             "   e.salary,                                " +
-            "   t.timecard_id AS timecard_timecard_id,   " +
-            "   t.employee_id AS timecard_employee_id,   " +
-            "   t.week_of_year AS timecard_week_of_year, " +
-            "   t.actual_hours AS timecard_actual_hours  " +
+            "   t.timecard_id AS timecards__timecard_id,   " +
+            "   t.employee_id AS timecards__employee_id,   " +
+            "   t.week_of_year AS timecards__week_of_year, " +
+            "   t.actual_hours AS timecards__actual_hours  " +
+            " FROM  employee e                           " +
+            " LEFT OUTER JOIN timecard t                 " +
+            "   ON e.employee_id = t.employee_id         " +
+            " WHERE e.salary > :salary                   " +
+            " AND   e.last_name LIKE :lastName           ";
+
+    private static final String SELECT_EMPLOYEE_AND_TIMECARDS_UNDERSCORE_TO_MANY =
+            " SELECT                                     " +
+            "   e.employee_id,                           " +
+            "   e.first_name,                            " +
+            "   e.last_name,                             " +
+            "   e.active,                                " +
+            "   e.hire_date,                             " +
+            "   e.salary,                                " +
+            "   t.timecard_id AS timecard__timecard_id,   " +
+            "   t.employee_id AS timecard__employee_id,   " +
+            "   t.week_of_year AS timecard__week_of_year, " +
+            "   t.actual_hours AS timecard__actual_hours  " +
             " FROM  employee e                           " +
             " LEFT OUTER JOIN timecard t                 " +
             "   ON e.employee_id = t.employee_id         " +

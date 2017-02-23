@@ -17,6 +17,10 @@
 package indo.sql;
 
 import indo.example.Employee;
+import indo.sql.mapping.CaseInsensitiveColumnMappingStrategy;
+import indo.sql.mapping.ColumnMappingStrategy;
+import indo.sql.mapping.ExclusiveColumnMappingStrategy;
+import indo.sql.mapping.InclusiveColumnMappingStrategy;
 import indo.util.Reflect;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,7 +60,7 @@ public class ParameterizedReflectionRowProcessorTest {
     public Object[] values;
 
     @Parameterized.Parameter(4)
-    public MappingStrategy[] strategies;
+    public ColumnMappingStrategy strategy;
 
     @Parameterized.Parameters
     public static List<Object[]> parameters() {
@@ -66,91 +70,91 @@ public class ParameterizedReflectionRowProcessorTest {
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new Object[] {0L, "firstName", "lastName", BigDecimal.valueOf(33.33)},
-                        new MappingStrategy[] {MappingStrategy.EXCLUSIVE}
+                        new ExclusiveColumnMappingStrategy()
                 },
                 {
                         Employee.class,
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new Object[] {null, null, null, null},
-                        new MappingStrategy[] {MappingStrategy.EXCLUSIVE}
+                        new ExclusiveColumnMappingStrategy()
                 },
                 {
                         InitializedEmployee.class,
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new Object[] {null, null, null, null},
-                        new MappingStrategy[] {MappingStrategy.EXCLUSIVE}
+                        new ExclusiveColumnMappingStrategy()
                 },
                 {
                         Employee.class,
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new String[] {"EmployeeId", "FirstName", "LastName", "Salary"},
                         new Object[] {0L, "firstName", "lastName", BigDecimal.valueOf(33.33)},
-                        new MappingStrategy[] {MappingStrategy.CASE_INSENSITIVE}
+                        new CaseInsensitiveColumnMappingStrategy()
                 },
                 {
                         Employee.class,
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new String[] {"employeeId", "firstname", "lastname", "salary"},
                         new Object[] {0L, "firstName", "lastName", BigDecimal.valueOf(33.33)},
-                        new MappingStrategy[] {MappingStrategy.CASE_INSENSITIVE}
+                        new CaseInsensitiveColumnMappingStrategy()
                 },
                 {
                         Employee.class,
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new String[] {"EMPLOYEEID", "FIRSTNAME", "LASTNAME", "SALARY"},
                         new Object[] {0L, "firstName", "lastName", BigDecimal.valueOf(33.33)},
-                        new MappingStrategy[] {MappingStrategy.CASE_INSENSITIVE}
+                        new CaseInsensitiveColumnMappingStrategy()
                 },
                 {
                         Employee.class,
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new String[] {"EMPLOYEEID", "FIRSTNAME", "LASTNAME", "SALARY"},
                         new Object[] {null, null, null, null},
-                        new MappingStrategy[] {MappingStrategy.CASE_INSENSITIVE}
+                        new CaseInsensitiveColumnMappingStrategy()
                 },
                 {
                         InitializedEmployee.class,
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new String[] {"EMPLOYEEID", "FIRSTNAME", "LASTNAME", "SALARY"},
                         new Object[] {null, null, null, null},
-                        new MappingStrategy[] {MappingStrategy.CASE_INSENSITIVE}
+                        new CaseInsensitiveColumnMappingStrategy()
                 },
                 {
                         Employee.class,
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new String[] {"employee_id", "first_name", "last_name", "salary"},
                         new Object[] {0L, "firstName", "lastName", BigDecimal.valueOf(33.33)},
-                        new MappingStrategy[] {MappingStrategy.INCLUSIVE}
+                        new InclusiveColumnMappingStrategy()
                 },
                 {
                         Employee.class,
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new String[] {"EMPLOYEE_ID", "FIRST_NAME", "LAST_NAME", "SALARY"},
                         new Object[] {0L, "firstName", "lastName", BigDecimal.valueOf(33.33)},
-                        new MappingStrategy[] {MappingStrategy.INCLUSIVE}
+                        new InclusiveColumnMappingStrategy()
                 },
                 {
                         Employee.class,
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new String[] {"EMPLOYEE_ID", "FIRST_NAME", "LAST_NAME", "SALARY"},
                         new Object[] {null, "firstName", "lastName", BigDecimal.valueOf(33.33)},
-                        new MappingStrategy[] {MappingStrategy.INCLUSIVE}
+                        new InclusiveColumnMappingStrategy()
                 },
                 {
                         Employee.class,
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new String[] {"EMPLOYEE_ID", "FIRST_NAME", "LAST_NAME", "SALARY"},
                         new Object[] {null, null, null, null},
-                        new MappingStrategy[] {MappingStrategy.INCLUSIVE}
+                        new InclusiveColumnMappingStrategy()
                 },
                 {
                         InitializedEmployee.class,
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new String[] {"EMPLOYEE_ID", "FIRST_NAME", "LAST_NAME", "SALARY"},
                         new Object[] {null, null, null, null},
-                        new MappingStrategy[] {MappingStrategy.INCLUSIVE}
+                        new InclusiveColumnMappingStrategy()
                 },
 
         });
@@ -171,12 +175,7 @@ public class ParameterizedReflectionRowProcessorTest {
             when(mockResultSet.getObject(columns[i])).thenReturn(values[i]);
         }
 
-        ReflectionRowProcessor<?> rowProcessor = new ReflectionRowProcessor(aClass) {
-            @Override
-            protected List<MappingStrategy> getMappingStrategies() {
-                return Arrays.asList(strategies);
-            }
-        };
+        ReflectionRowProcessor<?> rowProcessor = new ReflectionRowProcessor<>(aClass, ResultTypes.empty(), strategy);
 
         Object result = rowProcessor.map(mockResultSet);
         Reflect<Object> reflect = Reflect.on(result);

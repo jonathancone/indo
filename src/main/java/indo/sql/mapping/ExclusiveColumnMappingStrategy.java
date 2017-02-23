@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package indo.sql;
+package indo.sql.mapping;
 
-import indo.sql.mapping.InclusiveColumnMappingStrategy;
-
-import static org.junit.Assert.assertEquals;
+import java.util.Optional;
+import java.util.Set;
 
 /**
- * Unit tests for {@link ReflectionRowProcessor}.
- *
- * @author Jonathan Cone
+ * A ColumnMappingStrategy that requires an exact case-sensitive String match
+ * between column and property names.
  */
-public class ReflectionRowProcessorTest {
-    public void testGetMappingStrategies() throws Exception {
-        assertEquals(InclusiveColumnMappingStrategy.class,
-                new ReflectionRowProcessor<>(Object.class).getColumnMappingStrategy().getClass());
+public class ExclusiveColumnMappingStrategy implements ReflectionColumnMappingStrategy {
+    public ExclusiveColumnMappingStrategy() {
+    }
+
+    @Override
+    public Optional<String> findMatch(String column, Set<String> fieldNames) {
+        return Optional.ofNullable(fieldNames.contains(column) ? column : null);
     }
 }
