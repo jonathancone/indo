@@ -42,9 +42,9 @@ import static indo.log.Logger.debug;
  */
 public class ReflectionRowProcessor<T> implements RowProcessor<T> {
 
-    private Class<T> targetType;
-    private ResultTypes resultTypes;
-    private ColumnMappingStrategy columnMappingStrategy;
+    private final Class<T> targetType;
+    private final ResultTypes resultTypes;
+    private final ColumnMappingStrategy columnMappingStrategy;
 
     public ReflectionRowProcessor(Class<T> targetType, ResultTypes resultTypes, ColumnMappingStrategy columnMappingStrategy) {
         this.targetType = targetType;
@@ -117,9 +117,9 @@ public class ReflectionRowProcessor<T> implements RowProcessor<T> {
 
                         if (isExceptionThrownWhenColumnHasNoMatch()) {
                             throw new JdbcException(message);
-                        } else {
-                            debug(this, message);
                         }
+
+                        debug(this, message);
                     }
                 });
 
