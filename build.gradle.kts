@@ -14,27 +14,30 @@
  * limitations under the License.
  */
 
-apply plugin: 'java'
-apply plugin: 'idea'
-
-repositories {
-    jcenter()
+plugins {
+    `java-library`
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+    }
+}
+repositories {
+    mavenCentral()
+}
 
 dependencies {
 
-    compile 'org.slf4j:slf4j-api:1.7.12'
+    compileOnly("org.slf4j:slf4j-api:1.7.33")
 
-    testCompile 'org.slf4j:slf4j-simple:1.7.12'
-    testCompile 'com.h2database:h2:1.4.187'
-    testCompile 'org.postgresql:postgresql:9.4-1203-jdbc42'
-    testCompile 'mysql:mysql-connector-java:5.1.40'
-    testCompile 'org.apache.ant:ant:1.9.6'
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.+'
-    testCompile 'org.dbunit:dbunit:2.5.1'
+    testCompileOnly("org.slf4j:slf4j-simple:1.7.33")
+    testCompileOnly("com.h2database:h2:2.1.210")
+    testCompileOnly("org.postgresql:postgresql:42.3.1")
+    testCompileOnly("mysql:mysql-connector-java:8.0.25")
+    testCompileOnly("org.apache.ant:ant:1.10.11")
+    testCompileOnly("junit:junit:4.13.2")
+    testCompileOnly("org.mockito:mockito-core:4.2.0")
+    testCompileOnly("org.dbunit:dbunit:2.7.2")
 
 }
