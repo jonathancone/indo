@@ -16,7 +16,7 @@
 
 package indo.sql.test;
 
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import com.mysql.cj.jdbc.MysqlDataSource;
 import org.dbunit.dataset.datatype.DefaultDataTypeFactory;
 import org.dbunit.ext.mysql.MySqlDataTypeFactory;
 
@@ -30,7 +30,7 @@ import javax.sql.DataSource;
 public class MySql57Configuration extends DatabaseConfiguration {
 
     @Override
-    protected DataSource doCreateDataSource() throws Exception {
+    protected DataSource doCreateDataSource() {
 
         MysqlDataSource ds = new MysqlDataSource();
         ds.setURL(getUrl());
