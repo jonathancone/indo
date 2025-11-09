@@ -38,6 +38,7 @@ public class Postgres94Configuration extends DatabaseConfiguration {
         String source = Postgres94Configuration.class.getSimpleName() + random.nextLong();
 
         PGPoolingDataSource ds = new PGPoolingDataSource();
+        ds.setUrl(getUrl());
         ds.setDataSourceName(source);
         ds.setDatabaseName(getName());
         ds.setUser(getUser());

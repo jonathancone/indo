@@ -17,11 +17,11 @@
 package indo.util;
 
 import indo.jdbc.JdbcException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for {@link JdbcException}.
@@ -47,10 +47,12 @@ public class JdbcExceptionTest {
         assertEquals(initial, new JdbcException(initial).getSQLExceptionCause().get());
     }
 
-    @Test(expected = ClassCastException.class)
+    @Test
     public void testGetSQLExceptionCause2() throws Exception {
         Exception initial = new Exception();
 
-        assertNotEquals(initial, new JdbcException(initial).getSQLExceptionCause());
+        assertThrows(ClassCastException.class,
+                () -> new JdbcException(initial).getSQLExceptionCause());
+
     }
 }

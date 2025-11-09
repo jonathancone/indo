@@ -22,20 +22,19 @@ import indo.sql.mapping.ColumnMappingStrategy;
 import indo.sql.mapping.ExclusiveColumnMappingStrategy;
 import indo.sql.mapping.InclusiveColumnMappingStrategy;
 import indo.util.Reflect;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -44,124 +43,107 @@ import static org.mockito.Mockito.when;
  *
  * @author Jonathan Cone
  */
-@RunWith(Parameterized.class)
 public class ParameterizedReflectionRowProcessorTest {
 
-    @Parameterized.Parameter(0)
-    public Class<?> aClass;
-
-    @Parameterized.Parameter(1)
-    public String[] properties;
-
-    @Parameterized.Parameter(2)
-    public String[] columns;
-
-    @Parameterized.Parameter(3)
-    public Object[] values;
-
-    @Parameterized.Parameter(4)
-    public ColumnMappingStrategy strategy;
-
-    @Parameterized.Parameters
-    public static List<Object[]> parameters() {
-        return Arrays.asList(new Object[][] {
-                {
+    static Stream<Arguments> parameters() {
+        return Stream.of(
+                Arguments.of(
                         Employee.class,
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new Object[] {0L, "firstName", "lastName", BigDecimal.valueOf(33.33)},
                         new ExclusiveColumnMappingStrategy()
-                },
-                {
+                ),
+                Arguments.of(
                         Employee.class,
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new Object[] {null, null, null, null},
                         new ExclusiveColumnMappingStrategy()
-                },
-                {
+                ),
+                Arguments.of(
                         InitializedEmployee.class,
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new Object[] {null, null, null, null},
                         new ExclusiveColumnMappingStrategy()
-                },
-                {
+                ),
+                Arguments.of(
                         Employee.class,
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new String[] {"EmployeeId", "FirstName", "LastName", "Salary"},
                         new Object[] {0L, "firstName", "lastName", BigDecimal.valueOf(33.33)},
                         new CaseInsensitiveColumnMappingStrategy()
-                },
-                {
+                ),
+                Arguments.of(
                         Employee.class,
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new String[] {"employeeId", "firstname", "lastname", "salary"},
                         new Object[] {0L, "firstName", "lastName", BigDecimal.valueOf(33.33)},
                         new CaseInsensitiveColumnMappingStrategy()
-                },
-                {
+                ),
+                Arguments.of(
                         Employee.class,
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new String[] {"EMPLOYEEID", "FIRSTNAME", "LASTNAME", "SALARY"},
                         new Object[] {0L, "firstName", "lastName", BigDecimal.valueOf(33.33)},
                         new CaseInsensitiveColumnMappingStrategy()
-                },
-                {
+                ),
+                Arguments.of(
                         Employee.class,
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new String[] {"EMPLOYEEID", "FIRSTNAME", "LASTNAME", "SALARY"},
                         new Object[] {null, null, null, null},
                         new CaseInsensitiveColumnMappingStrategy()
-                },
-                {
+                ),
+                Arguments.of(
                         InitializedEmployee.class,
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new String[] {"EMPLOYEEID", "FIRSTNAME", "LASTNAME", "SALARY"},
                         new Object[] {null, null, null, null},
                         new CaseInsensitiveColumnMappingStrategy()
-                },
-                {
+                ),
+                Arguments.of(
                         Employee.class,
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new String[] {"employee_id", "first_name", "last_name", "salary"},
                         new Object[] {0L, "firstName", "lastName", BigDecimal.valueOf(33.33)},
                         new InclusiveColumnMappingStrategy()
-                },
-                {
+                ),
+                Arguments.of(
                         Employee.class,
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new String[] {"EMPLOYEE_ID", "FIRST_NAME", "LAST_NAME", "SALARY"},
                         new Object[] {0L, "firstName", "lastName", BigDecimal.valueOf(33.33)},
                         new InclusiveColumnMappingStrategy()
-                },
-                {
+                ),
+                Arguments.of(
                         Employee.class,
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new String[] {"EMPLOYEE_ID", "FIRST_NAME", "LAST_NAME", "SALARY"},
                         new Object[] {null, "firstName", "lastName", BigDecimal.valueOf(33.33)},
                         new InclusiveColumnMappingStrategy()
-                },
-                {
+                ),
+                Arguments.of(
                         Employee.class,
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new String[] {"EMPLOYEE_ID", "FIRST_NAME", "LAST_NAME", "SALARY"},
                         new Object[] {null, null, null, null},
                         new InclusiveColumnMappingStrategy()
-                },
-                {
+                ),
+                Arguments.of(
                         InitializedEmployee.class,
                         new String[] {"employeeId", "firstName", "lastName", "salary"},
                         new String[] {"EMPLOYEE_ID", "FIRST_NAME", "LAST_NAME", "SALARY"},
                         new Object[] {null, null, null, null},
                         new InclusiveColumnMappingStrategy()
-                },
-
-        });
+                )
+        );
     }
 
-    @Test
-    public void testMap() throws Exception {
+    @ParameterizedTest
+    @MethodSource("parameters")
+    public void testMap(Class<?> aClass, String[] properties, String[] columns, Object[] values, ColumnMappingStrategy strategy) throws Exception {
         ResultSet mockResultSet = mock(ResultSet.class);
         ResultSetMetaData mockMeta = mock(ResultSetMetaData.class);
 

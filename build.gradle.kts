@@ -15,30 +15,42 @@
  */
 
 plugins {
+    id("com.github.ben-manes.versions") version "0.53.0"
     `java-library`
 }
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(8))
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 repositories {
     mavenCentral()
 }
 
-// Test
+tasks.test {
+    useJUnitPlatform()
+}
+
 dependencies {
 
-    compileOnly("org.slf4j:slf4j-api:1.7.33")
+    compileOnly("org.slf4j:slf4j-api:2.0.17")
 
-    testCompileOnly("org.slf4j:slf4j-simple:1.7.33")
-    testCompileOnly("com.h2database:h2:2.1.210")
-    testCompileOnly("org.postgresql:postgresql:42.3.1")
-    testCompileOnly("mysql:mysql-connector-java:8.0.25")
-    testCompileOnly("org.apache.ant:ant:1.10.11")
-    testCompileOnly("junit:junit:4.13.2")
-    testCompileOnly("org.mockito:mockito-core:4.2.0")
-    testCompileOnly("org.dbunit:dbunit:2.7.2")
+    testImplementation("org.junit.jupiter:junit-jupiter:6.0.1")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.0.1")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.0.1")
+
+    testImplementation("org.slf4j:slf4j-simple:2.0.17")
+    testImplementation("com.h2database:h2:2.4.240")
+    testImplementation("org.postgresql:postgresql:42.7.7")
+    testImplementation("com.mysql:mysql-connector-j:9.5.0")
+    testImplementation("org.apache.ant:ant:1.10.15")
+    testImplementation("org.mockito:mockito-core:5.20.0")
+    testImplementation("org.dbunit:dbunit:3.0.0")
+
+    testImplementation("org.testcontainers:testcontainers:1.20.4")
+    testImplementation("org.testcontainers:junit-jupiter:1.20.4")
+    testImplementation("org.testcontainers:postgresql:1.20.4")
+    testImplementation("org.testcontainers:mysql:1.20.4")
 
 }

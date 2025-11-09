@@ -18,7 +18,7 @@ package indo.sql;
 
 import indo.sql.mapping.InclusiveColumnMappingStrategy;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Unit tests for {@link ReflectionRowProcessor}.

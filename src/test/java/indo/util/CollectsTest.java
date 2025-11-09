@@ -16,14 +16,14 @@
 
 package indo.util;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unit tests for {@link Collects}.
@@ -54,12 +54,12 @@ public class CollectsTest {
 
     @Test
     public void testArrayIsNotEmpty1() {
-        assertTrue(Collects.isNotEmpty(new String[] {"1"}));
+        assertTrue(Collects.isNotEmpty(new String[]{"1"}));
     }
 
     @Test
     public void testArrayIsNotEmpty2() {
-        assertTrue(Collects.isNotEmpty(new String[] {"1", "2"}));
+        assertTrue(Collects.isNotEmpty(new String[]{"1", "2"}));
     }
 
     @Test
@@ -69,7 +69,7 @@ public class CollectsTest {
 
     @Test
     public void testArrayIsNotEmpty4() {
-        assertFalse(Collects.isNotEmpty(new String[] {}));
+        assertFalse(Collects.isNotEmpty(new String[]{}));
     }
 
 }

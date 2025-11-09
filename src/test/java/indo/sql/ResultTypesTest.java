@@ -16,10 +16,10 @@
 
 package indo.sql;
 
-import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for {@link ResultTypes}.
@@ -29,9 +29,11 @@ import static org.junit.Assert.assertFalse;
  */
 public class ResultTypesTest {
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testEmpty() {
-        ResultTypes.empty().andColumn("name", ResultType.BIG_DECIMAL);
+
+        assertThrows(IllegalStateException.class,
+                () -> ResultTypes.empty().andColumn("name", ResultType.BIG_DECIMAL));
     }
 
     @Test
