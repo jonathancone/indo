@@ -16,9 +16,11 @@
 
 package indo.sql;
 
-import org.junit.Test;
 
-import static org.junit.Assert.assertArrayEquals;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Unit tests for {@link SqlParameter}.
@@ -63,10 +65,10 @@ public class SqlParameterTest {
         assertArrayEquals(new Integer[]{3, 4}, sqlParameter.getIndexes().toArray());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testAddIndexes5() {
         SqlParameter sqlParameter = new SqlParameter("name", "value");
-
-        sqlParameter.addIndexes(0, 1);
+        assertThrows(IllegalArgumentException.class, () ->
+                sqlParameter.addIndexes(0, 1));
     }
 }

@@ -17,163 +17,151 @@
 package indo.sql;
 
 import indo.util.Maps;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.*;
+import java.util.stream.Stream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(Parameterized.class)
 public class StreamingSqlParserTest {
 
-    @Parameter(0)
-    public String original;
-
-    @Parameter(1)
-    public String expected;
-
-    @Parameter(2)
-    public Map<String, ?> mapParameters;
-
-    @Parameterized.Parameters(name = "{index}: {1}")
-    public static Collection<Object[]> statements() {
-        return Arrays
-                .asList(new Object[][]{
-                        {
-                                "SELECT * FROM table WHERE column = :column",
-                                "SELECT * FROM table WHERE column = ?",
-                                Maps.newHashMap("column", 1)
-                        },
-                        {
-                                "SELECT * FROM table WHERE column=:column",
-                                "SELECT * FROM table WHERE column=?",
-                                Maps.newHashMap("column", 1)
-                        },
-                        {
-                                "SELECT * FROM table WHERE column = :column ",
-                                "SELECT * FROM table WHERE column = ? ",
-                                Maps.newHashMap("column", 1)
-                        },
-                        {
-                                "SELECT * FROM table WHERE column=:column ",
-                                "SELECT * FROM table WHERE column=? ",
-                                Maps.newHashMap("column", 1)
-                        },
-                        {
-                                "SELECT * FROM table WHERE column = :column AND column = :column",
-                                "SELECT * FROM table WHERE column = ? AND column = ?",
-                                Maps.newHashMap("column", 1)
-                        },
-                        {
-                                "SELECT * FROM table WHERE column=:column AND column=:column",
-                                "SELECT * FROM table WHERE column=? AND column=?",
-                                Maps.newHashMap("column", 1)
-                        },
-                        {
-                                "SELECT * FROM table WHERE column = :column AND column = :column ",
-                                "SELECT * FROM table WHERE column = ? AND column = ? ",
-                                Maps.newHashMap("column", 1)
-                        },
-                        {
-                                "SELECT * FROM table WHERE column=:column AND column=:column ",
-                                "SELECT * FROM table WHERE column=? AND column=? ",
-                                Maps.newHashMap("column", 1)
-                        },
-                        {
-                                "SELECT * FROM table WHERE column=:column1 AND column=:column2 ",
-                                "SELECT * FROM table WHERE column=? AND column=? ",
-                                Maps.newHashMap("column1", 1, "column2", 2)
-                        },
-                        {
-                                "SELECT :column1 FROM table WHERE column=:column2 AND column=:column3 ",
-                                "SELECT ? FROM table WHERE column=? AND column=? ",
-                                Maps.newHashMap("column1", 1, "column2", 2, "column3", 3)
-                        },
-                        {
-                                "SELECT * FROM table WHERE column IN(:column1) AND column IN(:column2)",
-                                "SELECT * FROM table WHERE column IN(?) AND column IN(?)",
-                                Maps.newHashMap("column1", 1, "column2", 2)
-                        },
-                        {
-                                "SELECT * FROM table WHERE column IN (:column1) AND column IN (:column2)",
-                                "SELECT * FROM table WHERE column IN (?) AND column IN (?)",
-                                Maps.newHashMap("column1", 1, "column2", 2)
-                        },
-                        {
-                                "SELECT :column1 FROM table",
-                                "SELECT ? FROM table",
-                                Maps.newHashMap("column1", 1)
-                        },
-                        {
-                                "SELECT ':column1' FROM table",
-                                "SELECT ':column1' FROM table",
-                                Maps.newHashMap()
-                        },
-                        {
-                                "SELECT \":column1\" FROM table",
-                                "SELECT \":column1\" FROM table",
-                                Maps.newHashMap()
-                        },
-                        {
-                                "SELECT \":column1\" FROM table",
-                                "SELECT \":column1\" FROM table",
-                                Maps.newHashMap()
-                        },
-                        {
-                                "SELECT '':column1'' FROM table",
-                                "SELECT ''?'' FROM table",
-                                Maps.newHashMap("column1", 1)
-                        },
-                        {
-                                "SELECT '':column1'' FROM table",
-                                "SELECT ''?'' FROM table",
-                                Maps.newHashMap("column1", 1)
-                        },
-                        {
-                                "SELECT \"\":column1\"\" FROM table",
-                                "SELECT \"\"?\"\" FROM table",
-                                Maps.newHashMap("column1", 1)
-                        },
-                        {
-                                "SELECT ''':column1''' FROM table",
-                                "SELECT ''':column1''' FROM table",
-                                Maps.newHashMap()
-                        },
-                        {
-                                "SELECT \"\"\":column1\"\"\" FROM table",
-                                "SELECT \"\"\":column1\"\"\" FROM table",
-                                Maps.newHashMap()
-                        },
-                        {
-                                "SELECT * FROM table WHERE column IN (:column1) AND column IN (:column2)",
-                                "SELECT * FROM table WHERE column IN (?) AND column IN (?,?,?,?)",
-                                Maps.newHashMap("column1", 1, "column2", new int[]{2, 3, 4, 5})
-                        },
-                        {
-                                "SELECT * FROM table WHERE column IN (:column1) AND column IN (:column2)",
-                                "SELECT * FROM table WHERE column IN (?,?,?,?,?,?,?) AND column IN (?,?,?,?)",
-                                Maps.newHashMap("column1", new int[]{1, 2, 3, 4, 5, 6, 7}, "column2", new int[]{8, 9, 10, 11})
-                        },
-                        {
-                                "SELECT * FROM table WHERE column IN (:column1) AND column IN (:column2)",
-                                "SELECT * FROM table WHERE column IN (?,?,?,?,?,?,?) AND column IN (?)",
-                                Maps.newHashMap("column1", new int[]{1, 2, 3, 4, 5, 6, 7}, "column2", new int[]{8})
-                        },
-
-                });
+    static Stream<Arguments> statements() {
+        return Stream.of(
+                Arguments.of(
+                        "SELECT * FROM table WHERE column = :column",
+                        "SELECT * FROM table WHERE column = ?",
+                        Maps.newHashMap("column", 1)
+                ),
+                Arguments.of(
+                        "SELECT * FROM table WHERE column=:column",
+                        "SELECT * FROM table WHERE column=?",
+                        Maps.newHashMap("column", 1)
+                ),
+                Arguments.of(
+                        "SELECT * FROM table WHERE column = :column ",
+                        "SELECT * FROM table WHERE column = ? ",
+                        Maps.newHashMap("column", 1)
+                ),
+                Arguments.of(
+                        "SELECT * FROM table WHERE column=:column ",
+                        "SELECT * FROM table WHERE column=? ",
+                        Maps.newHashMap("column", 1)
+                ),
+                Arguments.of(
+                        "SELECT * FROM table WHERE column = :column AND column = :column",
+                        "SELECT * FROM table WHERE column = ? AND column = ?",
+                        Maps.newHashMap("column", 1)
+                ),
+                Arguments.of(
+                        "SELECT * FROM table WHERE column=:column AND column=:column",
+                        "SELECT * FROM table WHERE column=? AND column=?",
+                        Maps.newHashMap("column", 1)
+                ),
+                Arguments.of(
+                        "SELECT * FROM table WHERE column = :column AND column = :column ",
+                        "SELECT * FROM table WHERE column = ? AND column = ? ",
+                        Maps.newHashMap("column", 1)
+                ),
+                Arguments.of(
+                        "SELECT * FROM table WHERE column=:column AND column=:column ",
+                        "SELECT * FROM table WHERE column=? AND column=? ",
+                        Maps.newHashMap("column", 1)
+                ),
+                Arguments.of(
+                        "SELECT * FROM table WHERE column=:column1 AND column=:column2 ",
+                        "SELECT * FROM table WHERE column=? AND column=? ",
+                        Maps.newHashMap("column1", 1, "column2", 2)
+                ),
+                Arguments.of(
+                        "SELECT :column1 FROM table WHERE column=:column2 AND column=:column3 ",
+                        "SELECT ? FROM table WHERE column=? AND column=? ",
+                        Maps.newHashMap("column1", 1, "column2", 2, "column3", 3)
+                ),
+                Arguments.of(
+                        "SELECT * FROM table WHERE column IN(:column1) AND column IN(:column2)",
+                        "SELECT * FROM table WHERE column IN(?) AND column IN(?)",
+                        Maps.newHashMap("column1", 1, "column2", 2)
+                ),
+                Arguments.of(
+                        "SELECT * FROM table WHERE column IN (:column1) AND column IN (:column2)",
+                        "SELECT * FROM table WHERE column IN (?) AND column IN (?)",
+                        Maps.newHashMap("column1", 1, "column2", 2)
+                ),
+                Arguments.of(
+                        "SELECT :column1 FROM table",
+                        "SELECT ? FROM table",
+                        Maps.newHashMap("column1", 1)
+                ),
+                Arguments.of(
+                        "SELECT ':column1' FROM table",
+                        "SELECT ':column1' FROM table",
+                        Maps.newHashMap()
+                ),
+                Arguments.of(
+                        "SELECT \":column1\" FROM table",
+                        "SELECT \":column1\" FROM table",
+                        Maps.newHashMap()
+                ),
+                Arguments.of(
+                        "SELECT \":column1\" FROM table",
+                        "SELECT \":column1\" FROM table",
+                        Maps.newHashMap()
+                ),
+                Arguments.of(
+                        "SELECT '':column1'' FROM table",
+                        "SELECT ''?'' FROM table",
+                        Maps.newHashMap("column1", 1)
+                ),
+                Arguments.of(
+                        "SELECT '':column1'' FROM table",
+                        "SELECT ''?'' FROM table",
+                        Maps.newHashMap("column1", 1)
+                ),
+                Arguments.of(
+                        "SELECT \"\":column1\"\" FROM table",
+                        "SELECT \"\"?\"\" FROM table",
+                        Maps.newHashMap("column1", 1)
+                ),
+                Arguments.of(
+                        "SELECT ''':column1''' FROM table",
+                        "SELECT ''':column1''' FROM table",
+                        Maps.newHashMap()
+                ),
+                Arguments.of(
+                        "SELECT \"\"\":column1\"\"\" FROM table",
+                        "SELECT \"\"\":column1\"\"\" FROM table",
+                        Maps.newHashMap()
+                ),
+                Arguments.of(
+                        "SELECT * FROM table WHERE column IN (:column1) AND column IN (:column2)",
+                        "SELECT * FROM table WHERE column IN (?) AND column IN (?,?,?,?)",
+                        Maps.newHashMap("column1", 1, "column2", new int[]{2, 3, 4, 5})
+                ),
+                Arguments.of(
+                        "SELECT * FROM table WHERE column IN (:column1) AND column IN (:column2)",
+                        "SELECT * FROM table WHERE column IN (?,?,?,?,?,?,?) AND column IN (?,?,?,?)",
+                        Maps.newHashMap("column1", new int[]{1, 2, 3, 4, 5, 6, 7}, "column2", new int[]{8, 9, 10, 11})
+                ),
+                Arguments.of(
+                        "SELECT * FROM table WHERE column IN (:column1) AND column IN (:column2)",
+                        "SELECT * FROM table WHERE column IN (?,?,?,?,?,?,?) AND column IN (?)",
+                        Maps.newHashMap("column1", new int[]{1, 2, 3, 4, 5, 6, 7}, "column2", new int[]{8})
+                )
+        );
     }
 
-    @Test
-    public void testParseWithParameterProvider() {
+    @ParameterizedTest
+    @MethodSource("statements")
+    public void testParseWithParameterProvider(String original, String expected, Map<String, ?> mapParameters) {
         StreamingSqlParser parser = StreamingSqlParser.instance();
 
         SqlQueryMetaData meta = parser.parse(original, mapParameters);
 
-        assertEquals("The parsed SQL statement did not match the expected value.", expected, meta.getParsedSql());
+        assertEquals(expected, meta.getParsedSql(), "The parsed SQL statement did not match the expected value.");
 
         SqlParameterProvider sqlParameterProvider = meta.getSqlParameterProvider();
 
@@ -191,11 +179,11 @@ public class StreamingSqlParserTest {
                     int[] array = (int[]) o;
 
                     for (int i = 0; i < array.length; i++) {
-                        assertTrue("The parameter indexes should have contained the index.", sqlParameter.hasIndex(array[i]));
+                        assertTrue(sqlParameter.hasIndex(array[i]), "The parameter indexes should have contained the index.");
                     }
-                    assertEquals("The parameter should have contained the number of indexes in the array.", array.length, sqlParameter.getIndexes().size());
+                    assertEquals(array.length, sqlParameter.getIndexes().size(), "The parameter should have contained the number of indexes in the array.");
                 } else {
-                    assertTrue("The parameter indexes should have contained the index.", sqlParameter.hasIndex((Integer) o));
+                    assertTrue(sqlParameter.hasIndex((Integer) o), "The parameter indexes should have contained the index.");
                 }
             }
         }

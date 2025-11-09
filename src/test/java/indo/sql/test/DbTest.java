@@ -23,38 +23,55 @@ import indo.util.Strings;
 import indo.util.Unchecked;
 import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.datatype.TypeCastException;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.TestName;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInfo;
 
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
-import static org.junit.Assert.assertEquals;
+import static indo.log.Logger.info;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(Parameterized.class)
 public abstract class DbTest {
 
-    @Rule
-    public TestName testName = new TestName();
-
-    @Parameterized.Parameter(0)
-    public String configuration;
-
+    protected String configuration;
+    private TestInfo testInfo;
     private DatabaseConfiguration dbConfig;
+    private boolean isSetup = false;
 
-    @Parameterized.Parameters(name = "{0}")
-    public static List<Object> dataSourceConfigurations() {
-        return Arrays.asList(
+    // Container registry: maps configuration name to container config
+    private static final Map<String, DatabaseContainerConfig> CONTAINER_REGISTRY = new ConcurrentHashMap<>();
+
+    static {
+        // Register container configurations for each database type
+        registerContainer("h2-case-insensitive", new H2ContainerConfig());
+        registerContainer("h2-case-sensitive", new H2ContainerConfig());
+        registerContainer("postgres", new PostgresContainerConfig());
+        registerContainer("mysql", new MySqlContainerConfig());
+    }
+
+    /**
+     * Registers a container configuration for a specific database configuration name.
+     *
+     * @param configName the configuration name (e.g., "postgres", "mysql")
+     * @param containerConfig the container configuration
+     */
+    protected static void registerContainer(String configName, DatabaseContainerConfig containerConfig) {
+        CONTAINER_REGISTRY.put(configName, containerConfig);
+        info(DbTest.class, "Registered container config for: %s", configName);
+    }
+
+    public static Stream<String> dataSourceConfigurations() {
+        return Stream.of(
                 "h2-case-insensitive",
                 "h2-case-sensitive",
                 "postgres",
@@ -62,29 +79,51 @@ public abstract class DbTest {
         );
     }
 
-    @Before
-    public void setupDataSource() {
-        if (dbConfig == null) {
+    @BeforeEach
+    public void captureTestInfo(TestInfo testInfo) {
+        this.testInfo = testInfo;
+    }
+
+    private void ensureSetup() {
+        if (!isSetup && configuration != null) {
             try {
+                if (dbConfig == null) {
+                    // Start container if one is registered for this configuration
+                    DatabaseContainerConfig containerConfig = CONTAINER_REGISTRY.get(configuration);
+                    if (containerConfig != null) {
+                        info(this, "Starting container for configuration: %s", configuration);
+                        containerConfig.start();
+                    }
 
-                Properties properties = new Properties();
-                properties.load(getClass().getResourceAsStream("test/" + configuration + ".properties"));
+                    // Load properties from file
+                    Properties properties = new Properties();
+                    properties.load(getClass().getResourceAsStream("test/" + configuration + ".properties"));
 
-                dbConfig = DatabaseConfiguration.create(properties);
-                dbConfig.createDataSource();
-                dbConfig.createSchema();
+                    // Override with container connection details if available
+                    if (containerConfig != null) {
+                        info(this, "Applying container connection details for: %s", configuration);
+                        containerConfig.applyToProperties(properties);
+                    }
 
+                    dbConfig = DatabaseConfiguration.create(properties);
+                    dbConfig.createDataSource();
+                    dbConfig.createSchema();
+                }
+
+                dbConfig.populateSchema(classBeforeDataSetName(), methodBeforeDataSetName());
+                isSetup = true;
             } catch (IOException e) {
                 throw Unchecked.exception(e);
             }
         }
-
-        dbConfig.populateSchema(classBeforeDataSetName(), methodBeforeDataSetName());
     }
 
-    @After
+    @AfterEach
     public void tearDownDataSource() {
-        dbConfig.assertSchema(classAfterDataSetName(), methodAfterDataSetName());
+        if (isSetup && dbConfig != null) {
+            dbConfig.assertSchema(classAfterDataSetName(), methodAfterDataSetName());
+            isSetup = false;
+        }
     }
 
     protected String classBeforeDataSetName() {
@@ -109,14 +148,16 @@ public abstract class DbTest {
     }
 
     protected String getSimpleTestMethodName() {
-        return Strings.before(testName.getMethodName(), '[');
+        return Strings.before(testInfo.getTestMethod().map(m -> m.getName()).orElse(""), '[');
     }
 
     protected DataSource dataSource() {
+        ensureSetup();
         return getDataSource();
     }
 
     protected Connection con() {
+        ensureSetup();
         return getConnection();
     }
 
@@ -145,9 +186,8 @@ public abstract class DbTest {
         try {
             Object o = dataType.typeCast(expected);
 
-            assertEquals(
-                    String.format("The expected column value (%s.%s) didn't match the actual value.", expectedTable, expectedColumn),
-                    o, actual);
+            assertEquals(o, actual,
+                    String.format("The expected column value (%s.%s) didn't match the actual value.", expectedTable, expectedColumn));
 
             Logger.debug(this, "Expected %s, returned %s", o, actual);
         } catch (TypeCastException e) {

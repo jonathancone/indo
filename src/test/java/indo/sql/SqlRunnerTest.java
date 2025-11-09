@@ -19,12 +19,13 @@ package indo.sql;
 import indo.example.Employee;
 import indo.sql.test.DbTest;
 import indo.util.Maps;
-import org.junit.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
 
 import static indo.jdbc.ResultSets.*;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unit tests for {@link SqlRunner}.
@@ -35,67 +36,69 @@ public class SqlRunnerTest extends DbTest {
 
     private static final String SELECT_EMPLOYEE_ORDINAL_PARAMS =
             " SELECT                   " +
-            "   e.employee_id,         " +
-            "   e.first_name,          " +
-            "   e.last_name,           " +
-            "   e.active,              " +
-            "   e.hire_date,           " +
-            "   e.salary               " +
-            " FROM  employee e         " +
-            " WHERE e.salary > ?       " +
-            " AND   e.last_name LIKE ? ";
+                    "   e.employee_id,         " +
+                    "   e.first_name,          " +
+                    "   e.last_name,           " +
+                    "   e.active,              " +
+                    "   e.hire_date,           " +
+                    "   e.salary               " +
+                    " FROM  employee e         " +
+                    " WHERE e.salary > ?       " +
+                    " AND   e.last_name LIKE ? ";
 
     private static final String SELECT_EMPLOYEE_NAMED_PARAMS =
             " SELECT                           " +
-            "   e.employee_id,                 " +
-            "   e.first_name,                  " +
-            "   e.last_name,                   " +
-            "   e.active,                      " +
-            "   e.hire_date,                   " +
-            "   e.salary                       " +
-            " FROM  employee e                 " +
-            " WHERE e.salary > :salary         " +
-            " AND   e.last_name LIKE :lastName ";
+                    "   e.employee_id,                 " +
+                    "   e.first_name,                  " +
+                    "   e.last_name,                   " +
+                    "   e.active,                      " +
+                    "   e.hire_date,                   " +
+                    "   e.salary                       " +
+                    " FROM  employee e                 " +
+                    " WHERE e.salary > :salary         " +
+                    " AND   e.last_name LIKE :lastName ";
 
     private static final String SELECT_EMPLOYEE_AND_DEPARTMENT_UNDERSCORE_TO_ONE =
             " SELECT                                     " +
-            "   e.employee_id,                           " +
-            "   e.first_name,                            " +
-            "   e.last_name,                             " +
-            "   e.active,                                " +
-            "   e.hire_date,                             " +
-            "   e.salary,                                " +
-            "   t.timecard_id AS timecards__timecard_id,   " +
-            "   t.employee_id AS timecards__employee_id,   " +
-            "   t.week_of_year AS timecards__week_of_year, " +
-            "   t.actual_hours AS timecards__actual_hours  " +
-            " FROM  employee e                           " +
-            " LEFT OUTER JOIN timecard t                 " +
-            "   ON e.employee_id = t.employee_id         " +
-            " WHERE e.salary > :salary                   " +
-            " AND   e.last_name LIKE :lastName           ";
+                    "   e.employee_id,                           " +
+                    "   e.first_name,                            " +
+                    "   e.last_name,                             " +
+                    "   e.active,                                " +
+                    "   e.hire_date,                             " +
+                    "   e.salary,                                " +
+                    "   t.timecard_id AS timecards__timecard_id,   " +
+                    "   t.employee_id AS timecards__employee_id,   " +
+                    "   t.week_of_year AS timecards__week_of_year, " +
+                    "   t.actual_hours AS timecards__actual_hours  " +
+                    " FROM  employee e                           " +
+                    " LEFT OUTER JOIN timecard t                 " +
+                    "   ON e.employee_id = t.employee_id         " +
+                    " WHERE e.salary > :salary                   " +
+                    " AND   e.last_name LIKE :lastName           ";
 
     private static final String SELECT_EMPLOYEE_AND_TIMECARDS_UNDERSCORE_TO_MANY =
             " SELECT                                     " +
-            "   e.employee_id,                           " +
-            "   e.first_name,                            " +
-            "   e.last_name,                             " +
-            "   e.active,                                " +
-            "   e.hire_date,                             " +
-            "   e.salary,                                " +
-            "   t.timecard_id AS timecard__timecard_id,   " +
-            "   t.employee_id AS timecard__employee_id,   " +
-            "   t.week_of_year AS timecard__week_of_year, " +
-            "   t.actual_hours AS timecard__actual_hours  " +
-            " FROM  employee e                           " +
-            " LEFT OUTER JOIN timecard t                 " +
-            "   ON e.employee_id = t.employee_id         " +
-            " WHERE e.salary > :salary                   " +
-            " AND   e.last_name LIKE :lastName           ";
+                    "   e.employee_id,                           " +
+                    "   e.first_name,                            " +
+                    "   e.last_name,                             " +
+                    "   e.active,                                " +
+                    "   e.hire_date,                             " +
+                    "   e.salary,                                " +
+                    "   t.timecard_id AS timecard__timecard_id,   " +
+                    "   t.employee_id AS timecard__employee_id,   " +
+                    "   t.week_of_year AS timecard__week_of_year, " +
+                    "   t.actual_hours AS timecard__actual_hours  " +
+                    " FROM  employee e                           " +
+                    " LEFT OUTER JOIN timecard t                 " +
+                    "   ON e.employee_id = t.employee_id         " +
+                    " WHERE e.salary > :salary                   " +
+                    " AND   e.last_name LIKE :lastName           ";
 
 
-    @Test
-    public void testListEmployeesWithLargeSalaries1() {
+    @ParameterizedTest
+    @MethodSource("indo.sql.test.DbTest#dataSourceConfigurations")
+    public void testListEmployeesWithLargeSalaries1(String configuration) {
+        this.configuration = configuration;
         SqlRunner runner = new SqlRunner(dataSource());
 
         // List results by specifying a result object type and bind
@@ -110,8 +113,10 @@ public class SqlRunnerTest extends DbTest {
 
     }
 
-    @Test
-    public void testListEmployeesWithLargeSalaries2() {
+    @ParameterizedTest
+    @MethodSource("indo.sql.test.DbTest#dataSourceConfigurations")
+    public void testListEmployeesWithLargeSalaries2(String configuration) {
+        this.configuration = configuration;
         SqlRunner runner = new SqlRunner(dataSource());
 
         // List results by binding named parameters from a custom
@@ -125,8 +130,10 @@ public class SqlRunnerTest extends DbTest {
 
     }
 
-    @Test
-    public void testListEmployeesWithLargeSalaries3() {
+    @ParameterizedTest
+    @MethodSource("indo.sql.test.DbTest#dataSourceConfigurations")
+    public void testListEmployeesWithLargeSalaries3(String configuration) {
+        this.configuration = configuration;
         SqlRunner runner = new SqlRunner(dataSource());
 
         // List results by specifying a result object type and
@@ -143,8 +150,10 @@ public class SqlRunnerTest extends DbTest {
 
     }
 
-    @Test
-    public void testListEmployeesWithLargeSalaries4() {
+    @ParameterizedTest
+    @MethodSource("indo.sql.test.DbTest#dataSourceConfigurations")
+    public void testListEmployeesWithLargeSalaries4(String configuration) {
+        this.configuration = configuration;
         SqlRunner runner = new SqlRunner(dataSource());
 
         // List results and map them directly from the ResultSet using
@@ -167,8 +176,10 @@ public class SqlRunnerTest extends DbTest {
 
     }
 
-    @Test
-    public void testListEmployeesWithLargeSalaries5() {
+    @ParameterizedTest
+    @MethodSource("indo.sql.test.DbTest#dataSourceConfigurations")
+    public void testListEmployeesWithLargeSalaries5(String configuration) {
+        this.configuration = configuration;
         SqlRunner runner = new SqlRunner(dataSource());
 
         // List results by specifying a result object type and bind

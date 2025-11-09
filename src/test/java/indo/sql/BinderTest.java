@@ -16,33 +16,29 @@
 
 package indo.sql;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Arrays;
 import java.util.Collection;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
  * Created by jcone on 8/4/15.
  */
-@RunWith(Parameterized.class)
+
 public class BinderTest {
-    @Parameterized.Parameter(0)
-    public int length;
 
-    @Parameterized.Parameter(1)
-    public String result;
-
-    @Parameterized.Parameters
     public static Collection<Object[]> statements() {
         return Arrays.asList(new Object[][]{{-1, ""}, {0, ""}, {1, "?"}, {2, "?,?"}, {3, "?,?,?"}});
     }
 
 
-    @Test
-    public void testRepeatPlaceholder() {
-        Assert.assertEquals(result, Binder.repeatPlaceholders(length));
+    @ParameterizedTest
+    @MethodSource("statements")
+    public void testRepeatPlaceholder(int length, String result) {
+        assertEquals(result, Binder.repeatPlaceholders(length));
     }
 }
