@@ -43,10 +43,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public abstract class DbTest {
 
-    protected String configuration;
     private TestInfo testInfo;
-    private DatabaseConfiguration dbConfig;
-    private boolean isSetup = false;
+
+    // Maps configuration name to DatabaseConfiguration instance
+    private static final Map<String, DatabaseConfiguration> DB_CONFIGS = new ConcurrentHashMap<>();
+
+    // Tracks which configurations have been set up for the current test
+    private final Map<String, Boolean> setupStatus = new ConcurrentHashMap<>();
 
     // Container registry: maps configuration name to container config
     private static final Map<String, DatabaseContainerConfig> CONTAINER_REGISTRY = new ConcurrentHashMap<>();
@@ -84,46 +87,64 @@ public abstract class DbTest {
         this.testInfo = testInfo;
     }
 
-    private void ensureSetup() {
-        if (!isSetup && configuration != null) {
-            try {
-                if (dbConfig == null) {
+    private void ensureSetup(String configuration) {
+        if (configuration == null) {
+            throw new IllegalArgumentException("Configuration cannot be null");
+        }
+
+        if (setupStatus.getOrDefault(configuration, false)) {
+            return; // Already set up for this test
+        }
+
+        try {
+            DatabaseConfiguration dbConfig = DB_CONFIGS.computeIfAbsent(configuration, config -> {
+                try {
                     // Start container if one is registered for this configuration
-                    DatabaseContainerConfig containerConfig = CONTAINER_REGISTRY.get(configuration);
+                    DatabaseContainerConfig containerConfig = CONTAINER_REGISTRY.get(config);
                     if (containerConfig != null) {
-                        info(this, "Starting container for configuration: %s", configuration);
+                        info(this, "Starting container for configuration: %s", config);
                         containerConfig.start();
                     }
 
                     // Load properties from file
                     Properties properties = new Properties();
-                    properties.load(getClass().getResourceAsStream("test/" + configuration + ".properties"));
+                    properties.load(getClass().getResourceAsStream("test/" + config + ".properties"));
 
                     // Override with container connection details if available
                     if (containerConfig != null) {
-                        info(this, "Applying container connection details for: %s", configuration);
+                        info(this, "Applying container connection details for: %s", config);
                         containerConfig.applyToProperties(properties);
                     }
 
-                    dbConfig = DatabaseConfiguration.create(properties);
-                    dbConfig.createDataSource();
-                    dbConfig.createSchema();
+                    DatabaseConfiguration dbConfiguration = DatabaseConfiguration.create(properties);
+                    dbConfiguration.createDataSource();
+                    dbConfiguration.createSchema();
+                    return dbConfiguration;
+                } catch (IOException e) {
+                    throw Unchecked.exception(e);
                 }
+            });
 
-                dbConfig.populateSchema(classBeforeDataSetName(), methodBeforeDataSetName());
-                isSetup = true;
-            } catch (IOException e) {
-                throw Unchecked.exception(e);
-            }
+            dbConfig.populateSchema(classBeforeDataSetName(), methodBeforeDataSetName());
+            setupStatus.put(configuration, true);
+        } catch (Exception e) {
+            throw Unchecked.exception(e);
         }
     }
 
     @AfterEach
     public void tearDownDataSource() {
-        if (isSetup && dbConfig != null) {
-            dbConfig.assertSchema(classAfterDataSetName(), methodAfterDataSetName());
-            isSetup = false;
-        }
+        // Assert schema for each configuration that was set up in this test
+        setupStatus.forEach((config, wasSetup) -> {
+            if (wasSetup) {
+                DatabaseConfiguration dbConfig = DB_CONFIGS.get(config);
+                if (dbConfig != null) {
+                    dbConfig.assertSchema(classAfterDataSetName(), methodAfterDataSetName());
+                }
+            }
+        });
+        // Clear setup status for next test
+        setupStatus.clear();
     }
 
     protected String classBeforeDataSetName() {
@@ -151,36 +172,36 @@ public abstract class DbTest {
         return Strings.before(testInfo.getTestMethod().map(m -> m.getName()).orElse(""), '[');
     }
 
-    protected DataSource dataSource() {
-        ensureSetup();
-        return getDataSource();
+    protected DataSource dataSource(String configuration) {
+        ensureSetup(configuration);
+        return getDataSource(configuration);
     }
 
-    protected Connection con() {
-        ensureSetup();
-        return getConnection();
+    protected Connection con(String configuration) {
+        ensureSetup(configuration);
+        return getConnection(configuration);
     }
 
-    protected DataSource getDataSource() {
-        return getDbConfig().getDataSource();
+    protected DataSource getDataSource(String configuration) {
+        return getDbConfig(configuration).getDataSource();
     }
 
-    protected Connection getConnection() {
-        return DataSources.getConnection(getDbConfig().getDataSource());
+    protected Connection getConnection(String configuration) {
+        return DataSources.getConnection(getDbConfig(configuration).getDataSource());
     }
 
-    protected <T, R> void assertEqualsRowValue(String expectedTable, String expectedColumn, List<? extends RowIdentity> results, Function<T, R> getterFunction) {
+    protected <T, R> void assertEqualsRowValue(String configuration, String expectedTable, String expectedColumn, List<? extends RowIdentity> results, Function<T, R> getterFunction) {
         for (int i = 0; i < results.size(); i++) {
-            assertEqualsRowValue(expectedTable, expectedColumn, i, results.get(i).getRowId().intValue(), results, getterFunction);
+            assertEqualsRowValue(configuration, expectedTable, expectedColumn, i, results.get(i).getRowId().intValue(), results, getterFunction);
         }
     }
 
-    protected <T, R> void assertEqualsRowValue(String expectedTable, String expectedColumn, int offset, int expectedRow, List<? extends RowIdentity> results, Function<T, R> getterFunction) {
-        assertEqualsRowValue(expectedTable, expectedColumn, expectedRow, getterFunction.apply((T) results.get(offset)));
+    protected <T, R> void assertEqualsRowValue(String configuration, String expectedTable, String expectedColumn, int offset, int expectedRow, List<? extends RowIdentity> results, Function<T, R> getterFunction) {
+        assertEqualsRowValue(configuration, expectedTable, expectedColumn, expectedRow, getterFunction.apply((T) results.get(offset)));
     }
 
-    protected void assertEqualsRowValue(String expectedTable, String expectedColumn, int expectedRow, Object actual) {
-        Object expected = getDbConfig().getValue(expectedTable, expectedColumn, expectedRow);
+    protected void assertEqualsRowValue(String configuration, String expectedTable, String expectedColumn, int expectedRow, Object actual) {
+        Object expected = getDbConfig(configuration).getValue(expectedTable, expectedColumn, expectedRow);
 
         DataType dataType = DataType.forObject(actual);
         try {
@@ -195,7 +216,7 @@ public abstract class DbTest {
         }
     }
 
-    protected DatabaseConfiguration getDbConfig() {
-        return dbConfig;
+    protected DatabaseConfiguration getDbConfig(String configuration) {
+        return DB_CONFIGS.get(configuration);
     }
 }

@@ -98,8 +98,7 @@ public class SqlRunnerTest extends DbTest {
     @ParameterizedTest
     @MethodSource("indo.sql.test.DbTest#dataSourceConfigurations")
     public void testListEmployeesWithLargeSalaries1(String configuration) {
-        this.configuration = configuration;
-        SqlRunner runner = new SqlRunner(dataSource());
+        SqlRunner runner = new SqlRunner(dataSource(configuration));
 
         // List results by specifying a result object type and bind
         // parameters as variable arguments.
@@ -109,15 +108,14 @@ public class SqlRunnerTest extends DbTest {
                         75000.00,
                         "Lancaster");
 
-        assertEmployees(employees);
+        assertEmployees(configuration, employees);
 
     }
 
     @ParameterizedTest
     @MethodSource("indo.sql.test.DbTest#dataSourceConfigurations")
     public void testListEmployeesWithLargeSalaries2(String configuration) {
-        this.configuration = configuration;
-        SqlRunner runner = new SqlRunner(dataSource());
+        SqlRunner runner = new SqlRunner(dataSource(configuration));
 
         // List results by binding named parameters from a custom
         // SqlParameterProvider, in this case a POJO.
@@ -126,15 +124,14 @@ public class SqlRunnerTest extends DbTest {
                         Employee.class,
                         SqlParameters.from(new Employee("Jill", "Lancaster", 75000.00)));
 
-        assertEmployees(employees);
+        assertEmployees(configuration, employees);
 
     }
 
     @ParameterizedTest
     @MethodSource("indo.sql.test.DbTest#dataSourceConfigurations")
     public void testListEmployeesWithLargeSalaries3(String configuration) {
-        this.configuration = configuration;
-        SqlRunner runner = new SqlRunner(dataSource());
+        SqlRunner runner = new SqlRunner(dataSource(configuration));
 
         // List results by specifying a result object type and
         // named bind parameters as a map.
@@ -146,15 +143,14 @@ public class SqlRunnerTest extends DbTest {
                                 "salary", 75000.00
                         ));
 
-        assertEmployees(employees);
+        assertEmployees(configuration, employees);
 
     }
 
     @ParameterizedTest
     @MethodSource("indo.sql.test.DbTest#dataSourceConfigurations")
     public void testListEmployeesWithLargeSalaries4(String configuration) {
-        this.configuration = configuration;
-        SqlRunner runner = new SqlRunner(dataSource());
+        SqlRunner runner = new SqlRunner(dataSource(configuration));
 
         // List results and map them directly from the ResultSet using
         // the indo.jdbc.ResultSets static helper.
@@ -172,15 +168,14 @@ public class SqlRunnerTest extends DbTest {
                                 "salary", 75000.00
                         ));
 
-        assertEmployees(employees);
+        assertEmployees(configuration, employees);
 
     }
 
     @ParameterizedTest
     @MethodSource("indo.sql.test.DbTest#dataSourceConfigurations")
     public void testListEmployeesWithLargeSalaries5(String configuration) {
-        this.configuration = configuration;
-        SqlRunner runner = new SqlRunner(dataSource());
+        SqlRunner runner = new SqlRunner(dataSource(configuration));
 
         // List results by specifying a result object type and bind
         // parameters as variable arguments.
@@ -193,20 +188,20 @@ public class SqlRunnerTest extends DbTest {
                         75000.00,
                         "Lancaster");
 
-        assertEmployees(employees);
+        assertEmployees(configuration, employees);
 
     }
 
-    private void assertEmployees(List<Employee> employees) {
+    private void assertEmployees(String configuration, List<Employee> employees) {
 
         assertTrue(employees.size() > 0);
 
-        assertEqualsRowValue("employee", "employee_id", employees, Employee::getEmployeeId);
-        assertEqualsRowValue("employee", "first_name", employees, Employee::getFirstName);
-        assertEqualsRowValue("employee", "last_name", employees, Employee::getLastName);
-        assertEqualsRowValue("employee", "active", employees, Employee::isActive);
-        assertEqualsRowValue("employee", "hire_date", employees, Employee::getHireDate);
-        assertEqualsRowValue("employee", "salary", employees, Employee::getSalary);
+        assertEqualsRowValue(configuration, "employee", "employee_id", employees, Employee::getEmployeeId);
+        assertEqualsRowValue(configuration, "employee", "first_name", employees, Employee::getFirstName);
+        assertEqualsRowValue(configuration, "employee", "last_name", employees, Employee::getLastName);
+        assertEqualsRowValue(configuration, "employee", "active", employees, Employee::isActive);
+        assertEqualsRowValue(configuration, "employee", "hire_date", employees, Employee::getHireDate);
+        assertEqualsRowValue(configuration, "employee", "salary", employees, Employee::getSalary);
 
     }
 }
