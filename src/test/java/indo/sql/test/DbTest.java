@@ -29,6 +29,7 @@ import org.junit.jupiter.api.TestInfo;
 
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.sql.Connection;
 import java.util.List;
@@ -65,7 +66,7 @@ public abstract class DbTest {
     /**
      * Registers a container configuration for a specific database configuration name.
      *
-     * @param configName the configuration name (e.g., "postgres", "mysql")
+     * @param configName      the configuration name (e.g., "postgres", "mysql")
      * @param containerConfig the container configuration
      */
     protected static void registerContainer(String configName, DatabaseContainerConfig containerConfig) {
@@ -169,7 +170,7 @@ public abstract class DbTest {
     }
 
     protected String getSimpleTestMethodName() {
-        return Strings.before(testInfo.getTestMethod().map(m -> m.getName()).orElse(""), '[');
+        return Strings.before(testInfo.getTestMethod().map(Method::getName).orElse(""), '[');
     }
 
     protected DataSource dataSource(String configuration) {

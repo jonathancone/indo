@@ -25,7 +25,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.List;
 
 import static indo.jdbc.ResultSets.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Unit tests for {@link SqlRunner}.
@@ -34,65 +34,69 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class SqlRunnerTest extends DbTest {
 
-    private static final String SELECT_EMPLOYEE_ORDINAL_PARAMS =
-            " SELECT                   " +
-                    "   e.employee_id,         " +
-                    "   e.first_name,          " +
-                    "   e.last_name,           " +
-                    "   e.active,              " +
-                    "   e.hire_date,           " +
-                    "   e.salary               " +
-                    " FROM  employee e         " +
-                    " WHERE e.salary > ?       " +
-                    " AND   e.last_name LIKE ? ";
+    private static final String SELECT_EMPLOYEE_ORDINAL_PARAMS = """
+             SELECT
+               e.employee_id,
+               e.first_name,
+               e.last_name,
+               e.active,
+               e.hire_date,
+               e.salary
+             FROM  employee e
+             WHERE e.salary > ?
+             AND   e.last_name LIKE ?
+            """;
 
-    private static final String SELECT_EMPLOYEE_NAMED_PARAMS =
-            " SELECT                           " +
-                    "   e.employee_id,                 " +
-                    "   e.first_name,                  " +
-                    "   e.last_name,                   " +
-                    "   e.active,                      " +
-                    "   e.hire_date,                   " +
-                    "   e.salary                       " +
-                    " FROM  employee e                 " +
-                    " WHERE e.salary > :salary         " +
-                    " AND   e.last_name LIKE :lastName ";
+    private static final String SELECT_EMPLOYEE_NAMED_PARAMS = """
+             SELECT
+               e.employee_id,
+               e.first_name,
+               e.last_name,
+               e.active,
+               e.hire_date,
+               e.salary
+             FROM  employee e
+             WHERE e.salary > :salary
+             AND   e.last_name LIKE :lastName
+            """;
 
-    private static final String SELECT_EMPLOYEE_AND_DEPARTMENT_UNDERSCORE_TO_ONE =
-            " SELECT                                     " +
-                    "   e.employee_id,                           " +
-                    "   e.first_name,                            " +
-                    "   e.last_name,                             " +
-                    "   e.active,                                " +
-                    "   e.hire_date,                             " +
-                    "   e.salary,                                " +
-                    "   t.timecard_id AS timecards__timecard_id,   " +
-                    "   t.employee_id AS timecards__employee_id,   " +
-                    "   t.week_of_year AS timecards__week_of_year, " +
-                    "   t.actual_hours AS timecards__actual_hours  " +
-                    " FROM  employee e                           " +
-                    " LEFT OUTER JOIN timecard t                 " +
-                    "   ON e.employee_id = t.employee_id         " +
-                    " WHERE e.salary > :salary                   " +
-                    " AND   e.last_name LIKE :lastName           ";
+    private static final String SELECT_EMPLOYEE_AND_DEPARTMENT_UNDERSCORE_TO_ONE = """
+             SELECT
+               e.employee_id,
+               e.first_name,
+               e.last_name,
+               e.active,
+               e.hire_date,
+               e.salary,
+               t.timecard_id AS timecards__timecard_id,
+               t.employee_id AS timecards__employee_id,
+               t.week_of_year AS timecards__week_of_year,
+               t.actual_hours AS timecards__actual_hours
+             FROM  employee e
+             LEFT OUTER JOIN timecard t
+               ON e.employee_id = t.employee_id
+             WHERE e.salary > :salary
+             AND   e.last_name LIKE :lastName
+            """;
 
-    private static final String SELECT_EMPLOYEE_AND_TIMECARDS_UNDERSCORE_TO_MANY =
-            " SELECT                                     " +
-                    "   e.employee_id,                           " +
-                    "   e.first_name,                            " +
-                    "   e.last_name,                             " +
-                    "   e.active,                                " +
-                    "   e.hire_date,                             " +
-                    "   e.salary,                                " +
-                    "   t.timecard_id AS timecard__timecard_id,   " +
-                    "   t.employee_id AS timecard__employee_id,   " +
-                    "   t.week_of_year AS timecard__week_of_year, " +
-                    "   t.actual_hours AS timecard__actual_hours  " +
-                    " FROM  employee e                           " +
-                    " LEFT OUTER JOIN timecard t                 " +
-                    "   ON e.employee_id = t.employee_id         " +
-                    " WHERE e.salary > :salary                   " +
-                    " AND   e.last_name LIKE :lastName           ";
+    private static final String SELECT_EMPLOYEE_AND_TIMECARDS_UNDERSCORE_TO_MANY = """
+             SELECT
+               e.employee_id,
+               e.first_name,
+               e.last_name,
+               e.active,
+               e.hire_date,
+               e.salary,
+               t.timecard_id AS timecard__timecard_id,
+               t.employee_id AS timecard__employee_id,
+               t.week_of_year AS timecard__week_of_year,
+               t.actual_hours AS timecard__actual_hours
+             FROM  employee e
+             LEFT OUTER JOIN timecard t
+               ON e.employee_id = t.employee_id
+             WHERE e.salary > :salary
+             AND   e.last_name LIKE :lastName
+            """;
 
 
     @ParameterizedTest
@@ -194,7 +198,7 @@ public class SqlRunnerTest extends DbTest {
 
     private void assertEmployees(String configuration, List<Employee> employees) {
 
-        assertTrue(employees.size() > 0);
+        assertFalse(employees.isEmpty());
 
         assertEqualsRowValue(configuration, "employee", "employee_id", employees, Employee::getEmployeeId);
         assertEqualsRowValue(configuration, "employee", "first_name", employees, Employee::getFirstName);
